@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  immer:
+    specifier: ^9.0.21
+    version: 9.0.21
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -10,6 +13,9 @@ dependencies:
   zod:
     specifier: ^3.21.4
     version: 3.21.4
+  zustand:
+    specifier: ^4.3.7
+    version: 4.3.7(immer@9.0.21)(react@18.2.0)
 
 devDependencies:
   '@types/react':
@@ -18,6 +24,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.0.11
     version: 18.0.11
+  '@types/wicg-file-system-access':
+    specifier: ^2020.9.5
+    version: 2020.9.5
   '@vercel/node':
     specifier: ^2.10.2
     version: 2.10.2
@@ -601,6 +610,10 @@ packages:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
     dev: true
 
+  /@types/wicg-file-system-access@2020.9.5:
+    resolution: {integrity: sha512-UYK244awtmcUYQfs7FR8710MJcefL2WvkyHMjA8yJzxd1mo0Gfn88sRZ1Bls7hiUhA2w7ne1gpJ9T5g3G0wOyA==}
+    dev: true
+
   /@vercel/build-utils@6.7.0:
     resolution: {integrity: sha512-1cHgu0AzETSMLo1ugeHOT2pcrXNoZb1bwgxBP7yTIlJAKWLIEqPHbJWFvKQXZl2FV3kzzTctTrw/YNUWmntYiA==}
     dev: true
@@ -1124,6 +1137,10 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: true
 
+  /immer@9.0.21:
+    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
+    dev: false
+
   /is-core-module@2.11.0:
     resolution: {integrity: sha512-RRjxlvLDkD1YJwDbroBHMb+cukurkDWNyHx7D3oNB5x9rb5ogcksMC5wHCadcXoo67gVr/+3GFySh3134zi6rw==}
     dependencies:
@@ -1482,6 +1499,14 @@ packages:
       punycode: 2.3.0
     dev: true
 
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
     dev: true
@@ -1542,4 +1567,21 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zustand@4.3.7(immer@9.0.21)(react@18.2.0):
+    resolution: {integrity: sha512-dY8ERwB9Nd21ellgkBZFhudER8KVlelZm8388B5nDAXhO/+FZDhYMuRnqDgu5SYyRgz/iaf8RKnbUs/cHfOGlQ==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      immer: 9.0.21
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
