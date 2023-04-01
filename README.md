@@ -4,10 +4,23 @@ Pre-requisites:
 
 - [node](https://nodejs.org/) (Probably already installed!)
 - [pnpm](https://pnpm.io/)
-- [An OpenAI API Key](https://platform.openai.com/account/api-keys)
 
 Install dependencies:
 
 ```
 pnpm install
+```
+
+## Repository Structure
+
+- `api/` - Functions to be run on the server
+- `src/` - Frontend code
+- `public/` - Static assets
+
+## Development
+
+Start the development server:
+
+```
+pnpm vercel dev
 ```
