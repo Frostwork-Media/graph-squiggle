@@ -1,7 +1,9 @@
-import { useAppState } from "./lib/useAppState";
+import { useFileState } from "./lib/useFileState";
 import { close, create, open, save } from "./lib/files";
 import { useEffect } from "react";
 import { SquiggleEditor } from "./components/SquiggleEditor";
+import { Graph } from "./components/Graph";
+import { useWatchProject } from "./lib/useSquiggleState";
 
 export default function App() {
   return <Editor />;
@@ -11,15 +13,17 @@ export default function App() {
  * The editor to display when a project is open
  */
 function Editor() {
-  const project = useAppState((state) => state.project);
+  const project = useFileState((state) => state.project);
   const isProjectOpen = project != null;
   const projectString = JSON.stringify(project, null, 2);
-  const previousContents = useAppState((state) => state.previousContents ?? "");
+  const previousContents = useFileState(
+    (state) => state.previousContents ?? ""
+  );
   const isDirty = isProjectOpen
     ? projectString.trim() !== previousContents.trim()
     : false;
-  const fileHandle = useAppState((state) => state.fileHandle);
-  const loadFileError = useAppState((state) => state.loadFileError);
+
+  const loadFileError = useFileState((state) => state.loadFileError);
   // Add a before unload listener to warn the user if they have unsaved changes
   // and the squiggle code is not empty
   useEffect(() => {
@@ -67,18 +71,7 @@ function Editor() {
       </button>
       <hr />
       {isProjectOpen ? (
-        <>
-          <h1>
-            {fileHandle ? fileHandle.name : "Untitled Project"}
-            {isDirty ? "*" : ""}
-          </h1>
-          {isDirty && fileHandle && (
-            <button onClick={() => save(fileHandle)}>Save</button>
-          )}
-          <button onClick={() => save()}>Save As</button>
-          <hr />
-          <SquiggleEditor />
-        </>
+        <Project isDirty={isDirty} />
       ) : loadFileError ? (
         <>
           <h2>Unable to Load File</h2>
@@ -87,6 +80,29 @@ function Editor() {
       ) : (
         <p>No project open</p>
       )}
+    </div>
+  );
+}
+
+/**
+ * Mounted when a valid project is opened
+ */
+function Project({ isDirty }: { isDirty: boolean }) {
+  const fileHandle = useFileState((state) => state.fileHandle);
+  useWatchProject();
+  return (
+    <div>
+      <h1>
+        {fileHandle ? fileHandle.name : "Untitled Project"}
+        {isDirty ? "*" : ""}
+      </h1>
+      {isDirty && fileHandle && (
+        <button onClick={() => save(fileHandle)}>Save</button>
+      )}
+      <button onClick={() => save()}>Save As</button>
+      <hr />
+      <SquiggleEditor />
+      <Graph />
     </div>
   );
 }

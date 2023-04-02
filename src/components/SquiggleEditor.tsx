@@ -1,4 +1,4 @@
-import { useAppState } from "../lib/useAppState";
+import { useFileState } from "../lib/useFileState";
 import produce from "immer";
 import { useSquiggleState } from "../lib/useSquiggleState";
 
@@ -6,7 +6,7 @@ import { useSquiggleState } from "../lib/useSquiggleState";
  * Edit the squiggle code
  */
 export function SquiggleEditor() {
-  const squiggle = useAppState((state) => state.project?.squiggle);
+  const squiggle = useFileState((state) => state.project?.squiggle);
   const error = useSquiggleState((state) => state.squiggleRunError);
   if (squiggle == null) return null;
   return (
@@ -18,11 +18,13 @@ export function SquiggleEditor() {
         }}
         value={squiggle}
         onChange={(e) => {
-          useAppState.setState(
+          useFileState.setState(
             produce((draft) => {
               if (!draft.project) return;
               draft.project.squiggle = e.target.value;
-            })
+            }),
+            false,
+            "squiggle editor"
           );
         }}
       />

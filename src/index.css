@@ -1,0 +1,33 @@
+.offscreen-canvas {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.react-flow__node-squiggleNodeType {
+  width: 360px;
+  height: 240px;
+  background-color: #ffffff;
+  border: 1px solid;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px;
+}
+
+.react-flow__handle {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  min-width: 0px;
+  min-height: 0px;
+  opacity: 0;
+  border-radius: 0;
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: move;
+  z-index: 10;
+  padding: 0;
+}

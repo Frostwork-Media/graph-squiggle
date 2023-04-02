@@ -1,4 +1,4 @@
-import { baseAppState, useAppState } from "./useAppState";
+import { baseFileState, useFileState } from "./useFileState";
 import { isError } from "./isError";
 import { getEmptyProject, projectSchema } from "./schema";
 
@@ -6,9 +6,9 @@ import { getEmptyProject, projectSchema } from "./schema";
  * Create a new project
  */
 export function create() {
-  useAppState.setState(
+  useFileState.setState(
     {
-      ...baseAppState,
+      ...baseFileState,
       project: getEmptyProject(),
       previousContents: JSON.stringify(getEmptyProject(), null, 2),
     },
@@ -41,9 +41,9 @@ export async function open() {
     try {
       const json = JSON.parse(contents);
       const project = projectSchema.parse(json);
-      useAppState.setState(
+      useFileState.setState(
         {
-          ...baseAppState,
+          ...baseFileState,
           project,
           previousContents: contents,
           fileHandle,
@@ -55,9 +55,9 @@ export async function open() {
       if (isError(error)) {
         console.log(error.message);
       }
-      useAppState.setState(
+      useFileState.setState(
         {
-          ...baseAppState,
+          ...baseFileState,
           loadFileError: isError(error)
             ? error
             : new Error("Unable to load file"),
@@ -68,8 +68,6 @@ export async function open() {
 
       return;
     }
-
-    console.log(contents);
     return file;
   } catch (error) {
     // console.error(error);
@@ -78,7 +76,7 @@ export async function open() {
 
 /** Remove file and handle from client state. Back to main screen */
 export function close() {
-  useAppState.setState(baseAppState, false, "close");
+  useFileState.setState(baseFileState, false, "close");
 }
 
 /**
@@ -89,7 +87,7 @@ export function close() {
  * If called without a fileHandle, it will open a file picker
  */
 export async function save(_fileHandle?: FileSystemFileHandle) {
-  const { project } = useAppState.getState();
+  const { project } = useFileState.getState();
   if (!project) return;
 
   try {
@@ -112,9 +110,9 @@ export async function save(_fileHandle?: FileSystemFileHandle) {
     const writable = await fileHandle.createWritable();
     await writable.write(contents);
     await writable.close();
-    useAppState.setState(
+    useFileState.setState(
       {
-        ...baseAppState,
+        ...baseFileState,
         project,
         previousContents: contents,
         fileHandle,

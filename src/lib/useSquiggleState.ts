@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { SqProject, run } from "@quri/squiggle-lang";
-import { useAppState } from "./useAppState";
+import { useFileState } from "./useFileState";
 import { isError } from "./isError";
 import debounce from "lodash.debounce";
+import { devtools, subscribeWithSelector } from "zustand/middleware";
+import { useEffect } from "react";
 
 type SquiggleState = {
   /** The parsed squiggle object */
@@ -11,16 +13,30 @@ type SquiggleState = {
   squiggleRunError?: string;
 };
 
-export const useSquiggleState = create<SquiggleState>((set) => ({}));
-
-/** On Load, we subscribe to the project squiggle code and run it when it changes */
-useAppState.subscribe(
-  (state) => state.project?.squiggle,
-  debounce(runSquiggle, 650, { leading: false, trailing: true }),
-  {
-    fireImmediately: true,
-  }
+export const useSquiggleState = create<SquiggleState>()(
+  devtools(
+    subscribeWithSelector((set) => ({})),
+    {
+      name: "Squiggle State",
+    }
+  )
 );
+
+export function useWatchProject() {
+  useEffect(() => {
+    const squiggle = useFileState.getState().project?.squiggle;
+    runSquiggle(squiggle);
+    /** On Load, we subscribe to the project squiggle code and run it when it changes */
+    const unsub = useFileState.subscribe(
+      (state) => state.project?.squiggle,
+      debounce(runSquiggle, 650, { leading: false, trailing: true })
+    );
+
+    return () => {
+      unsub();
+    };
+  }, []);
+}
 
 /**
  * Run the squiggle code and update the state
@@ -30,22 +46,38 @@ function runSquiggle(code: string | undefined) {
     try {
       const result = run(code).result;
       if (result.ok) {
-        useSquiggleState.setState({
-          squiggleRunResult: result.value.location.project,
-          squiggleRunError: undefined,
-        });
+        useSquiggleState.setState(
+          {
+            squiggleRunResult: result.value.location.project,
+            squiggleRunError: undefined,
+          },
+          false,
+          "run squiggle / ok"
+        );
       } else {
-        useSquiggleState.setState({
-          squiggleRunError: result.value.toString(),
-        });
+        useSquiggleState.setState(
+          {
+            squiggleRunError: result.value.toString(),
+          },
+          false,
+          "run squiggle / error"
+        );
       }
     } catch (e) {
       let message = isError(e) ? e.message : "Unknown error";
-      useSquiggleState.setState({
-        squiggleRunError: message,
-      });
+      useSquiggleState.setState(
+        {
+          squiggleRunError: message,
+        },
+        false,
+        "run squiggle / Unknown error"
+      );
     }
   } else {
-    useSquiggleState.setState({ squiggleRunResult: undefined });
+    useSquiggleState.setState(
+      { squiggleRunResult: undefined },
+      false,
+      "run squiggle / no code"
+    );
   }
 }

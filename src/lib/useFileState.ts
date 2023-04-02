@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Project } from "./schema";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 
-type AppState = {
+type FileState = {
   /** The current project */
   project?: Project;
   /** The previous contents of the file */
@@ -13,7 +13,7 @@ type AppState = {
   loadFileError?: Error;
 };
 
-export const baseAppState: AppState = {
+export const baseFileState: FileState = {
   project: undefined,
   previousContents: undefined,
   fileHandle: undefined,
@@ -24,11 +24,11 @@ export const baseAppState: AppState = {
  * This is global app state that is not persisted. It's wiped when the app
  * restarts.
  */
-export const useAppState = create<AppState>()(
+export const useFileState = create<FileState>()(
   devtools(
     subscribeWithSelector((set) => ({})),
     {
-      name: "Client State",
+      name: "File State",
     }
   )
 );

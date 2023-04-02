@@ -10,9 +10,11 @@
     - [x] Show open file name
   - [x] Display errors if unable to load file
   - [x] Warn user if unsaved changes before navigating away from file
-- [ ] parse squiggle
+- [x] parse squiggle
   - [x] run squiggle when code changes
   - [x] display squiggle errors
-  - [ ] convert to nodes and edges
+  - [x] convert to nodes and edges
 - [ ] render graph
+  - [ ] render cytoscape graph headless with a fixed node size
+  - [ ] render react-flow graph with node for each
 - [ ] edit context from graph nodes
