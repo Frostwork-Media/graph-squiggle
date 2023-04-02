@@ -1,7 +1,7 @@
-import { useClientState } from "./lib/clientState";
+import { useAppState } from "./lib/useAppState";
 import { close, create, open, save } from "./lib/files";
-import produce from "immer";
 import { useEffect } from "react";
+import { SquiggleEditor } from "./components/SquiggleEditor";
 
 export default function App() {
   return <Editor />;
@@ -11,17 +11,15 @@ export default function App() {
  * The editor to display when a project is open
  */
 function Editor() {
-  const project = useClientState((state) => state.project);
+  const project = useAppState((state) => state.project);
   const isProjectOpen = project != null;
   const projectString = JSON.stringify(project, null, 2);
-  const previousContents = useClientState(
-    (state) => state.previousContents ?? ""
-  );
+  const previousContents = useAppState((state) => state.previousContents ?? "");
   const isDirty = isProjectOpen
     ? projectString.trim() !== previousContents.trim()
     : false;
-  const fileHandle = useClientState((state) => state.fileHandle);
-  const loadFileError = useClientState((state) => state.loadFileError);
+  const fileHandle = useAppState((state) => state.fileHandle);
+  const loadFileError = useAppState((state) => state.loadFileError);
   // Add a before unload listener to warn the user if they have unsaved changes
   // and the squiggle code is not empty
   useEffect(() => {
@@ -90,26 +88,5 @@ function Editor() {
         <p>No project open</p>
       )}
     </div>
-  );
-}
-
-/**
- * Edit the squiggle code
- */
-function SquiggleEditor() {
-  const squiggle = useClientState((state) => state.project?.squiggle);
-  if (squiggle == null) return null;
-  return (
-    <textarea
-      value={squiggle}
-      onChange={(e) => {
-        useClientState.setState(
-          produce((draft) => {
-            if (!draft.project) return;
-            draft.project.squiggle = e.target.value;
-          })
-        );
-      }}
-    />
   );
 }

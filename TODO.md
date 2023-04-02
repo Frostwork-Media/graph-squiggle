@@ -10,4 +10,9 @@
     - [x] Show open file name
   - [x] Display errors if unable to load file
   - [x] Warn user if unsaved changes before navigating away from file
-- [ ] need to recurse and find internal nodes in our graph parser
+- [ ] parse squiggle
+  - [x] run squiggle when code changes
+  - [x] display squiggle errors
+  - [ ] convert to nodes and edges
+- [ ] render graph
+- [ ] edit context from graph nodes

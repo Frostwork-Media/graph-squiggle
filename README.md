@@ -24,3 +24,9 @@ Start the development server:
 ```
 pnpm vercel dev
 ```
+
+## Major Building Blocks
+
+### Squiggle -> Graph
+
+Converting the squiggle code into nodes and edges. This is done in `src/lib/squiggleToGraph.ts`.

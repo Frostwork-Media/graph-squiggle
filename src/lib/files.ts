@@ -1,4 +1,4 @@
-import { baseClientState, useClientState } from "./clientState";
+import { baseAppState, useAppState } from "./useAppState";
 import { isError } from "./isError";
 import { getEmptyProject, projectSchema } from "./schema";
 
@@ -6,9 +6,9 @@ import { getEmptyProject, projectSchema } from "./schema";
  * Create a new project
  */
 export function create() {
-  useClientState.setState(
+  useAppState.setState(
     {
-      ...baseClientState,
+      ...baseAppState,
       project: getEmptyProject(),
       previousContents: JSON.stringify(getEmptyProject(), null, 2),
     },
@@ -41,9 +41,9 @@ export async function open() {
     try {
       const json = JSON.parse(contents);
       const project = projectSchema.parse(json);
-      useClientState.setState(
+      useAppState.setState(
         {
-          ...baseClientState,
+          ...baseAppState,
           project,
           previousContents: contents,
           fileHandle,
@@ -55,9 +55,9 @@ export async function open() {
       if (isError(error)) {
         console.log(error.message);
       }
-      useClientState.setState(
+      useAppState.setState(
         {
-          ...baseClientState,
+          ...baseAppState,
           loadFileError: isError(error)
             ? error
             : new Error("Unable to load file"),
@@ -78,7 +78,7 @@ export async function open() {
 
 /** Remove file and handle from client state. Back to main screen */
 export function close() {
-  useClientState.setState(baseClientState, false, "close");
+  useAppState.setState(baseAppState, false, "close");
 }
 
 /**
@@ -89,7 +89,7 @@ export function close() {
  * If called without a fileHandle, it will open a file picker
  */
 export async function save(_fileHandle?: FileSystemFileHandle) {
-  const { project } = useClientState.getState();
+  const { project } = useAppState.getState();
   if (!project) return;
 
   try {
@@ -112,9 +112,9 @@ export async function save(_fileHandle?: FileSystemFileHandle) {
     const writable = await fileHandle.createWritable();
     await writable.write(contents);
     await writable.close();
-    useClientState.setState(
+    useAppState.setState(
       {
-        ...baseClientState,
+        ...baseAppState,
         project,
         previousContents: contents,
         fileHandle,

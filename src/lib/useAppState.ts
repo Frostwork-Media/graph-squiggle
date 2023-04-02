@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { Project } from "./schema";
-import { devtools } from "zustand/middleware";
+import { devtools, subscribeWithSelector } from "zustand/middleware";
 
-type ClientState = {
+type AppState = {
   /** The current project */
   project?: Project;
   /** The previous contents of the file */
@@ -13,7 +13,7 @@ type ClientState = {
   loadFileError?: Error;
 };
 
-export const baseClientState: ClientState = {
+export const baseAppState: AppState = {
   project: undefined,
   previousContents: undefined,
   fileHandle: undefined,
@@ -24,8 +24,11 @@ export const baseClientState: ClientState = {
  * This is global app state that is not persisted. It's wiped when the app
  * restarts.
  */
-export const useClientState = create<ClientState>()(
-  devtools((set) => ({}), {
-    name: "Client State",
-  })
+export const useAppState = create<AppState>()(
+  devtools(
+    subscribeWithSelector((set) => ({})),
+    {
+      name: "Client State",
+    }
+  )
 );
