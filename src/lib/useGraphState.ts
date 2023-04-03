@@ -46,7 +46,6 @@ export function useWatchSquiggle() {
         if (project) {
           try {
             const elements = squiggleToGraph(project);
-            console.log({ elements });
             useGraphState.setState({ elements }, false, "watch squiggle state");
           } catch (e) {}
         }
@@ -77,8 +76,8 @@ export function useWatchSquiggle() {
               {
                 selector: "node",
                 style: {
-                  width: "360px",
-                  height: "240px",
+                  width: "240px",
+                  height: "120px",
                   shape: "rectangle",
                   "background-color": "#fff",
                   label: "data(id)",
@@ -156,10 +155,6 @@ export function useWatchSquiggle() {
               id,
               source: edge.data.source,
               target: edge.data.target,
-              style: {
-                stroke: "#000",
-                strokeWidth: 2,
-              },
               markerStart: {
                 type: MarkerType.Arrow,
               },

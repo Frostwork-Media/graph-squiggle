@@ -10,8 +10,9 @@ export function SquiggleEditor() {
   const error = useSquiggleState((state) => state.squiggleRunError);
   if (squiggle == null) return null;
   return (
-    <div>
+    <div className="p-2 bg-white/50">
       <textarea
+        className="font-mono text-xs leading-5 resize-none bg-transparent"
         style={{
           width: 400,
           height: 300,

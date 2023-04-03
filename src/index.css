@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .offscreen-canvas {
   position: absolute;
   left: -9999px;
@@ -8,13 +12,13 @@
 }
 
 .react-flow__node-squiggleNodeType {
-  width: 360px;
-  height: 240px;
+  width: 240px;
+  height: 120px;
   background-color: #ffffff;
-  border: 1px solid;
+  border: 1px solid #b1b1b7;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: 2px 2px;
+  box-shadow: 2px 2px #b1b1b7;
 }
 
 .react-flow__handle {
