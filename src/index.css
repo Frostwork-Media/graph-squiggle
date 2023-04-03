@@ -31,3 +31,7 @@
   z-index: 10;
   padding: 0;
 }
+
+.react-flow__attribution {
+  display: none;
+}

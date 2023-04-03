@@ -5,7 +5,7 @@ import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { squiggleToGraph } from "./squiggleToGraph";
 import { useSquiggleState } from "./useSquiggleState";
 import klay from "cytoscape-klay";
-import { Node, Edge } from "reactflow";
+import { Node, Edge, MarkerType } from "reactflow";
 import { squiggleNodeType } from "./constants";
 
 // @ts-ignore
@@ -156,6 +156,13 @@ export function useWatchSquiggle() {
               id,
               source: edge.data.source,
               target: edge.data.target,
+              style: {
+                stroke: "#000",
+                strokeWidth: 2,
+              },
+              markerStart: {
+                type: MarkerType.Arrow,
+              },
             });
         }
         useGraphState.setState(

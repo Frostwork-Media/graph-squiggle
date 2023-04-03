@@ -14,7 +14,10 @@
   - [x] run squiggle when code changes
   - [x] display squiggle errors
   - [x] convert to nodes and edges
-- [ ] render graph
-  - [ ] render cytoscape graph headless with a fixed node size
-  - [ ] render react-flow graph with node for each
-- [ ] edit context from graph nodes
+- [x] render graph
+  - [x] render cytoscape graph headless with a fixed node size
+  - [x] render react-flow graph with node for each
+- [ ] determine a basic functional UI
+  - [ ] build node ui
+  - [ ] edit context from graph nodes
+  - [ ] UI for reconnecting nodes when unlinked from variable name

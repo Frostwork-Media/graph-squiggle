@@ -34,7 +34,7 @@ function TextUpdaterNode({ data }: NodeProps) {
     <>
       <Handle type="source" position={Position.Top} />
       <div>
-        <h1>Hello World</h1>
+        <h1>{data.label}</h1>
       </div>
       <Handle type="target" position={Position.Bottom} />
     </>
