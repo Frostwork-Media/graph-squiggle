@@ -1,11 +1,15 @@
 import { baseFileState, useFileState } from "./useFileState";
 import { isError } from "./isError";
 import { getEmptyProject, projectSchema } from "./schema";
+import { baseGraphState, useGraphState } from "./useGraphState";
+import { baseSquiggleState, useSquiggleState } from "./useSquiggleState";
 
 /**
  * Create a new project
  */
 export function create() {
+  useGraphState.setState(baseGraphState, false, "create");
+  useSquiggleState.setState(baseSquiggleState, false, "create");
   useFileState.setState(
     {
       ...baseFileState,

@@ -12,13 +12,13 @@
 }
 
 .react-flow__node-squiggleNodeType {
-  width: 240px;
-  height: 120px;
-  background-color: #ffffff;
+  width: 320px;
+  height: 200px;
+  /* background-color: #ffffff;
   border: 1px solid #b1b1b7;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: 2px 2px #b1b1b7;
+  box-shadow: 2px 2px #b1b1b7; */
 }
 
 .react-flow__handle {

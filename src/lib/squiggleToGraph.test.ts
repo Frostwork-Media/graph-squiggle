@@ -9,11 +9,13 @@ describe("squiggleToGraph", () => {
         {
           data: {
             id: "i",
+            line: 1,
           },
         },
         {
           data: {
             id: "j",
+            line: 2,
           },
         },
       ],
@@ -27,11 +29,13 @@ describe("squiggleToGraph", () => {
         {
           data: {
             id: "i",
+            line: 1,
           },
         },
         {
           data: {
             id: "j",
+            line: 2,
           },
         },
       ],
@@ -53,11 +57,13 @@ describe("squiggleToGraph", () => {
         {
           data: {
             id: "i",
+            line: 1,
           },
         },
         {
           data: {
             id: "j",
+            line: 2,
           },
         },
       ],
@@ -79,11 +85,13 @@ describe("squiggleToGraph", () => {
         {
           data: {
             id: "i",
+            line: 1,
           },
         },
         {
           data: {
             id: "j",
+            line: 2,
           },
         },
       ],
@@ -105,16 +113,19 @@ describe("squiggleToGraph", () => {
         {
           data: {
             id: "i",
+            line: 1,
           },
         },
         {
           data: {
             id: "j",
+            line: 2,
           },
         },
         {
           data: {
             id: "k",
+            line: 3,
           },
         },
       ],
@@ -127,6 +138,26 @@ describe("squiggleToGraph", () => {
           },
         },
       ],
+    });
+  });
+
+  test("stores line number in node data", () => {
+    expect(squiggleToGraph(getProject("i = 1\nj = 2"))).toEqual({
+      nodes: [
+        {
+          data: {
+            id: "i",
+            line: 1,
+          },
+        },
+        {
+          data: {
+            id: "j",
+            line: 2,
+          },
+        },
+      ],
+      edges: [],
     });
   });
 });

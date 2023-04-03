@@ -17,12 +17,14 @@ export function squiggleToGraph(sq: SqProject): ElementsDefinition {
   for (const statement of statements) {
     if (isLetStatement(statement)) {
       const variableName = statement.variable.value;
+      const line = statement.variable.location.start.line;
 
       // Check if node already exists in graph
       if (!nodes.find((n) => n.data.id === variableName)) {
         nodes.push({
           data: {
             id: variableName,
+            line,
           },
         });
       }
@@ -32,10 +34,11 @@ export function squiggleToGraph(sq: SqProject): ElementsDefinition {
 
       // Create nodes for an dependencies that don't already exist
       for (const dependency of dependencies) {
-        if (!nodes.find((n) => n.data.id === dependency)) {
+        if (!nodes.find((n) => n.data.id === dependency.variable)) {
           nodes.push({
             data: {
-              id: dependency,
+              id: dependency.variable,
+              line: dependency.line,
             },
           });
         }
@@ -44,9 +47,9 @@ export function squiggleToGraph(sq: SqProject): ElementsDefinition {
       for (const dependency of dependencies) {
         edges.push({
           data: {
-            id: `${variableName}-${dependency}`,
+            id: `${variableName}-${dependency.variable}`,
             source: variableName,
-            target: dependency,
+            target: dependency.variable,
           },
         });
       }
@@ -63,7 +66,7 @@ function isLetStatement(node: any): node is NodeLetStatement {
  * Recursively finds all references to other nodes
  */
 function findRefsRecursively(value: AnyPeggyNode) {
-  const refs: string[] = [];
+  const refs: { variable: string; line: number }[] = [];
 
   if ("statements" in value) {
     for (const statement of value.statements) {
@@ -78,7 +81,10 @@ function findRefsRecursively(value: AnyPeggyNode) {
   }
 
   if (value.type === "Identifier") {
-    refs.push(value.value);
+    refs.push({
+      variable: value.value,
+      line: value.location.start.line,
+    });
   }
 
   return refs;

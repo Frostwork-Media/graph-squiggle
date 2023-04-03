@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { SquiggleEditor } from "./components/SquiggleEditor";
 import { Graph } from "./components/Graph";
 import { useWatchProject } from "./lib/useSquiggleState";
+import { PromptEditor } from "./components/PromptEditor";
+import { useGlobalSettings } from "./lib/useGlobalSettings";
 
 export default function App() {
   const project = useFileState((state) => state.project);
@@ -58,15 +60,16 @@ function Nav({
   isDirty: boolean;
   fileHandle?: FileSystemFileHandle;
 }) {
+  const apiKey = useGlobalSettings((state) => state.openAIAPIKey);
   return (
-    <nav className="flex items-center gap-6 p-2 justify-between">
+    <nav className="flex items-center gap-6 px-4 py-1 justify-between">
       {isProjectOpen ? (
         <ProjectNav isDirty={isDirty} fileHandle={fileHandle} />
       ) : (
         <div />
       )}
       <div className="flex items-center gap-6">
-        <button
+        <NavButton
           onClick={() => {
             // if is dirty we warn user first
             if (isDirty) {
@@ -81,8 +84,8 @@ function Nav({
           }}
         >
           New Project
-        </button>
-        <button
+        </NavButton>
+        <NavButton
           onClick={() => {
             // if is dirty we warn user first
             if (isDirty) {
@@ -97,7 +100,16 @@ function Nav({
           }}
         >
           Open Project
-        </button>
+        </NavButton>
+        <input
+          type="password"
+          className="bg-neutral-100 font-mono"
+          placeholder="Paste OpenAI API Key"
+          value={apiKey}
+          onChange={(e) => {
+            useGlobalSettings.setState({ openAIAPIKey: e.target.value });
+          }}
+        />
       </div>
     </nav>
   );
@@ -141,9 +153,9 @@ function ProjectNav({
         {isDirty ? "*" : ""}
       </h1>
       {isDirty && fileHandle && (
-        <button onClick={() => save(fileHandle)}>Save</button>
+        <NavButton onClick={() => save(fileHandle)}>Save</NavButton>
       )}
-      <button onClick={() => save()}>Save As</button>
+      <NavButton onClick={() => save()}>Save As</NavButton>
     </div>
   );
 }
@@ -154,11 +166,29 @@ function ProjectNav({
 function Project() {
   useWatchProject();
   return (
-    <div className="h-full relative">
-      <div className="absolute top-0 left-2 z-10 rounded border">
+    <div className="h-full relative border-t border-neutral-200">
+      <div className="absolute top-0 left-2 z-10 rounded border grid gap-1">
         <SquiggleEditor />
+        <PromptEditor />
       </div>
       <Graph />
     </div>
+  );
+}
+
+function NavButton({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 p-2 rounded hover:bg-neutral-100 active:bg-neutral-200"
+    >
+      {children}
+    </button>
   );
 }

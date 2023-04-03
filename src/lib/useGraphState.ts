@@ -7,6 +7,7 @@ import { useSquiggleState } from "./useSquiggleState";
 import klay from "cytoscape-klay";
 import { Node, Edge, MarkerType } from "reactflow";
 import { squiggleNodeType } from "./constants";
+import { useFileState } from "./useFileState";
 
 // @ts-ignore
 if (!cytoscape.__hasInit) {
@@ -28,9 +29,10 @@ type GraphState = {
   edges?: Edge[];
 };
 
+export const baseGraphState: GraphState = {};
 export const useGraphState = create<GraphState>()(
   devtools(
-    subscribeWithSelector((set) => ({})),
+    subscribeWithSelector((set) => baseGraphState),
     {
       name: "Graph State",
     }
@@ -47,7 +49,15 @@ export function useWatchSquiggle() {
           try {
             const elements = squiggleToGraph(project);
             useGraphState.setState({ elements }, false, "watch squiggle state");
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
+        } else {
+          useGraphState.setState(
+            { elements: undefined },
+            false,
+            "watch squiggle state"
+          );
         }
       },
       {
@@ -76,8 +86,8 @@ export function useWatchSquiggle() {
               {
                 selector: "node",
                 style: {
-                  width: "240px",
-                  height: "120px",
+                  width: "320px",
+                  height: "200px",
                   shape: "rectangle",
                   "background-color": "#fff",
                   label: "data(id)",
@@ -121,12 +131,31 @@ export function useWatchSquiggle() {
       (state) => state.positions,
       (positions) => {
         if (positions) {
-          const nodes = Object.entries(positions).map(([id, { x, y }]) => ({
-            id,
-            type: squiggleNodeType,
-            data: { label: id },
-            position: { x, y },
-          }));
+          const elements = useGraphState.getState().elements;
+          const squiggle = useFileState.getState().project?.squiggle;
+          if (!elements || !squiggle) return;
+          const nodes = Object.entries(positions).map(([id, { x, y }]) => {
+            // find the node in the elements
+            const nodeInElements = elements?.nodes.find(
+              (node) => node.data.id === id
+            );
+            if (!nodeInElements) throw new Error("Node not found in elements");
+            // get the line before the node in the squiggle
+            let comment = squiggle.split("\n")[nodeInElements.data.line - 2];
+            console.log(squiggle.split("\n"));
+
+            if (!comment.startsWith("//")) {
+              comment = "";
+            } else {
+              comment = comment.slice(2).trim();
+            }
+            return {
+              id,
+              type: squiggleNodeType,
+              data: { ...nodeInElements.data, comment, label: id },
+              position: { x, y },
+            };
+          });
           useGraphState.setState(
             { nodes },
             false,
@@ -155,9 +184,13 @@ export function useWatchSquiggle() {
               id,
               source: edge.data.source,
               target: edge.data.target,
-              markerStart: {
-                type: MarkerType.Arrow,
+              style: {
+                strokeWidth: 2,
+                stroke: "#ccc",
               },
+              // markerStart: {
+              //   type: MarkerType.Arrow,
+              // },
             });
         }
         useGraphState.setState(

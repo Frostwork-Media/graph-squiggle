@@ -4,32 +4,40 @@ import ReactFlow, {
   Handle,
   Position,
   NodeProps,
-  useReactFlow,
+  Background,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { squiggleNodeType } from "../lib/constants";
 
-const newLocal = {
-  [squiggleNodeType]: TextUpdaterNode,
+const nodeTypes = {
+  [squiggleNodeType]: CustomNode,
 };
+
 export function Graph() {
   useWatchSquiggle();
   const nodes = useGraphState((state) => state.nodes);
   const edges = useGraphState((state) => state.edges);
 
   return (
-    <ReactFlow fitView nodes={nodes} edges={edges} nodeTypes={newLocal}>
+    <ReactFlow fitView nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
+      <Background />
       <Controls />
     </ReactFlow>
   );
 }
 
-function TextUpdaterNode({ data }: NodeProps) {
+function CustomNode({ data }: NodeProps) {
   return (
     <>
       <Handle type="source" position={Position.Top} />
-      <div className="overflow-hidden">
-        <Chip label={data.label} />
+      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)] h-full border border-neutral-300 p-1 rounded-xl border-b-8">
+        <div className="overflow-hidden">
+          <Chip label={data.label} />
+        </div>
+        {/* <span>{data.line}</span> */}
+        <div className="grid content-center justify-center pb-4 px-2">
+          <span className="text-sm text-center">{data.comment}</span>
+        </div>
       </div>
       <Handle type="target" position={Position.Bottom} />
     </>
@@ -38,7 +46,7 @@ function TextUpdaterNode({ data }: NodeProps) {
 
 function Chip({ label }: { label: string }) {
   return (
-    <div className="bg-gray-200 rounded-full inline-block px-3 py-1 text-xs text-gray-700 mr-2 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
+    <div className="bg-blue-50 rounded-lg inline-block p-1 px-2 text-[10px] text-blue-400 mr-2 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
       {label}
     </div>
   );

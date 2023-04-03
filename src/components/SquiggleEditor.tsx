@@ -29,7 +29,9 @@ export function SquiggleEditor() {
           );
         }}
       />
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {error && (
+        <div className="text-red-500 max-w-[360px] text-sm">{error}</div>
+      )}
     </div>
   );
 }

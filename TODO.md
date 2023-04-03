@@ -18,7 +18,7 @@
   - [x] render cytoscape graph headless with a fixed node size
   - [x] render react-flow graph with node for each
 - [ ] determine a basic functional UI
-  - [ ] basic tailwind interface
+  - [x] basic tailwind interface
   - [ ] build node ui
   - [ ] edit context from graph nodes
   - [ ] UI for reconnecting nodes when unlinked from variable name

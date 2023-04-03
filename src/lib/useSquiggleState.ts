@@ -13,9 +13,10 @@ type SquiggleState = {
   squiggleRunError?: string;
 };
 
+export const baseSquiggleState: SquiggleState = {};
 export const useSquiggleState = create<SquiggleState>()(
   devtools(
-    subscribeWithSelector((set) => ({})),
+    subscribeWithSelector((set) => baseSquiggleState),
     {
       name: "Squiggle State",
     }
