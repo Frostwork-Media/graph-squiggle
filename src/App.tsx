@@ -1,11 +1,8 @@
 import { useFileState } from "./lib/useFileState";
 import { create, open, save } from "./lib/files";
 import { useEffect } from "react";
-import { SquiggleEditor } from "./components/SquiggleEditor";
-import { Graph } from "./components/Graph";
-import { useWatchProject } from "./lib/useSquiggleState";
-import { PromptEditor } from "./components/PromptEditor";
 import { useGlobalSettings } from "./lib/useGlobalSettings";
+import { Project } from "./components/Project";
 
 export default function App() {
   const project = useFileState((state) => state.project);
@@ -156,22 +153,6 @@ function ProjectNav({
         <NavButton onClick={() => save(fileHandle)}>Save</NavButton>
       )}
       <NavButton onClick={() => save()}>Save As</NavButton>
-    </div>
-  );
-}
-
-/**
- * Mounted when a valid project is opened
- */
-function Project() {
-  useWatchProject();
-  return (
-    <div className="h-full relative border-t border-neutral-200">
-      <div className="absolute top-0 left-2 z-10 rounded border grid gap-1">
-        <SquiggleEditor />
-        <PromptEditor />
-      </div>
-      <Graph />
     </div>
   );
 }

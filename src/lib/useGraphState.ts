@@ -142,7 +142,6 @@ export function useWatchSquiggle() {
             if (!nodeInElements) throw new Error("Node not found in elements");
             // get the line before the node in the squiggle
             let comment = squiggle.split("\n")[nodeInElements.data.line - 2];
-            console.log(squiggle.split("\n"));
 
             if (!comment.startsWith("//")) {
               comment = "";

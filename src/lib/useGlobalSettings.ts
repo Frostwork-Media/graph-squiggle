@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
 
 type GlobalSettings = {
   openAIAPIKey: string;
@@ -9,7 +9,12 @@ const baseGlobalSettings: GlobalSettings = {
   openAIAPIKey: "",
 };
 export const useGlobalSettings = create<GlobalSettings>()(
-  persist((set) => baseGlobalSettings, {
-    name: "global-squiggle-app-settings",
-  })
+  devtools(
+    persist((set) => baseGlobalSettings, {
+      name: "global-squiggle-app-settings",
+    }),
+    {
+      name: "Global Settings",
+    }
+  )
 );

@@ -2,6 +2,8 @@ import { ElementsDefinition, NodeDefinition, EdgeDefinition } from "cytoscape";
 import { SqProject } from "@quri/squiggle-lang";
 import { NodeLetStatement } from "./types";
 import { AnyPeggyNode } from "@quri/squiggle-lang/dist/src/ast/peggyHelpers";
+import { getTextFromLocationRange } from "./getTextFromLocationRange";
+import { useFileState } from "./useFileState";
 
 /**
  * Converts compiled squiggle code to nodes and edges
@@ -9,6 +11,8 @@ import { AnyPeggyNode } from "@quri/squiggle-lang/dist/src/ast/peggyHelpers";
 export function squiggleToGraph(sq: SqProject): ElementsDefinition {
   const nodes: NodeDefinition[] = [];
   const edges: EdgeDefinition[] = [];
+
+  const code = useFileState.getState().project?.squiggle ?? "";
 
   const items = sq["items"];
   const program = items.get("main");
@@ -18,6 +22,7 @@ export function squiggleToGraph(sq: SqProject): ElementsDefinition {
     if (isLetStatement(statement)) {
       const variableName = statement.variable.value;
       const line = statement.variable.location.start.line;
+      const value = getTextFromLocationRange(statement.value.location, code);
 
       // Check if node already exists in graph
       if (!nodes.find((n) => n.data.id === variableName)) {
@@ -25,6 +30,7 @@ export function squiggleToGraph(sq: SqProject): ElementsDefinition {
           data: {
             id: variableName,
             line,
+            value,
           },
         });
       }

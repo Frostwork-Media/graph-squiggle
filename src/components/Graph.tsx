@@ -35,8 +35,11 @@ function CustomNode({ data }: NodeProps) {
           <Chip label={data.label} />
         </div>
         {/* <span>{data.line}</span> */}
-        <div className="grid content-center justify-center pb-4 px-2">
+        <div className="grid content-center justify-center justify-items-center pb-4 px-2 gap-2">
           <span className="text-sm text-center">{data.comment}</span>
+          <span className="max-h-24 overflow-auto text-sm text-blue-500 font-mono">
+            {data.value}
+          </span>
         </div>
       </div>
       <Handle type="target" position={Position.Bottom} />

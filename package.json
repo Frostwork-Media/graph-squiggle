@@ -11,13 +11,17 @@
   },
   "dependencies": {
     "@quri/squiggle-lang": "^0.6.0",
+    "@radix-ui/react-tabs": "^1.0.3",
     "cytoscape": "^3.23.0",
     "cytoscape-klay": "^3.1.4",
     "immer": "^9.0.21",
     "lodash.debounce": "^4.0.8",
     "openai": "^3.2.1",
+    "peggy": "^3.0.2",
+    "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-resizable-panels": "^0.0.39",
     "reactflow": "^11.7.0",
     "zod": "^3.21.4",
     "zustand": "^4.3.7"
