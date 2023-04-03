@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Helvetica", "sans-serif"],
+        sans: ["Readex Pro", "Helvetica", "sans-serif"],
       },
     },
   },

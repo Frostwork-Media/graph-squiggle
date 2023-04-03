@@ -38,7 +38,7 @@ export function Project() {
   };
 
   return (
-    <Tabs.Root>
+    <Tabs.Root defaultValue="prompt">
       <PanelGroup
         className="h-full relative border-t border-neutral-200"
         direction="horizontal"
@@ -55,16 +55,14 @@ export function Project() {
             }
           }}
         >
-          <div className="grid gap-1">
-            <Tabs.Content value="code" asChild>
-              <SquiggleEditor />
-            </Tabs.Content>
-            <Tabs.Content value="prompt" asChild>
-              <PromptEditor />
-            </Tabs.Content>
-          </div>
+          <Tabs.Content value="code" asChild>
+            <SquiggleEditor />
+          </Tabs.Content>
+          <Tabs.Content value="prompt" asChild>
+            <PromptEditor />
+          </Tabs.Content>
         </Panel>
-        <PanelResizeHandle className="bg-neutral-50 grid content-start p-2 gap-2">
+        <PanelResizeHandle className="bg-neutral-100 grid content-start p-1 gap-2">
           {isCollapsed ? (
             <IconButton icon={ArrowLineRight} onClick={expandPanel} />
           ) : (

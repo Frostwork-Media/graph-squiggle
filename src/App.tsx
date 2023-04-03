@@ -40,7 +40,7 @@ export default function App() {
       {loadFileError ? (
         <LoadFileError loadFileError={loadFileError} />
       ) : isProjectOpen ? (
-        <Project key={fileHandle?.name} />
+        <Project />
       ) : (
         <NoProjectOpen />
       )}
@@ -145,7 +145,7 @@ function ProjectNav({
 }) {
   return (
     <div className="flex items-center gap-6">
-      <h1 className="font-bold">
+      <h1 className="font-bold text-blue-600 tracking-wide">
         {fileHandle ? fileHandle.name : "Untitled Project"}
         {isDirty ? "*" : ""}
       </h1>
