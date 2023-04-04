@@ -1,9 +1,26 @@
-import { memo } from "react";
+import { memo, useMemo, useState } from "react";
 import { Handle, Position, NodeProps } from "reactflow";
 import { IconButton } from "../ui/IconButton";
 import { Graph } from "phosphor-react";
+import { useFileState } from "../lib/useFileState";
+import { SquiggleChart } from "@quri/squiggle-components";
 
 export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
+  const [showGraph, setShowGraph] = useState(false);
+  const code = useFileState((state) => state.project?.squiggle ?? "");
+  const squiggleCodeForGraph = useMemo(() => {
+    // get line number
+    const line = data.line;
+    const variableName = data.label;
+
+    // slice the code up to and including the line
+    const codeUpToLine = code.split("\n").slice(0, line).join("\n");
+
+    // add variable name as last line
+    const codeWithVariable = `${codeUpToLine}\n${variableName}`;
+
+    return codeWithVariable;
+  }, [code]);
   return (
     <>
       <Handle type="source" position={Position.Top} />
@@ -12,15 +29,28 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
-          <IconButton icon={Graph} size={20} />
+          <IconButton
+            icon={Graph}
+            size={20}
+            onClick={() => setShowGraph(!showGraph)}
+          />
         </div>
-        {/* <span>{data.line}</span> */}
-        <div className="grid content-center justify-center justify-items-center pb-4 px-2 gap-2">
-          <span className="text-sm text-center">{data.comment}</span>
-          <span className="max-h-24 overflow-auto text-sm text-blue-500 font-mono">
-            {data.value}
-          </span>
-        </div>
+        {showGraph ? (
+          <div className="h-[500px]">
+            <SquiggleChart
+              // @ts-ignore
+              height={200}
+              code={squiggleCodeForGraph}
+            />
+          </div>
+        ) : (
+          <div className="grid content-center justify-center justify-items-center pb-4 px-2 gap-2">
+            <span className="text-sm text-center">{data.comment}</span>
+            <span className="max-h-24 overflow-auto text-sm text-blue-500 font-mono">
+              {data.value}
+            </span>
+          </div>
+        )}
       </div>
       <Handle type="target" position={Position.Bottom} />
     </>

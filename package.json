@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
+    "@quri/squiggle-components": "^0.6.0",
     "@quri/squiggle-lang": "^0.6.0",
     "@radix-ui/react-tabs": "^1.0.3",
+    "canvas": "^2.11.2",
     "cytoscape": "^3.23.0",
     "cytoscape-klay": "^3.1.4",
     "immer": "^9.0.21",

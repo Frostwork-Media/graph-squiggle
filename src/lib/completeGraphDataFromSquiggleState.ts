@@ -56,27 +56,31 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
       const positions = getPositions(elements);
 
       // build react flow nodes
-      const nodes = Object.entries(positions).map(([id, { x, y }]) => {
-        // find the node in the elements
-        const nodeInElements = elements?.nodes.find(
-          (node) => node.data.id === id
-        );
-        if (!nodeInElements) throw new Error("Node not found in elements");
-        // get the line before the node in the squiggle
-        let comment = squiggle.split("\n")[nodeInElements.data.line - 2] ?? "";
+      const nodes: ReactFlowNode[] = Object.entries(positions).map(
+        ([id, { x, y }]) => {
+          // find the node in the elements
+          const nodeInElements = elements?.nodes.find(
+            (node) => node.data.id === id
+          );
+          if (!nodeInElements) throw new Error("Node not found in elements");
+          // get the line before the node in the squiggle
+          let comment =
+            squiggle.split("\n")[nodeInElements.data.line - 2] ?? "";
 
-        if (!comment.startsWith("//")) {
-          comment = "";
-        } else {
-          comment = comment.slice(2).trim();
+          if (!comment.startsWith("//")) {
+            comment = "";
+          } else {
+            comment = comment.slice(2).trim();
+          }
+          return {
+            id,
+            type: squiggleNodeType,
+            data: { ...nodeInElements.data, comment, label: id },
+            draggable: false,
+            position: { x, y },
+          };
         }
-        return {
-          id,
-          type: squiggleNodeType,
-          data: { ...nodeInElements.data, comment, label: id },
-          position: { x, y },
-        };
-      });
+      );
 
       // build react flow edges
       const edges: ReactFlowEdge[] = [];
@@ -122,8 +126,8 @@ function getPositions(elements: ElementsDefinition) {
         {
           selector: "node",
           style: {
-            width: "320px",
-            height: "200px",
+            width: "400px",
+            height: "360px",
             shape: "rectangle",
             "background-color": "#fff",
             label: "data(id)",

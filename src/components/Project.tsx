@@ -8,11 +8,12 @@ import {
   PanelResizeHandle,
   ImperativePanelHandle,
 } from "react-resizable-panels";
-import { X, Code, ArrowLineRight, Chats } from "phosphor-react";
+import { X, Code, ArrowLineRight, Chats, ChartBar } from "phosphor-react";
 import { IconButton } from "../ui/IconButton";
 import { useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useFileState } from "../lib/useFileState";
+import { Bindings } from "./Bindings";
 
 /**
  * Mounted when a valid project is opened
@@ -63,6 +64,9 @@ export function Project() {
           <Tabs.Content value="prompt" asChild>
             <PromptEditor key={fileHandle?.name ?? ""} />
           </Tabs.Content>
+          <Tabs.Content value="bindings" asChild>
+            <Bindings />
+          </Tabs.Content>
         </Panel>
         <PanelResizeHandle className="bg-neutral-100 grid content-start p-1 gap-2">
           {isCollapsed ? (
@@ -80,6 +84,12 @@ export function Project() {
             <Tabs.Trigger value="prompt" asChild>
               <IconButton
                 icon={Chats}
+                className="data-[state=active]:bg-neutral-300"
+              />
+            </Tabs.Trigger>
+            <Tabs.Trigger value="bindings" asChild>
+              <IconButton
+                icon={ChartBar}
                 className="data-[state=active]:bg-neutral-300"
               />
             </Tabs.Trigger>

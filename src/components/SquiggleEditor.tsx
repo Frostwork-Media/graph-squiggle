@@ -22,6 +22,7 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
             className: "w-full max-w-[100%] h-full overflow-hidden",
           }}
           width="100%"
+          language="squiggle"
           options={{
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
@@ -44,6 +45,26 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
               false,
               "squiggle editor"
             );
+          }}
+          beforeMount={(monaco) => {
+            // register a custom language "my-lang"
+            // that supports C-style comments
+            monaco.languages.register({ id: "squiggle" });
+            monaco.languages.setMonarchTokensProvider("squiggle", {
+              tokenizer: {
+                root: [
+                  // comments
+                  [/\/\/.*$/, "comment"],
+                ],
+              },
+            });
+            // set the default language
+            monaco.editor.setTheme("vs-dark");
+            monaco.languages.setLanguageConfiguration("squiggle", {
+              comments: {
+                lineComment: "//",
+              },
+            });
           }}
         />
         {error && <div className="bg-red-500 text-white text-sm">{error}</div>}
