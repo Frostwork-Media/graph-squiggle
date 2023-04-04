@@ -26,7 +26,7 @@ stepNumberOne = 0.5 to 0.8
 stepNumberTwo = 10k to 50k
 // another part of estimation
 stepNumberThree = 0.05 to 0.1
-// [Original Question]
+// the original problem
 finalAnswer = stepNumberOne * stepNumberTwo / stepNumberThree
 
 
