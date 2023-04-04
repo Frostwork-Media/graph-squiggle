@@ -14,7 +14,7 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
     if (squiggle == null) return null;
     return (
       <div
-        className="pt-4 pl-4 bg-white/50 h-full grid grid-rows-[minmax(0,1fr)_auto] max-w-[100%] overflow-hidden"
+        className="relative pt-4 pl-4 bg-white/50 h-full grid grid-rows-[minmax(0,1fr)_auto] max-w-[100%] overflow-hidden"
         ref={ref}
       >
         <Editor
@@ -67,7 +67,11 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
             });
           }}
         />
-        {error && <div className="bg-red-500 text-white text-sm">{error}</div>}
+        {error && (
+          <div className="absolute z-10 bottom-2 left-2 right-2 p-2 rounded bg-red-100 text-red-700 text-sm">
+            {error}
+          </div>
+        )}
       </div>
     );
   }
