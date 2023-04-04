@@ -1,6 +1,6 @@
 import produce from "immer";
 import { forwardRef, useEffect, useState } from "react";
-import { basePrompt } from "../lib/prompts";
+import { basePrompt, updatePrompt } from "../lib/prompts";
 import { useFileState } from "../lib/useFileState";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
 import { Chats } from "phosphor-react";
@@ -10,6 +10,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
     const [value, setValue] = useState(basePrompt);
     const apiKey = useGlobalSettings((state) => state.openAIAPIKey);
     const [isLoading, setIsLoading] = useState(false);
+    const isGraphEmpty = useFileState((state) => !state.project?.squiggle);
     if (!apiKey) return null;
 
     return (
@@ -49,7 +50,11 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
         }}
       >
         <div className="h-full">
-          <OpeningQuestion setValue={setValue} />
+          {isGraphEmpty ? (
+            <OpeningQuestion setValue={setValue} />
+          ) : (
+            <FollowUpQuestion setValue={setValue} />
+          )}
         </div>
         <button
           className={`bg-blue-700 justify-center text-white p-2 py-4 text-lg flex items-center gap-2 hover:bg-blue-800 active:bg-blue-900`}
@@ -127,7 +132,24 @@ function OpeningQuestion({ setValue }: { setValue: (value: string) => void }) {
     <textarea
       className="resize-none bg-transparent h-full leading-6 text-neutral-900 text-sm p-4 focus:outline-none w-full"
       value={prompt}
-      onChange={(e) => setPrompt(e.target.value)}
+      onChange={(e) => {
+        setPrompt(e.target.value);
+        setValue(e.target.value);
+      }}
+    />
+  );
+}
+
+function FollowUpQuestion({ setValue }: { setValue: (value: string) => void }) {
+  const [prompt, setPrompt] = useState("");
+  return (
+    <textarea
+      className="resize-none bg-transparent h-full leading-6 text-neutral-900 text-sm p-4 focus:outline-none w-full"
+      value={prompt}
+      onChange={(e) => {
+        setPrompt(e.target.value);
+        setValue(updatePrompt() + e.target.value);
+      }}
     />
   );
 }

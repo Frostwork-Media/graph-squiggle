@@ -18,10 +18,18 @@ export const IconButton = forwardRef(function IconButtonWithRef<
     as: T;
     icon: typeof Plus;
     className?: string;
+    size?: number;
   } & Prettify<ComponentProps<T>>,
   ref: PolymorphicRef<T>
 ) {
-  const { children, icon, as = "button", className = "", ...rest } = props;
+  const {
+    children,
+    size = 24,
+    icon,
+    as = "button",
+    className = "",
+    ...rest
+  } = props;
   const Icon = icon;
   const Comp = as;
   return (
@@ -30,7 +38,7 @@ export const IconButton = forwardRef(function IconButtonWithRef<
       {...rest}
       ref={ref}
     >
-      <Icon size={24} />
+      <Icon size={size} />
     </Comp>
   );
 });

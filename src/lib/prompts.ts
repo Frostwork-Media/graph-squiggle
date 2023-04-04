@@ -1,13 +1,11 @@
-export const systemPrompt =
-  "You are a prediction specialist. You use fermi estimation techniques to break complex problems into smaller pieces.";
+import { useFileState } from "./useFileState";
 
 /**
  * Prompt problems:
  * - hallucinating that it can write javascript, such as console.log and if statements
  * - using wrong scientific notation: radiusEarth = 6.2E+3 to 7.0E+3
  */
-
-export const basePrompt = `Break down the following question into steps and give a 0.05 and 0.95 confidence interval for each step. Like a Fermi estimation, the 0.05 value is a number you'd be shocked if it was below and the 0.95 a number you'd be shocked if it was above. Then, express the steps in the code according to the following rules:
+export const systemPrompt = `You are a prediction specialist. You break complex problems into smaller pieces and give a 0.05 and 0.95 confidence interval for each step. Like a Fermi estimation, the 0.05 value is a number you'd be shocked if it was below and the 0.95 a number you'd be shocked if it was above. Then, express the steps in the code according to the following rules:
 - For percentages, use decimal values (e.g. 0.5 for 50%)
 - For large or small use a suffix: 'n' for 10^-9, 'm' for 10^-3, 'k' for 10^3, 'M' for 10^6, and 'B' or 'G' for for 10^9, 'T' for 10^12, and 'P' 10^15 (e.g. 1.2M for 1,200,000)
 - Do not add units to numbers (e.g. 1.2M is correct, 1.2M km is not)
@@ -28,7 +26,16 @@ stepNumberN = 0.05 to 0.1
 finalAnswer = stepNumberOne * stepNumberTwo / stepNumberN
 
 
-Do not solve for value, just provide the steps and code. Please return only the commented code.
+Do not solve for value, just provide the steps and code. You only return commented code, no explanation or justification.`;
 
+export const basePrompt = `Question:\n`;
 
-Question:\n`;
+/**
+ * Problems so far:
+ * -
+ */
+export const updatePrompt = () => `Our current prediction code:
+${useFileState.getState().project?.squiggle ?? ""}
+
+Update our prediction code based on the following prompt and return the updated code only:
+`;

@@ -15,11 +15,3 @@ export function Graph() {
     </ReactFlow>
   );
 }
-
-export function Chip({ label }: { label: string }) {
-  return (
-    <div className="bg-blue-50 rounded-lg inline-block p-1 px-2 text-[10px] text-blue-400 mr-2 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
-      {label}
-    </div>
-  );
-}
