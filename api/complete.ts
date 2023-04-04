@@ -1,5 +1,6 @@
 import { VercelApiHandler } from "@vercel/node";
 import { Configuration, OpenAIApi } from "openai";
+import { systemPrompt } from "../src/lib/prompts";
 
 const handler: VercelApiHandler = async (req, res) => {
   // get prompt and api key from request
@@ -30,7 +31,13 @@ async function fromPrompt({
   const openai = new OpenAIApi(new Configuration({ apiKey }));
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: prompt }],
+    messages: [
+      {
+        role: "system",
+        content: systemPrompt,
+      },
+      { role: "user", content: prompt },
+    ],
   });
   return response?.data?.choices?.[0]?.message?.content?.trim();
 }

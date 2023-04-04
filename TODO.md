@@ -19,6 +19,6 @@
   - [x] render react-flow graph with node for each
 - [ ] determine a basic functional UI
   - [x] basic tailwind interface
-  - [ ] build node ui
+  - [x] build node ui
   - [ ] edit context from graph nodes
   - [ ] UI for reconnecting nodes when unlinked from variable name

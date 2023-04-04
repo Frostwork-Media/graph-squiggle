@@ -2,6 +2,7 @@ import { useFileState } from "../lib/useFileState";
 import produce from "immer";
 import { useSquiggleState } from "../lib/useSquiggleState";
 import { forwardRef } from "react";
+import Editor from "@monaco-editor/react";
 
 /**
  * Edit the squiggle code
@@ -13,17 +14,32 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
     if (squiggle == null) return null;
     return (
       <div
-        className="p-2 bg-white/50 h-full grid grid-rows-[minmax(0,1fr)_auto]"
+        className="pt-4 pl-4 bg-white/50 h-full grid grid-rows-[minmax(0,1fr)_auto] max-w-[100%] overflow-hidden"
         ref={ref}
       >
-        <textarea
-          className="font-mono text-sm leading-5 resize-none h-full w-full min-h-[700px] bg-neutral-700 text-white p-4 whitespace-pre overflow-auto"
+        <Editor
+          wrapperProps={{
+            className: "w-full max-w-[100%] h-full overflow-hidden",
+          }}
+          width="100%"
+          options={{
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            lineNumbers: "off",
+            lineDecorationsWidth: 0,
+            folding: false,
+            fontSize: 14,
+            renderLineHighlight: "none",
+            overviewRulerBorder: false,
+            overviewRulerLanes: 0,
+            wordWrap: "on",
+          }}
           value={squiggle}
-          onChange={(e) => {
+          onChange={(value) => {
             useFileState.setState(
               produce((draft) => {
                 if (!draft.project) return;
-                draft.project.squiggle = e.target.value;
+                draft.project.squiggle = value ?? "";
               }),
               false,
               "squiggle editor"
