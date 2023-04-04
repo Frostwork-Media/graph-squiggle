@@ -1,11 +1,13 @@
 /**
  * Prompt problems:
  * - hallucinating that it can write javascript, such as console.log and if statements
+ * - using wrong scientific notation: radiusEarth = 6.2E+3 to 7.0E+3
  */
 
 export const basePrompt = `Break down the following question into steps and give a 0.05 and 0.95 confidence interval for each step. Like a Fermi estimation, the 0.05 value is a number you'd be shocked if it was below and the 0.95 a number you'd be shocked if it was above. Then, express the steps in the code according to the following rules:
 - For percentages, use decimal values (e.g. 0.5 for 50%)
-- For large numbers, use B for billions, M for millions, k for thousands (e.g. 1.5B for 1.5 billion)
+- Use a suffix for very large or very small numbers: Use 'n' for 10^-9, 'm' for 10^-3, 'k' for 10^3, 'M' for 10^6, and 'B' or 'G' for for 10^9, 'T' for 10^12, and 'P' 10^15 (e.g. 1.2M for 1,200,000)
+- Do not add units (like 'meters' or 'seconds') to numbers
 - Include a description in a comment above each line of code
 - All variable names should be camelCase
 - You may combine steps using statistical operators (e.g. +, -, *, /, ^, etc.)
@@ -20,11 +22,10 @@ stepNumberTwo = 10k to 50k
 // another part of estimation
 stepNumberN = 0.05 to 0.1
 // final answer
-finalAnswer = stepOneNumber * stepTwoNumber / stepNNnumber
+finalAnswer = stepNumberOne * stepNumberTwo / stepNumberN
 
 
 Do not solve for value, just provide the steps and code. Please return only the commented code.
 
 
-Question:
-`;
+Question:\n`;

@@ -8,16 +8,18 @@ import {
   PanelResizeHandle,
   ImperativePanelHandle,
 } from "react-resizable-panels";
-import { X, Code, ArrowLineRight, Microphone } from "phosphor-react";
+import { X, Code, ArrowLineRight, Chats } from "phosphor-react";
 import { IconButton } from "../ui/IconButton";
 import { useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
+import { useFileState } from "../lib/useFileState";
 
 /**
  * Mounted when a valid project is opened
  */
 export function Project() {
   useWatchProject();
+  const fileHandle = useFileState((state) => state.fileHandle);
   const ref = useRef<ImperativePanelHandle>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -59,7 +61,7 @@ export function Project() {
             <SquiggleEditor />
           </Tabs.Content>
           <Tabs.Content value="prompt" asChild>
-            <PromptEditor />
+            <PromptEditor key={fileHandle?.name ?? ""} />
           </Tabs.Content>
         </Panel>
         <PanelResizeHandle className="bg-neutral-100 grid content-start p-1 gap-2">
@@ -72,13 +74,13 @@ export function Project() {
             <Tabs.Trigger value="code" asChild>
               <IconButton
                 icon={Code}
-                className="data-[state=active]:bg-neutral-200"
+                className="data-[state=active]:bg-neutral-300"
               />
             </Tabs.Trigger>
             <Tabs.Trigger value="prompt" asChild>
               <IconButton
-                icon={Microphone}
-                className="data-[state=active]:bg-neutral-200"
+                icon={Chats}
+                className="data-[state=active]:bg-neutral-300"
               />
             </Tabs.Trigger>
           </Tabs.List>

@@ -1,6 +1,10 @@
 import { baseFileState, useFileState } from "./useFileState";
 import { isError } from "./isError";
 import { getEmptyProject, projectSchema } from "./schema";
+import {
+  baseGraphState,
+  useGraphState,
+} from "./completeGraphDataFromSquiggleState";
 
 /**
  * Create a new project
@@ -15,6 +19,7 @@ export function create() {
     false,
     "create"
   );
+  useGraphState.setState(baseGraphState, true, "create");
 }
 
 export async function open() {

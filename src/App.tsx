@@ -40,7 +40,7 @@ export default function App() {
       {loadFileError ? (
         <LoadFileError loadFileError={loadFileError} />
       ) : isProjectOpen ? (
-        <Project />
+        <Project key={fileHandle?.name ?? ""} />
       ) : (
         <NoProjectOpen />
       )}

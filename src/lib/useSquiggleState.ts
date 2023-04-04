@@ -5,8 +5,9 @@ import { isError } from "./isError";
 import debounce from "lodash.debounce";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { useEffect } from "react";
+import { completeGraphDataFromSquiggleState } from "./completeGraphDataFromSquiggleState";
 
-type SquiggleState = {
+export type SquiggleState = {
   /** The parsed squiggle object */
   squiggleRunResult?: SqProject;
   /** The error that occurred when running the code */
@@ -24,6 +25,11 @@ export const useSquiggleState = create<SquiggleState>()(
 );
 
 export function useWatchProject() {
+  useEffect(() => {
+    // here we will subscribe to the squiggle state and update the graph
+    return useSquiggleState.subscribe(completeGraphDataFromSquiggleState);
+  }, []);
+
   useEffect(() => {
     const squiggle = useFileState.getState().project?.squiggle;
     runSquiggle(squiggle);
@@ -46,6 +52,7 @@ function runSquiggle(code: string | undefined) {
   if (code) {
     try {
       const result = run(code).result;
+      // When it ran successfully
       if (result.ok) {
         useSquiggleState.setState(
           {
@@ -65,6 +72,7 @@ function runSquiggle(code: string | undefined) {
         );
       }
     } catch (e) {
+      // When there is a syntax error
       let message = isError(e) ? e.message : "Unknown error";
       useSquiggleState.setState(
         {
@@ -75,8 +83,9 @@ function runSquiggle(code: string | undefined) {
       );
     }
   } else {
+    // When there is no code at all
     useSquiggleState.setState(
-      { squiggleRunResult: undefined },
+      { squiggleRunResult: undefined, squiggleRunError: undefined },
       false,
       "run squiggle / no code"
     );
