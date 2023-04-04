@@ -1,4 +1,4 @@
-import { useFileState } from "./useFileState";
+import { useFileState } from "../src/lib/useFileState";
 
 /**
  * Prompt problems:

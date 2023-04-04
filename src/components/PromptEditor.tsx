@@ -1,6 +1,6 @@
 import produce from "immer";
 import { forwardRef, useEffect, useState } from "react";
-import { basePrompt, updatePrompt } from "../lib/prompts";
+import { basePrompt, updatePrompt } from "../../api/_prompts";
 import { useFileState } from "../lib/useFileState";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
 import { Chats } from "phosphor-react";

@@ -1,6 +1,6 @@
 import { VercelApiHandler } from "@vercel/node";
 import { Configuration, OpenAIApi } from "openai";
-import { systemPrompt } from "../src/lib/prompts";
+import { systemPrompt } from "./_prompts";
 
 const handler: VercelApiHandler = async (req, res) => {
   // get prompt and api key from request
