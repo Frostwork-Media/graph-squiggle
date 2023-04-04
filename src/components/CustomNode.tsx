@@ -46,7 +46,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
         ) : (
           <div className="grid content-center justify-center justify-items-center pb-4 px-2 gap-2">
             <span className="text-sm text-center">{data.comment}</span>
-            <span className="max-h-24 overflow-auto text-sm text-blue-500 font-mono">
+            <span className="max-h-36 overflow-auto text-sm text-blue-500 font-mono">
               {data.value}
             </span>
           </div>
