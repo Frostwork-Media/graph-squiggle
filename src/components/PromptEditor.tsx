@@ -1,13 +1,13 @@
 import produce from "immer";
-import { forwardRef, useEffect, useState } from "react";
-import { basePrompt, updatePrompt } from "../../api/_prompts";
+import { forwardRef, useState } from "react";
+import { updatePrompt } from "../lib/updatePrompt";
 import { useFileState } from "../lib/useFileState";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
 import { Chats } from "phosphor-react";
 
 export const PromptEditor = forwardRef<HTMLFormElement, {}>(
   function PromptEditor(_props, ref) {
-    const [value, setValue] = useState(basePrompt);
+    const [value, setValue] = useState("");
     const apiKey = useGlobalSettings((state) => state.openAIAPIKey);
     const [isLoading, setIsLoading] = useState(false);
     const isGraphEmpty = useFileState((state) => !state.project?.squiggle);
@@ -19,7 +19,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
         className="grid h-full grid grid-rows-[minmax(0,1fr)_auto]"
         onSubmit={(e) => {
           e.preventDefault();
-          if (!value || value.trim() === basePrompt.trim()) return;
+          if (!value) return;
           setIsLoading(true);
           fetch("/api/complete", {
             method: "POST",
@@ -97,46 +97,23 @@ function AnimatedDots() {
 }
 
 function OpeningQuestion({ setValue }: { setValue: (value: string) => void }) {
-  const [useFullPrompt, setUseFullPrompt] = useState(false);
   const [prompt, setPrompt] = useState("");
-  if (!useFullPrompt)
-    return (
-      <div className="grid gap-3 p-2 h-full grid-rows-[auto_minmax(0,1fr)]">
-        <header className="grid gap-1">
-          <h2 className="text-lg">What do you want to estimate?</h2>
-          <button
-            className="text-xs text-neutral-500 justify-self-start hover:text-neutral-600 active:text-neutral-700"
-            type="button"
-            onClick={() => {
-              setUseFullPrompt(true);
-              setPrompt(basePrompt + prompt);
-              setValue(basePrompt + prompt);
-            }}
-          >
-            View Full Prompt
-          </button>
-        </header>
-        <textarea
-          className="rounded border border-gray-300 p-2 resize-none text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="The number of people in the world in 2030"
-          value={prompt}
-          onChange={(e) => {
-            setPrompt(e.target.value);
-            setValue(basePrompt + e.target.value);
-          }}
-        />
-      </div>
-    );
 
   return (
-    <textarea
-      className="resize-none bg-transparent h-full leading-6 text-neutral-900 text-sm p-4 focus:outline-none w-full"
-      value={prompt}
-      onChange={(e) => {
-        setPrompt(e.target.value);
-        setValue(e.target.value);
-      }}
-    />
+    <div className="grid gap-3 p-2 h-full grid-rows-[auto_minmax(0,1fr)]">
+      <header className="grid gap-1">
+        <h2 className="text-lg">What do you want to estimate?</h2>
+      </header>
+      <textarea
+        className="rounded border border-gray-300 p-2 resize-none text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="The number of people in the world in 2030"
+        value={prompt}
+        onChange={(e) => {
+          setPrompt(e.target.value);
+          setValue(e.target.value);
+        }}
+      />
+    </div>
   );
 }
 
