@@ -10,7 +10,8 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
     const [value, setValue] = useState("");
     const apiKey = useGlobalSettings((state) => state.openAIAPIKey);
     const [isLoading, setIsLoading] = useState(false);
-    const isGraphEmpty = useFileState((state) => !state.project?.squiggle);
+    const code = useFileState((state) => state.project?.squiggle ?? "");
+    const subject = useFileState((state) => state.project?.subject ?? "");
     if (!apiKey) return null;
 
     return (
@@ -21,12 +22,37 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
           e.preventDefault();
           if (!value) return;
           setIsLoading(true);
+
+          let data: {
+            apiKey: string;
+            subject: string;
+            prompt?: string;
+            code?: string;
+          } = {
+            apiKey,
+            subject,
+          };
+
+          if (!subject) {
+            data.subject = value;
+            useFileState.setState((state) =>
+              produce(state, (draft) => {
+                if (draft.project) {
+                  draft.project.subject = value;
+                }
+              })
+            );
+          } else {
+            data.prompt = value;
+            data.code = code;
+          }
+
           fetch("/api/complete", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ prompt: value, apiKey }),
+            body: JSON.stringify(data),
           })
             .then((res) => {
               if (res.ok) {
@@ -50,7 +76,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
         }}
       >
         <div className="h-full">
-          {isGraphEmpty ? (
+          {!subject ? (
             <OpeningQuestion setValue={setValue} />
           ) : (
             <FollowUpQuestion setValue={setValue} />
@@ -125,7 +151,7 @@ function FollowUpQuestion({ setValue }: { setValue: (value: string) => void }) {
       value={prompt}
       onChange={(e) => {
         setPrompt(e.target.value);
-        setValue(updatePrompt() + e.target.value);
+        setValue(e.target.value);
       }}
     />
   );

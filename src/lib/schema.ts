@@ -18,10 +18,9 @@ export type Context = z.infer<typeof contextSchema>;
 
 export const projectSchema = z
   .object({
-    squiggle: z.string({
-      description: "The squiggle code for this document",
-    }),
+    squiggle: z.string(),
     context: contextSchema,
+    subject: z.string(),
   })
   .strict();
 
@@ -32,4 +31,5 @@ export type Project = z.infer<typeof projectSchema>;
 export const getEmptyProject: () => Project = () => ({
   squiggle: "",
   context: {},
+  subject: "",
 });

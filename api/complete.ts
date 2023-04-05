@@ -1,5 +1,5 @@
 import { VercelApiHandler } from "@vercel/node";
-import { Configuration, OpenAIApi } from "openai";
+import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
 
 /**
  * Prompt problems:
@@ -7,19 +7,25 @@ import { Configuration, OpenAIApi } from "openai";
  * - using wrong scientific notation: radiusEarth = 6.2E+3 to 7.0E+3
  * - using mathematical constants incorrectly: pi instead of Math.pi
  * - not storing the final answer in a variable
+ * - multi-line comments
  */
-export const systemPrompt = `You are a prediction specialist. You break complex problems into smaller pieces and give a 0.05 and 0.95 confidence interval for each step. Like a Fermi estimation, the 0.05 value is a number you'd be shocked if it was below and the 0.95 a number you'd be shocked if it was above. Then, express the steps in the code according to the following rules:
-- For percentages, use decimal values (e.g. 0.5 for 50%)
-- For large or small use a suffix: 'n' for 10^-9, 'm' for 10^-3, 'k' for 10^3, 'M' for 10^6, and 'B' or 'G' for for 10^9, 'T' for 10^12, and 'P' 10^15 (e.g. 1.2M for 1,200,000)
-- Do not add units to numbers (e.g. 1.2M is correct, 1.2M km is not)
-- Include a description in a comment above each line of code
+export const systemPrompt = `You are a code-producing prediction machine. 
+You express complex questions as a combination of smaller questions, for which you give a 0.05 and 0.95 confidence interval.
+Like a Fermi estimation, the 0.05 value is a number you'd be shocked if it was below and the 0.95 a number you'd be shocked if it was above. 
+You produce code according to the following rules:
+- Each question is stored in a variable (e.g. stepNumberOne = 0.5 to 0.8)
 - All variable names should be camelCase
-- You may combine steps using statistical operators (e.g. +, -, *, /, ^, etc.)
+- For percentages, use decimal values (e.g. 0.5 for 50%)
+- Use a suffix for large or small: 'n' for 10^-9, 'm' for 10^-3, 'k' for 10^3, 'M' for 10^6, and 'B' or 'G' for for 10^9, 'T' for 10^12, and 'P' 10^15 (e.g. 1.2M for 1,200,000)
+- Do not add units to numbers (e.g. 1.2M is correct, 1.2M km is not)
+- Include a one-line comment above each line of code describe the variable
+- Combine steps using statistical operators (e.g. +, -, *, /, ^, etc.)
 - Do not end lines of code with a semicolon or period
-- Store the final response in a variable called finalAnswer
+- The final response should be in a variable called "response"
+- Do not solve for value, just provide the steps and code
+- You only respond with code- no explanation or justification
 
 Example Response:
-
 // one part of estimation
 stepNumberOne = 0.5 to 0.8
 // another part of estimation
@@ -27,23 +33,20 @@ stepNumberTwo = 10k to 50k
 // another part of estimation
 stepNumberThree = 0.05 to 0.1
 // the original problem
-finalAnswer = stepNumberOne * stepNumberTwo / stepNumberThree
-
-
-Do not solve for value, just provide the steps and code. You only return commented code, no explanation or justification.`;
+response = stepNumberOne * stepNumberTwo / stepNumberThree`;
 
 const handler: VercelApiHandler = async (req, res) => {
   // get prompt and api key from request
-  const { prompt, apiKey } = req.body;
+  const { apiKey, subject, code, prompt } = req.body;
 
   // throw if either is missing
-  if (!prompt || !apiKey) {
+  if (!subject || !apiKey) {
     res.status(400).send("Missing prompt or api key");
     return;
   }
 
   // call the function that calls the OpenAI API
-  const response = await fromPrompt({ prompt, apiKey });
+  const response = await fromPrompt({ apiKey, subject, code, prompt });
   console.log(response);
 
   res.status(200).send(response);
@@ -52,22 +55,48 @@ const handler: VercelApiHandler = async (req, res) => {
 export default handler;
 
 async function fromPrompt({
-  prompt,
   apiKey,
+  subject,
+  prompt,
+  code,
 }: {
-  prompt: string;
   apiKey: string;
+  subject: string;
+  prompt?: string;
+  code?: string;
 }) {
   const openai = new OpenAIApi(new Configuration({ apiKey }));
+
+  let messages: CreateChatCompletionRequest["messages"] = [
+    {
+      role: "system",
+      content: systemPrompt,
+    },
+    {
+      role: "user",
+      content: subject,
+    },
+  ];
+
+  // if code and prompt, then add code as first assistant message, followed by user prompt
+  if (code && prompt) {
+    messages = [
+      ...messages,
+      {
+        role: "assistant",
+        content: code,
+      },
+      {
+        role: "user",
+        content: prompt,
+      },
+    ];
+  }
+
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      { role: "user", content: prompt },
-    ],
+    messages,
   });
+
   return response?.data?.choices?.[0]?.message?.content?.trim();
 }

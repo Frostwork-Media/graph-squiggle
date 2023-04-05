@@ -30,3 +30,15 @@ pnpm vercel dev
 ### Squiggle -> Graph
 
 Converting the squiggle code into nodes and edges. This is done in `src/lib/squiggleToGraph.ts`.
+
+---
+
+_To Explain_
+
+[system]
+
+[user question]
+
+[current code state]
+
+[user modification request]

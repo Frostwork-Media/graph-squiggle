@@ -131,7 +131,9 @@ function LoadFileError({ loadFileError }: { loadFileError: Error | null }) {
 function NoProjectOpen() {
   return (
     <div className="h-full grid content-center justify-center">
-      No Project Open
+      <span className="text-2xl text-neutral-400">
+        Open a project or create a new one.
+      </span>
     </div>
   );
 }

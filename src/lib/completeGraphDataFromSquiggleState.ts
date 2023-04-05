@@ -63,19 +63,26 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
             (node) => node.data.id === id
           );
           if (!nodeInElements) throw new Error("Node not found in elements");
+
           // get the line before the node in the squiggle
-          let comment =
+          let commentLine =
             squiggle.split("\n")[nodeInElements.data.line - 2] ?? "";
 
-          if (!comment.startsWith("//")) {
-            comment = "";
+          let comment = "",
+            marketSlug = "";
+
+          if (!commentLine.startsWith("//")) {
+            commentLine = "";
           } else {
-            comment = comment.slice(2).trim();
+            commentLine = commentLine.slice(2).trim();
+            const parsed = parseComment(commentLine);
+            comment = parsed.comment;
+            marketSlug = parsed.slug;
           }
           return {
             id,
             type: squiggleNodeType,
-            data: { ...nodeInElements.data, comment, label: id },
+            data: { ...nodeInElements.data, comment, marketSlug, label: id },
             draggable: false,
             position: { x, y },
           };
@@ -158,4 +165,14 @@ function getPositions(elements: ElementsDefinition) {
     console.error(e);
     return {};
   }
+}
+
+/** Parse comment from label. Extract manifold markets slug if in parentheses at the end of the comment */
+export function parseComment(comment: string) {
+  if (comment.match(/\(.*\)$/)) {
+    const slug = comment.match(/\((.*)\)$/)?.[1] ?? "";
+    comment = comment.replace(`(${slug})`, "").trim();
+    return { comment, slug };
+  }
+  return { comment, slug: "" };
 }
