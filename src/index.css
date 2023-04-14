@@ -15,7 +15,7 @@
 
 .react-flow__node-squiggleNodeType {
   width: 400px;
-  height: 360px;
+  /* height: 360px; */
   /* background-color: #ffffff;
   border: 1px solid #b1b1b7;
   padding: 0.5rem;

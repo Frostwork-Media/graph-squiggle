@@ -1,9 +1,9 @@
 import produce from "immer";
 import { forwardRef, useState } from "react";
-import { updatePrompt } from "../lib/updatePrompt";
 import { useFileState } from "../lib/useFileState";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
-import { Chats } from "phosphor-react";
+import { Chats, X } from "phosphor-react";
+import { Textarea } from "../ui/Textarea";
 
 export const PromptEditor = forwardRef<HTMLFormElement, {}>(
   function PromptEditor(_props, ref) {
@@ -17,7 +17,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
     return (
       <form
         ref={ref}
-        className="grid h-full grid grid-rows-[minmax(0,1fr)_auto]"
+        className="h-full"
         onSubmit={(e) => {
           e.preventDefault();
           if (!value) return;
@@ -35,13 +35,6 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
 
           if (!subject) {
             data.subject = value;
-            useFileState.setState((state) =>
-              produce(state, (draft) => {
-                if (draft.project) {
-                  draft.project.subject = value;
-                }
-              })
-            );
           } else {
             data.prompt = value;
             data.code = code;
@@ -65,6 +58,9 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
                       produce(state, (draft) => {
                         if (draft.project) {
                           draft.project.squiggle = data;
+                          if (!draft.project.subject) {
+                            draft.project.subject = value;
+                          }
                         }
                       })
                     );
@@ -75,30 +71,46 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
             .finally(() => setIsLoading(false));
         }}
       >
-        <div className="h-full">
+        <div className="grid gap-4 p-4 gap-4 content-start">
+          {subject && (
+            <div className="grid gap-1">
+              <button
+                className="text-neutral-300 hover:text-neutral-500 active:text-neutral-700 justify-self-end"
+                onClick={() => {
+                  useFileState.setState((state) =>
+                    produce(state, (draft) => {
+                      if (draft.project) {
+                        draft.project.subject = "";
+                      }
+                    })
+                  );
+                }}
+              >
+                <X />
+              </button>
+              <span className="text-xs text-neutral-500">Subject</span>
+              {subject}
+            </div>
+          )}
           {!subject ? (
             <OpeningQuestion setValue={setValue} />
           ) : (
             <FollowUpQuestion setValue={setValue} />
           )}
+          <button
+            className={`bg-blue-100 rounded justify-center p-2 py-4 text-lg flex items-center gap-2 hover:bg-blue-200 active:bg-blue-300 text-blue-600`}
+          >
+            <Chats size={24} />
+            {isLoading ? (
+              <span className={`w-[100px] text-left`}>
+                {"Loading"}
+                <AnimatedDots />
+              </span>
+            ) : (
+              "Submit"
+            )}
+          </button>
         </div>
-        <button
-          className={`bg-blue-700 justify-center text-white p-2 py-4 text-lg flex items-center gap-2 hover:bg-blue-800 active:bg-blue-900`}
-        >
-          <Chats size={24} />
-          {isLoading ? (
-            <span
-              className={`w-[100px] text-left ${
-                isLoading ? "animate-pulse" : ""
-              }`}
-            >
-              {"Loading"}
-              <AnimatedDots />
-            </span>
-          ) : (
-            "Submit"
-          )}
-        </button>
       </form>
     );
   }
@@ -126,14 +138,12 @@ function OpeningQuestion({ setValue }: { setValue: (value: string) => void }) {
   const [prompt, setPrompt] = useState("");
 
   return (
-    <div className="grid gap-3 p-2 h-full grid-rows-[auto_minmax(0,1fr)]">
-      <header className="grid gap-1">
-        <h2 className="text-lg">What do you want to estimate?</h2>
-      </header>
-      <textarea
-        className="rounded border border-gray-300 p-2 resize-none text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    <div className="grid gap-2 h-full grid-rows-[auto_minmax(0,1fr)]">
+      <h2 className="text-lg">What do you want to estimate?</h2>
+      <Textarea
         placeholder="The number of people in the world in 2030"
         value={prompt}
+        className="min-h-[300px]"
         onChange={(e) => {
           setPrompt(e.target.value);
           setValue(e.target.value);
@@ -146,9 +156,9 @@ function OpeningQuestion({ setValue }: { setValue: (value: string) => void }) {
 function FollowUpQuestion({ setValue }: { setValue: (value: string) => void }) {
   const [prompt, setPrompt] = useState("");
   return (
-    <textarea
-      className="resize-none bg-transparent h-full leading-6 text-neutral-900 text-sm p-4 focus:outline-none w-full"
+    <Textarea
       value={prompt}
+      className="min-h-[300px]"
       onChange={(e) => {
         setPrompt(e.target.value);
         setValue(e.target.value);

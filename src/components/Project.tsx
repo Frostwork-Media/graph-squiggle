@@ -58,11 +58,11 @@ export function Project() {
             }
           }}
         >
-          <Tabs.Content value="code" asChild>
-            <SquiggleEditor />
-          </Tabs.Content>
           <Tabs.Content value="prompt" asChild>
             <PromptEditor key={fileHandle?.name ?? ""} />
+          </Tabs.Content>
+          <Tabs.Content value="code" asChild>
+            <SquiggleEditor />
           </Tabs.Content>
           <Tabs.Content value="bindings" asChild>
             <Bindings />
@@ -75,15 +75,15 @@ export function Project() {
             <IconButton icon={X} onClick={collapsePanel} />
           )}
           <Tabs.List className="grid gap-2">
-            <Tabs.Trigger value="code" asChild>
-              <IconButton
-                icon={Code}
-                className="data-[state=active]:bg-neutral-300"
-              />
-            </Tabs.Trigger>
             <Tabs.Trigger value="prompt" asChild>
               <IconButton
                 icon={Chats}
+                className="data-[state=active]:bg-neutral-300"
+              />
+            </Tabs.Trigger>
+            <Tabs.Trigger value="code" asChild>
+              <IconButton
+                icon={Code}
                 className="data-[state=active]:bg-neutral-300"
               />
             </Tabs.Trigger>

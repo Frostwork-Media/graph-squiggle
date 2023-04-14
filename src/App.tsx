@@ -3,6 +3,7 @@ import { create, open, save } from "./lib/files";
 import { useEffect } from "react";
 import { useGlobalSettings } from "./lib/useGlobalSettings";
 import { Project } from "./components/Project";
+import { Warning } from "phosphor-react";
 
 export default function App() {
   const project = useFileState((state) => state.project);
@@ -113,14 +114,18 @@ function Nav({
 }
 
 /**
- * The editor to display when a project is open
+ * If a file fails to load, this screen displays the error
  */
 function LoadFileError({ loadFileError }: { loadFileError: Error | null }) {
   return (
     <div className="h-full grid justify-center content-center">
-      <div className="p-2 bg-neutral-100 rounded">
-        <h2 className="text-lg font-bold">Unable to Load File</h2>
-        <pre className="text-xs font-mono overflow-auto">
+      <h2 className="text-xl flex items-center gap-2 mb-4 justify-self-center text-red-600">
+        <Warning size={24} />
+        Unable to Load File
+      </h2>
+      <div className="p-4 bg-red-50 text-red-700 rounded grid gap-2 min-w-[50vw]">
+        <p>Read the error and edit the file accordingly.</p>
+        <pre className="text-xs font-mono overflow-auto text-red-400">
           {JSON.stringify(loadFileError, null, 2)}
         </pre>
       </div>

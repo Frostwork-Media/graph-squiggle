@@ -2,10 +2,13 @@ import { memo } from "react";
 import { Handle, Position, NodeProps } from "reactflow";
 import { useQuery } from "@tanstack/react-query";
 import { ManifoldResponse } from "../lib/types";
+import { useFileState } from "../lib/useFileState";
+import { SquiggleChart } from "@quri/squiggle-components";
 
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
+  const code = useFileState((state) => state.project?.squiggle ?? "");
   const market = useQuery(
     ["market", data.marketSlug],
     async () => {
@@ -18,24 +21,44 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
       staleTime: Infinity,
     }
   );
+
+  // if this is a mathematically derived value, don't show the equation
+  const isDerived = /[\*\+-]/gi.test(data.value);
+
+  let squiggleCode = "";
+  if (isDerived) {
+    squiggleCode = code + "\n" + data.label;
+  }
+
   return (
     <>
       <Handle type="source" position={Position.Top} />
-      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-1 rounded-xl border-b-8">
+      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-2 rounded-xl border-b-8">
         <div className="grid gap-1">
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
         </div>
-        <div className="grid content-center justify-center justify-items-center pb-4 px-2 gap-2">
-          <span className="text-center text-lg">{data.comment}</span>
-          <span className="max-h-36 overflow-auto text-sm text-blue-500 font-mono text-center">
+
+        <p className="text-2xl">{data.comment}</p>
+        {isDerived ? (
+          <div>
+            <SquiggleChart code={squiggleCode} enableLocalSettings />
+          </div>
+        ) : (
+          <p className="max-h-36 overflow-auto text-xl font-bold text-blue-500 text-center my-3">
             {data.value}
-          </span>
-        </div>
+          </p>
+        )}
+
         {market.data && (
-          <div className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start">
-            <img src="/manifold-market-logo.svg" className="w-4 h-4" />
+          <a
+            className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start"
+            href={market.data.url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src="/manifold-market-logo.svg" className="w-6 h-6" />
             <span className="text-sm grow">{market.data.question}</span>
             <span
               className="text-xs font-mono max-w-[60px] overflow-hidden whitespace-nowrap overflow-ellipsis rounded-full bg-purple-200 px-1"
@@ -43,7 +66,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
             >
               {market.data.probability}
             </span>
-          </div>
+          </a>
         )}
       </div>
       <Handle type="target" position={Position.Bottom} />
