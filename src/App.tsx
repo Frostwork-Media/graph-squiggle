@@ -1,11 +1,20 @@
 import { useFileState } from "./lib/useFileState";
-import { create, open, save } from "./lib/files";
-import { useEffect } from "react";
+import { create, loadFromHash, open, save } from "./lib/files";
+import { useEffect, useState } from "react";
 import { useGlobalSettings } from "./lib/useGlobalSettings";
 import { Project } from "./components/Project";
-import { Warning } from "phosphor-react";
+import { Check, Warning } from "phosphor-react";
 
 export default function App() {
+  useEffect(() => {
+    // check for hash
+    const hash = window.location.hash;
+    // if there is a hash that's longer then 1 character, then it may be a project
+    if (hash.length > 1) {
+      // try to load it
+      loadFromHash();
+    }
+  }, []);
   const project = useFileState((state) => state.project);
   const isProjectOpen = project != null;
   const projectString = JSON.stringify(project, null, 2);
@@ -160,7 +169,35 @@ function ProjectNav({
         <NavButton onClick={() => save(fileHandle)}>Save</NavButton>
       )}
       <NavButton onClick={() => save()}>Save As</NavButton>
+      <CopyShareUrl />
     </div>
+  );
+}
+
+function CopyShareUrl() {
+  const projectUrl = useFileState((state) => state.projectUrl);
+  const [success, setSuccess] = useState(false);
+  return (
+    <>
+      <NavButton
+        onClick={async () => {
+          // current url
+          let url = new URL(window.location.href);
+          // add projectURL as hash
+          url.hash = projectUrl ?? "";
+          await navigator.clipboard.writeText(url.toString());
+          setSuccess(true);
+          setTimeout(() => setSuccess(false), 2000);
+        }}
+      >
+        Copy Share URL
+      </NavButton>
+      {success && (
+        <span className="animate-ping text-green-800 text-xs font-bold">
+          <Check weight="bold" />
+        </span>
+      )}
+    </>
   );
 }
 

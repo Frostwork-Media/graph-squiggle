@@ -23,7 +23,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   );
 
   // if this is a mathematically derived value, don't show the equation
-  const isDerived = /[\*\+-]/gi.test(data.value);
+  const isDerived = /[\*\/\+\-]/gi.test(data.value);
 
   let squiggleCode = "";
   if (isDerived) {

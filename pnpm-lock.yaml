@@ -34,6 +34,9 @@ dependencies:
   openai:
     specifier: ^3.2.1
     version: 3.2.1
+  pako:
+    specifier: ^2.1.0
+    version: 2.1.0
   peggy:
     specifier: ^3.0.2
     version: 3.0.2
@@ -66,6 +69,9 @@ devDependencies:
   '@types/lodash.debounce':
     specifier: ^4.0.7
     version: 4.0.7
+  '@types/pako':
+    specifier: ^2.0.0
+    version: 2.0.0
   '@types/react':
     specifier: ^18.0.28
     version: 18.0.28
@@ -1412,6 +1418,10 @@ packages:
 
   /@types/node@14.18.33:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
+    dev: true
+
+  /@types/pako@2.0.0:
+    resolution: {integrity: sha512-10+iaz93qR5WYxTo+PMifD5TSxiOtdRaxBf7INGGXMQgTCu8Z/7GYWYFUOS3q/G0nE5boj1r4FEB+WSy7s5gbA==}
     dev: true
 
   /@types/prop-types@15.7.5:
@@ -3101,6 +3111,10 @@ packages:
     dependencies:
       yocto-queue: 1.0.0
     dev: true
+
+  /pako@2.1.0:
+    resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==}
+    dev: false
 
   /parse-ms@2.1.0:
     resolution: {integrity: sha512-kHt7kzLoS9VBZfUsiKjv43mr91ea+U05EyKkEtqp7vNbHxmaVuEqN7XxeEVnGrMtYOAxGrDElSi96K7EgO1zCA==}

@@ -10,10 +10,12 @@ import {
 } from "react-resizable-panels";
 import { X, Code, ArrowLineRight, Chats, ChartBar } from "phosphor-react";
 import { IconButton } from "../ui/IconButton";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
-import { useFileState } from "../lib/useFileState";
+import { serializeProject, useFileState } from "../lib/useFileState";
 import { Bindings } from "./Bindings";
+import { Project as ProjectType } from "../lib/schema";
+import debounce from "lodash.debounce";
 
 /**
  * Mounted when a valid project is opened
@@ -39,6 +41,25 @@ export function Project() {
       setIsCollapsed(false);
     }
   };
+
+  /**
+   * Subscribe to changes in the project, and serialize the project data in a url using pako
+   */
+  useEffect(() => {
+    const debounceSetProjectUrl = debounce((project?: ProjectType) => {
+      if (project) {
+        const base64 = serializeProject(project);
+        useFileState.setState({ projectUrl: base64 });
+      }
+    }, 1000);
+
+    const unsub = useFileState.subscribe(
+      (state) => state.project,
+      debounceSetProjectUrl
+    );
+
+    return unsub;
+  }, []);
 
   return (
     <Tabs.Root defaultValue="prompt">

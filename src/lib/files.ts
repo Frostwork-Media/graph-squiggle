@@ -1,4 +1,8 @@
-import { baseFileState, useFileState } from "./useFileState";
+import {
+  baseFileState,
+  deserializeProject,
+  useFileState,
+} from "./useFileState";
 import { isError } from "./isError";
 import { getEmptyProject, projectSchema } from "./schema";
 import {
@@ -127,5 +131,42 @@ export async function save(_fileHandle?: FileSystemFileHandle) {
     );
   } catch (error) {
     console.error(error);
+  }
+}
+
+export async function loadFromHash() {
+  try {
+    const hash = window.location.hash;
+    if (hash) {
+      const base64 = hash.slice(1);
+      const project = deserializeProject(base64);
+      useFileState.setState(
+        {
+          ...baseFileState,
+          project,
+          projectUrl: window.location.href,
+        },
+        false,
+        "loadFromHash"
+      );
+    }
+  } catch (error) {
+    if (isError(error)) {
+      console.log(error.message);
+    }
+
+    useFileState.setState(
+      {
+        ...baseFileState,
+        loadFileError: isError(error)
+          ? error
+          : new Error("Unable to load file"),
+      },
+      false,
+      "loadFromHash/error"
+    );
+  } finally {
+    // remove the hash from the url
+    window.history.replaceState({}, document.title, "/");
   }
 }
