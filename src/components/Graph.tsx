@@ -9,7 +9,14 @@ export function Graph() {
   const edges = useGraphState((state) => state.edges);
 
   return (
-    <ReactFlow fitView nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
+    <ReactFlow
+      fitView
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      minZoom={0.2}
+      maxZoom={2}
+    >
       <Background />
       <Controls />
     </ReactFlow>
