@@ -7,6 +7,7 @@ import { squiggleToGraph } from "./squiggleToGraph";
 import { useFileState } from "./useFileState";
 import { squiggleNodeType } from "./constants";
 import { Node as ReactFlowNode, Edge as ReactFlowEdge } from "reactflow";
+import { NODE_WIDTH } from "../components/CustomNode";
 
 // @ts-ignore
 if (!cytoscape.__hasInit) {
@@ -119,7 +120,9 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
   }
 }
 
-// This is going to get a set of positions for the elemnts by rendering a temporary cytoscape graph
+/**
+ * This builds a temporary cytoscape instance to get the positions of the nodes
+ * */
 function getPositions(elements: ElementsDefinition) {
   try {
     // create a div with the class offscreen-canvas
@@ -133,7 +136,7 @@ function getPositions(elements: ElementsDefinition) {
         {
           selector: "node",
           style: {
-            width: "400px",
+            width: NODE_WIDTH,
             height: "360px",
             shape: "rectangle",
             "background-color": "#fff",

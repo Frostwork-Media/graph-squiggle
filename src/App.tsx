@@ -1,9 +1,10 @@
 import { useFileState } from "./lib/useFileState";
 import { create, loadFromHash, open, save } from "./lib/files";
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { useGlobalSettings } from "./lib/useGlobalSettings";
 import { Project } from "./components/Project";
 import { Check, Warning } from "phosphor-react";
+import { NODE_WIDTH } from "./components/CustomNode";
 
 export default function App() {
   useEffect(() => {
@@ -41,7 +42,10 @@ export default function App() {
   }, [isDirty]);
 
   return (
-    <div className="h-screen grid grid-rows-[auto_minmax(0,1fr)]">
+    <div
+      className="h-screen grid grid-rows-[auto_minmax(0,1fr)]"
+      style={{ "--node-width": NODE_WIDTH } as CSSProperties}
+    >
       <Nav
         isProjectOpen={isProjectOpen}
         isDirty={isDirty}

@@ -7,6 +7,8 @@ import { SquiggleChart } from "@quri/squiggle-components";
 
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
+export const NODE_WIDTH = "400px";
+
 export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   const code = useFileState((state) => state.project?.squiggle ?? "");
   const market = useQuery(
@@ -33,24 +35,22 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   return (
     <>
       <Handle type="source" position={Position.Top} />
-      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-2 rounded-xl border-b-8">
+      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8">
         <div className="grid gap-1">
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
         </div>
-
-        <p className="text-2xl">{data.comment}</p>
+        <p className="text-lg">{data.comment}</p>
         {isDerived ? (
           <div>
             <SquiggleChart code={squiggleCode} enableLocalSettings />
           </div>
         ) : (
-          <p className="max-h-36 overflow-auto text-xl font-bold text-blue-500 text-center my-3">
+          <p className="text-4xl text-neutral-600 text-center my-3 font-mono">
             {data.value}
           </p>
         )}
-
         {market.data && (
           <a
             className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start"
