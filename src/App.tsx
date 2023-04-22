@@ -85,7 +85,7 @@ function Nav({
             // if is dirty we warn user first
             if (isDirty) {
               if (
-                !confirm(
+                !window.confirm(
                   "You have unsaved changes. Are you sure you want to close?"
                 )
               )
@@ -101,7 +101,7 @@ function Nav({
             // if is dirty we warn user first
             if (isDirty) {
               if (
-                !confirm(
+                !window.confirm(
                   "You have unsaved changes. Are you sure you want to close?"
                 )
               )
