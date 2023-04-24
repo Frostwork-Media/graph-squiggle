@@ -53,7 +53,11 @@ export function sqProjectToCyElements(
             statement.value.statements[0].fn.type === "Identifier" &&
             statement.value.statements[0].args.length === 2 &&
             statement.value.statements[0].fn.value ===
-              "credibleIntervalToDistribution"
+              "credibleIntervalToDistribution" &&
+            // and every arg is a float or integer
+            statement.value.statements[0].args.every((arg) => {
+              return arg.type === "Float" || arg.type === "Integer";
+            })
           ) {
             valueType = "distribution";
 

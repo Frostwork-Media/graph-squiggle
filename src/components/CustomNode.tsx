@@ -30,13 +30,12 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
     }
   );
 
-  let squiggleCode = "";
-  if (data.isDerived) {
-    squiggleCode = code + "\n" + data.label;
-  }
-
   const valueType = (data.valueType ?? "unknown") as SquiggleVariableValue;
 
+  let squiggleCode = "";
+  if (valueType === "derived") {
+    squiggleCode = code + "\n" + data.label;
+  }
   return (
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />

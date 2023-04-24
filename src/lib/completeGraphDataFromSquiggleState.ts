@@ -93,9 +93,6 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
             marketSlug = parsed.slug;
           }
 
-          /** if this is a mathematically derived value, don't show the equation  */
-          const isDerived = /[*/+-]/gi.test(nodeInElements.data.value);
-
           /**
            * determine what kind of value this is
            */
@@ -105,7 +102,6 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
             type: squiggleNodeType,
             data: {
               ...nodeInElements.data,
-              isDerived,
               comment,
               marketSlug,
               label: id,

@@ -262,6 +262,40 @@ describe("sqProjectToCyElements", () => {
       edges: [],
     });
   });
+
+  test("a variable should be derived if it references any variables, even in a distribution", () => {
+    const code = "i = 1\nj = i to 2";
+    expect(sqProjectToCyElements(getProject(code), code)).toEqual({
+      nodes: [
+        {
+          data: {
+            id: "i",
+            line: 1,
+            numValue: 1,
+            value: "1",
+            valueType: "single",
+          },
+        },
+        {
+          data: {
+            id: "j",
+            line: 2,
+            value: "i to 2",
+            valueType: "derived",
+          },
+        },
+      ],
+      edges: [
+        {
+          data: {
+            id: "j-i",
+            source: "j",
+            target: "i",
+          },
+        },
+      ],
+    });
+  });
 });
 
 function getProject(code: string): SqProject {
