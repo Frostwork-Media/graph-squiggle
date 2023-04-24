@@ -34,7 +34,7 @@ export const IconButton = forwardRef(function IconButtonWithRef<
   const Comp = as;
   return (
     <Comp
-      className={`p-1 rounded-md bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${className}`}
+      className={`p-1 rounded-md hover:bg-neutral-100 active:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${className}`}
       {...rest}
       ref={ref}
     >

@@ -89,7 +89,7 @@ export function Project() {
             <Bindings />
           </Tabs.Content>
         </Panel>
-        <PanelResizeHandle className="bg-neutral-100 grid content-start p-1 gap-2">
+        <PanelResizeHandle className="border-x border-neutral-300 grid content-start p-1 gap-2">
           {isCollapsed ? (
             <IconButton icon={ArrowLineRight} onClick={expandPanel} />
           ) : (

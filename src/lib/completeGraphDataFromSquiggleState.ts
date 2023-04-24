@@ -3,10 +3,14 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import cytoscape, { ElementsDefinition } from "cytoscape";
 import klay from "cytoscape-klay";
-import { squiggleToGraph } from "./squiggleToGraph";
+import { sqProjectToCyElements } from "./sqProjectToCyElements";
 import { useFileState } from "./useFileState";
 import { squiggleNodeType } from "./constants";
-import { Node as ReactFlowNode, Edge as ReactFlowEdge } from "reactflow";
+import {
+  Node as ReactFlowNode,
+  Edge as ReactFlowEdge,
+  MarkerType,
+} from "reactflow";
 import { NODE_WIDTH } from "../components/CustomNode";
 
 // @ts-ignore
@@ -39,6 +43,9 @@ export const useGraphState = create<GraphState>()(
   })
 );
 
+/**
+ * Prepares graph data from squiggle state
+ */
 export function completeGraphDataFromSquiggleState(state: SquiggleState) {
   // if there is an error, don't change latest graph state
   if (state.squiggleRunError) return;
@@ -51,7 +58,10 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
       const squiggle = useFileState.getState().project?.squiggle ?? "";
 
       // Create cyto elements
-      const elements = squiggleToGraph(state.squiggleRunResult);
+      const elements = sqProjectToCyElements(
+        state.squiggleRunResult,
+        state.squiggleCode ?? ""
+      );
 
       // get positions
       const positions = getPositions(elements);
@@ -80,11 +90,26 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
             comment = parsed.comment;
             marketSlug = parsed.slug;
           }
+
+          /** if this is a mathematically derived value, don't show the equation  */
+          const isDerived = /[*/+-]/gi.test(nodeInElements.data.value);
+
+          /**
+           * determine what kind of value this is
+           */
+
           return {
             id,
             type: squiggleNodeType,
-            data: { ...nodeInElements.data, comment, marketSlug, label: id },
-            draggable: false,
+            data: {
+              ...nodeInElements.data,
+              isDerived,
+              comment,
+              marketSlug,
+              label: id,
+            },
+            draggable: true,
+            dragHandle: ".drag-handle",
             position: { x, y },
           };
         }
@@ -100,12 +125,16 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
             source: edge.data.source,
             target: edge.data.target,
             style: {
-              strokeWidth: 2,
+              strokeWidth: 4,
               stroke: "#ccc",
             },
-            // markerStart: {
-            //   type: MarkerType.Arrow,
-            // },
+            markerStart: {
+              type: MarkerType.Arrow,
+              height: 33,
+              width: 33,
+              strokeWidth: 0.5,
+              color: "#ccc",
+            },
           });
       }
 

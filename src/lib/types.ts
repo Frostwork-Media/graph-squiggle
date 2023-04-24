@@ -35,3 +35,9 @@ export interface Pool {
   NO: number;
   YES: number;
 }
+
+export type SquiggleVariableValue =
+  | "single"
+  | "distribution"
+  | "derived"
+  | "unknown";

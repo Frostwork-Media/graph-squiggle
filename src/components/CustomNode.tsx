@@ -1,10 +1,18 @@
-import { memo } from "react";
+import { ReactNode, memo, useEffect, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "reactflow";
 import { useQuery } from "@tanstack/react-query";
-import { ManifoldResponse } from "../lib/types";
+import { ManifoldResponse, SquiggleVariableValue } from "../lib/types";
 import { useFileState } from "../lib/useFileState";
 import { SquiggleChart } from "@quri/squiggle-components";
-
+import rangeSlider from "range-slider-input";
+import "range-slider-input/dist/style.css";
+import {
+  updateSquiggleLineSingle,
+  updateSquiggleLineDistribution,
+  throttleSingleUpdate,
+  throttleDistributionUpdate,
+} from "../lib/updateSquiggleLineSingle";
+import produce from "immer";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -24,13 +32,12 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
     }
   );
 
-  // if this is a mathematically derived value, don't show the equation
-  const isDerived = /[*/+-]/gi.test(data.value);
-
   let squiggleCode = "";
-  if (isDerived) {
+  if (data.isDerived) {
     squiggleCode = code + "\n" + data.label;
   }
+
+  const valueType = (data.valueType ?? "unknown") as SquiggleVariableValue;
 
   return (
     <>
@@ -42,14 +49,19 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
           </div>
         </div>
         <p className="text-lg">{data.comment}</p>
-        {isDerived ? (
-          <div>
+        {valueType === "derived" && (
+          <div className="squiggle-chart">
             <SquiggleChart code={squiggleCode} enableLocalSettings />
           </div>
-        ) : (
-          <p className="text-4xl text-neutral-600 text-center my-3 font-mono">
-            {data.value}
-          </p>
+        )}
+        {valueType === "single" && (
+          <Single initialValue={data.numValue} line={data.line} />
+        )}
+        {valueType === "distribution" && (
+          <RangeSlider
+            initialValue={[data.numLower, data.numUpper]}
+            line={data.line}
+          />
         )}
         {market.data && (
           <a
@@ -83,5 +95,95 @@ export function Chip({ label }: { label: string }) {
     <div className="bg-blue-50 rounded-lg inline-block p-1 px-2 text-[10px] text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
       {label}
     </div>
+  );
+}
+
+function Single({
+  initialValue,
+  line,
+}: {
+  initialValue: number;
+  line: number;
+}) {
+  // get a min and max value on the 10's scale of the number
+  const [value, setValue] = useState(initialValue);
+  const [min] = useState(() => {
+    return 0;
+  });
+  const [max] = useState(() => {
+    // If number is between 0 and 1, return 1
+    // If number is between 1 and 10, return 10
+    // If number is between 10 and 100, return 100
+    // etc.
+    return Math.pow(10, Math.ceil(Math.log10(value)));
+  });
+
+  return (
+    <div className="grid gap-2">
+      <MedianDisplay>{value}</MedianDisplay>
+      <input
+        type="range"
+        className="w-full mt-6"
+        defaultValue={value}
+        min={min}
+        max={max}
+        step={(max - min) / 100}
+        onChange={(e) => {
+          setValue(Number(e.target.value));
+          throttleSingleUpdate(line, e.target.value);
+        }}
+      />
+    </div>
+  );
+}
+
+function RangeSlider({
+  initialValue,
+  line,
+}: {
+  initialValue: [number, number];
+  line: number;
+}) {
+  const divRef = useRef<HTMLDivElement>(null);
+  const init = useRef<[number, number]>(initialValue);
+  const [value, setValue] = useState(initialValue);
+  // store a min which is the floor of the given initial value
+  const [min] = useState(Math.floor(initialValue[0]));
+  // store a max which is the ceiling of the given initial value
+  const [max] = useState(Math.ceil(initialValue[1]));
+
+  useEffect(() => {
+    if (!divRef.current) return;
+    const slider = rangeSlider(divRef.current, {
+      min,
+      max,
+      step: 0.01,
+      value: init.current,
+      onInput: (v) => {
+        setValue(v);
+        throttleDistributionUpdate(line, ...v);
+      },
+    });
+
+    return () => {
+      slider.removeGlobalEventListeners();
+    };
+  }, [line, max, min]);
+
+  return (
+    <div className="grid gap-2">
+      <MedianDisplay>
+        {value[0]} to {value[1]}
+      </MedianDisplay>
+      <div className="mt-6" ref={divRef} />
+    </div>
+  );
+}
+
+function MedianDisplay({ children }: { children: ReactNode }) {
+  return (
+    <p className="text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter">
+      {children}
+    </p>
   );
 }

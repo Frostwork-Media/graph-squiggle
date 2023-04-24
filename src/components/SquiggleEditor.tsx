@@ -1,7 +1,7 @@
 import { useFileState } from "../lib/useFileState";
 import produce from "immer";
 import { useSquiggleState } from "../lib/useSquiggleState";
-import { forwardRef } from "react";
+import { forwardRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 
 /**
@@ -11,6 +11,16 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
   function SquiggleEditor(_props, ref) {
     const squiggle = useFileState((state) => state.project?.squiggle);
     const error = useSquiggleState((state) => state.squiggleRunError);
+    const onChange = useCallback((value: string | undefined) => {
+      useFileState.setState(
+        produce((draft) => {
+          if (!draft.project) return;
+          draft.project.squiggle = value ?? "";
+        }),
+        false,
+        "squiggle editor"
+      );
+    }, []);
     if (squiggle == null) return null;
     return (
       <div
@@ -36,16 +46,7 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
             wordWrap: "on",
           }}
           value={squiggle}
-          onChange={(value) => {
-            useFileState.setState(
-              produce((draft) => {
-                if (!draft.project) return;
-                draft.project.squiggle = value ?? "";
-              }),
-              false,
-              "squiggle editor"
-            );
-          }}
+          onChange={onChange}
           beforeMount={(monaco) => {
             // register a custom language "my-lang"
             // that supports C-style comments

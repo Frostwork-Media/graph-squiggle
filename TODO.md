@@ -1,24 +1,16 @@
-# Todo
+- ~~should also update for two variables~~
+- ~~hoist the slider number storage up to the node~~
+- ~~display that number so that it stays up to date with the slider~~
+- ~~throttle the slider so that it doesn't update the code too often~~
 
-- [x] determine a v1 data format
-- [x] build basic file saving and loading
-  - [x] Can create new project
-  - [x] Can save project to file
-    - [x] Only display save if different previous Contents
-    - [x] Store file handle and save to same file
-  - [x] Can load project from file
-    - [x] Show open file name
-  - [x] Display errors if unable to load file
-  - [x] Warn user if unsaved changes before navigating away from file
-- [x] parse squiggle
-  - [x] run squiggle when code changes
-  - [x] display squiggle errors
-  - [x] convert to nodes and edges
-- [x] render graph
-  - [x] render cytoscape graph headless with a fixed node size
-  - [x] render react-flow graph with node for each
-- [ ] determine a basic functional UI
-  - [x] basic tailwind interface
-  - [x] build node ui
-  - [ ] edit context from graph nodes
-  - [ ] UI for reconnecting nodes when unlinked from variable name
+FIX:
+
+- it should be derived if there are any variable references in it. should not show a slider (y = x to 4) should NOT show a slider
+
+# []: # Path: TODO.md
+
+Directly edit squiggle code from range slider and have it update immediately.
+That means not using the text editor throttle. But rather throttling the slider
+and a lower level and feeding the updated code directly into the squiggle mechanism.
+
+- we will need some way to tell the input slider to update if the text is edited manually

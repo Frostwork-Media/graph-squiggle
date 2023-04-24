@@ -7,7 +7,12 @@ import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { useEffect } from "react";
 import { completeGraphDataFromSquiggleState } from "./completeGraphDataFromSquiggleState";
 
+/**
+ * Stores the processed squiggle code, along with the code that was run
+ */
 export type SquiggleState = {
+  /** The squiggle code that was run */
+  squiggleCode?: string;
   /** The parsed squiggle object */
   squiggleRunResult?: SqProject;
   /** The error that occurred when running the code */
@@ -56,6 +61,7 @@ function runSquiggle(code: string | undefined) {
       if (result.ok) {
         useSquiggleState.setState(
           {
+            squiggleCode: code,
             squiggleRunResult: result.value.location.project,
             squiggleRunError: undefined,
           },
@@ -85,7 +91,11 @@ function runSquiggle(code: string | undefined) {
   } else {
     // When there is no code at all
     useSquiggleState.setState(
-      { squiggleRunResult: undefined, squiggleRunError: undefined },
+      {
+        squiggleCode: undefined,
+        squiggleRunResult: undefined,
+        squiggleRunError: undefined,
+      },
       false,
       "run squiggle / no code"
     );

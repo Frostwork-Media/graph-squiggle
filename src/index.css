@@ -35,3 +35,19 @@
 .react-flow__attribution {
   display: none;
 }
+
+.squiggle-chart,
+.squiggle-chart > div {
+  height: 100%;
+  overflow: hidden;
+}
+
+.squiggle-chart > div > div.flex:nth-child(2) {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.squiggle-chart > div > div.flex:nth-child(2) > .overflow-auto {
+  overflow: hidden;
+}
