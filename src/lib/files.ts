@@ -1,6 +1,7 @@
 import {
   baseFileState,
   deserializeProject,
+  serializeProject,
   useFileState,
 } from "./useFileState";
 import { isError } from "./isError";
@@ -30,7 +31,7 @@ export function create() {
 /**
  * loadFile load a file
  */
-export async function open() {
+export async function loadFile() {
   try {
     // Open file picker and destructure the result the first handle
     const [fileHandle] = await window.showOpenFilePicker({
@@ -76,16 +77,21 @@ export async function open() {
       // set the nodeLocation state
       useNodeLocation.setState(json.nodeLocation);
 
+      const projectUrl = serializeProject(project);
+
       useFileState.setState(
         {
           ...baseFileState,
           project,
           previousContents: contents,
           fileHandle,
+          projectUrl,
         },
         false,
         "open"
       );
+
+      // set the project url
     } catch (error) {
       if (isError(error)) {
         console.log(error.message);
@@ -155,6 +161,10 @@ export async function save(_fileHandle?: FileSystemFileHandle) {
       false,
       "saveAs"
     );
+
+    // update the project url
+    const projectUrl = serializeProject(project);
+    useFileState.setState({ projectUrl }, false, "saveAs");
   } catch (error) {
     console.error(error);
   }

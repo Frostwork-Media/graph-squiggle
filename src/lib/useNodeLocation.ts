@@ -52,6 +52,6 @@ export const writeNodeLocation = debounce(
       return nextState;
     });
   },
-  500,
+  250,
   { leading: false, trailing: true }
 );

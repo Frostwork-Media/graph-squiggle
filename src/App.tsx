@@ -1,5 +1,5 @@
 import { useFileState } from "./lib/useFileState";
-import { create, loadFromHash, open, save } from "./lib/files";
+import { create, loadFromHash, loadFile, save } from "./lib/files";
 import { CSSProperties, useEffect, useState } from "react";
 import { useGlobalSettings } from "./lib/useGlobalSettings";
 import { Project } from "./components/Project";
@@ -107,7 +107,7 @@ function Nav({
               )
                 return;
             }
-            open();
+            loadFile();
           }}
         >
           Open Project

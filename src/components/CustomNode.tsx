@@ -11,6 +11,7 @@ import {
   throttleSingleUpdate,
   throttleDistributionUpdate,
 } from "../lib/updateSquiggleLineSingle";
+import { useCodeEdited } from "./SquiggleEditor";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -27,6 +28,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
       enabled: !!data.marketSlug,
       cacheTime: Infinity,
       staleTime: Infinity,
+      retry: false,
     }
   );
 
@@ -36,6 +38,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   if (valueType === "derived") {
     squiggleCode = code + "\n" + data.label;
   }
+
   return (
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />
@@ -62,12 +65,13 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
           <Single initialValue={data.numValue} line={data.line} />
         )}
         {valueType === "distribution" && (
-          <RangeSlider
-            initialValue={[data.numLower, data.numUpper]}
+          <Distribution
+            lower={data.numLower}
+            upper={data.numUpper}
             line={data.line}
           />
         )}
-        {market.data && (
+        {market.data && !market.isError && !("error" in market.data) ? (
           <a
             className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start"
             href={market.data.url}
@@ -87,7 +91,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
               {market.data.probability}
             </span>
           </a>
-        )}
+        ) : null}
       </div>
       <Handle
         type="source"
@@ -106,6 +110,10 @@ export function Chip({ label }: { label: string }) {
   );
 }
 
+function getMax(n: number) {
+  return n <= 1 ? 1 : Math.pow(10, Math.ceil(Math.log10(n)));
+}
+
 function Single({
   initialValue,
   line,
@@ -113,29 +121,49 @@ function Single({
   initialValue: number;
   line: number;
 }) {
+  const lastEdited = useCodeEdited((state) => state.lastEdited);
+  const shouldUpdate = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   // get a min and max value on the 10's scale of the number
   const [value, setValue] = useState(initialValue);
-  const [min] = useState(() => {
-    return 0;
-  });
-  const [max] = useState(() => {
-    // If number is between 0 and 1, return 1
-    // If number is between 1 and 10, return 10
-    // If number is between 10 and 100, return 100
-    // etc.
-    return Math.pow(10, Math.ceil(Math.log10(value)));
-  });
+  // If number is between 0 and 1, return 1
+  // If number is between 1 and 10, return 10
+  // If number is between 10 and 100, return 100
+  // etc.
+  const [max, setMax] = useState(getMax(initialValue));
+
+  /**
+   * When last edited is triggered then we allow the next initialValue change to reset the state
+   */
+  useEffect(() => {
+    shouldUpdate.current = true;
+  }, [lastEdited]);
+
+  /**
+   * When the code is edited, we want to update the value of the slider
+   */
+  useEffect(() => {
+    if (!shouldUpdate.current) return;
+    setValue(initialValue);
+    setMax(getMax(initialValue));
+    shouldUpdate.current = false;
+    setTimeout(() => {
+      if (!inputRef.current) return;
+      inputRef.current.value = inputRef.current.defaultValue;
+    }, 45);
+  }, [initialValue]);
 
   return (
     <div className="grid gap-2">
       <MedianDisplay>{value}</MedianDisplay>
       <input
         type="range"
+        ref={inputRef}
         className="w-full mt-6"
-        defaultValue={value}
-        min={min}
+        defaultValue={initialValue}
+        min={0}
         max={max}
-        step={(max - min) / 100}
+        step={max / 100}
         onChange={(e) => {
           setValue(Number(e.target.value));
           throttleSingleUpdate(line, e.target.value);
@@ -145,25 +173,42 @@ function Single({
   );
 }
 
-function RangeSlider({
-  initialValue,
+function Distribution({
+  lower,
+  upper,
   line,
 }: {
-  initialValue: [number, number];
+  lower: number;
+  upper: number;
   line: number;
 }) {
+  const lastEdited = useCodeEdited((state) => state.lastEdited);
+  const shouldUpdate = useRef(false);
+  const [resetCounter, setResetCounter] = useState(0);
   const divRef = useRef<HTMLDivElement>(null);
-  const init = useRef<[number, number]>(initialValue);
-  const [value, setValue] = useState(initialValue);
-  // store a min which is the floor of the given initial value
-  const [min] = useState(Math.floor(initialValue[0]));
-  // store a max which is the ceiling of the given initial value
-  const [max] = useState(Math.ceil(initialValue[1]));
+  const init = useRef<[number, number]>([lower, upper]);
+  const [value, setValue] = useState([lower, upper]);
+  const [max, setMax] = useState(getMax(upper));
+
+  // Watch lastEdited and allow reset on initialValue after code change
+  useEffect(() => {
+    shouldUpdate.current = true;
+  }, [lastEdited]);
+
+  // Watch initialValue and incrememnt resetCounter to reset the slider
+  useEffect(() => {
+    if (!shouldUpdate.current) return;
+    init.current = [lower, upper];
+    setValue([lower, upper]);
+    setMax(getMax(upper));
+    setResetCounter((c) => c + 1);
+    shouldUpdate.current = false;
+  }, [lower, upper]);
 
   useEffect(() => {
     if (!divRef.current) return;
     const slider = rangeSlider(divRef.current, {
-      min,
+      min: 0,
       max,
       step: 0.01,
       value: init.current,
@@ -176,7 +221,7 @@ function RangeSlider({
     return () => {
       slider.removeGlobalEventListeners();
     };
-  }, [line, max, min]);
+  }, [line, max, resetCounter]);
 
   return (
     <div className="grid gap-2">

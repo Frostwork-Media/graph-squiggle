@@ -3,6 +3,12 @@ import produce from "immer";
 import { useSquiggleState } from "../lib/useSquiggleState";
 import { forwardRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
+import { create } from "zustand";
+
+// Tiny client-side store to know when the code has been edited
+export const useCodeEdited = create<{ lastEdited: string }>((set) => ({
+  lastEdited: Date.now().toString(),
+}));
 
 /**
  * Edit the squiggle code
@@ -56,6 +62,12 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
                 root: [
                   // comments
                   [/\/\/.*$/, "comment"],
+                  // multi-line comments
+                  [/\/\*/, "comment", "@comment"],
+                ],
+                comment: [
+                  [/\*\//, "comment", "@pop"],
+                  [/./, "comment"],
                 ],
               },
             });
@@ -64,7 +76,14 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
             monaco.languages.setLanguageConfiguration("squiggle", {
               comments: {
                 lineComment: "//",
+                blockComment: ["/*", "*/"],
               },
+            });
+          }}
+          onMount={(editor) => {
+            // bind a keydown event to the editor
+            editor.onKeyDown((e) => {
+              useCodeEdited.setState({ lastEdited: Date.now().toString() });
             });
           }}
         />

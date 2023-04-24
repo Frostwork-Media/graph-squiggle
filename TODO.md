@@ -1,10 +1,11 @@
 FIX:
 
 - ~~it should be derived if there are any variable references in it. should not show a slider (y = x to 4) should NOT show a slider~~
-- the parsing bug
-- there's a bug where sliders jump back to their initial position if you edit the code manually after
-- copy share URL not populated on first load of project
-- copy share URL not populated when just moving a node
+- ~~the parsing bug~~
+- ~~copy share URL not populated on first load of project~~
+- ~~copy share URL not populated when just moving a node~~
+- ~~share URL empty after saving project~~
+- ~~there's a bug where sliders jump back to their initial position if you edit the code manually after~~
 
 LAYOUT:
 
