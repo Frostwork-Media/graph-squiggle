@@ -39,10 +39,10 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
 
   return (
     <>
-      <Handle type="source" position={Position.Top} />
+      <Handle type="target" position={Position.Top} className="top-handle" />
       <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default">
         <div className="flex gap-1 justify-between">
-          <div className="drag-handle translate-x-[-5px] translate-y-[-2.5px] opacity-25 hover:opacity-75 active:opacity-100 cursor-move">
+          <div className="drag-handle translate-x-[-5px] translate-y-[-2.5px] opacity-50 hover:opacity-100 cursor-move">
             <DotsSixVertical size={24} />
           </div>
           <div className="overflow-hidden">
@@ -52,7 +52,11 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
         <p className="text-lg">{data.comment}</p>
         {valueType === "derived" && (
           <div className="squiggle-chart">
-            <SquiggleChart code={squiggleCode} enableLocalSettings />
+            <SquiggleChart
+              code={squiggleCode}
+              enableLocalSettings
+              distributionChartSettings={{ minX: 0, maxX: 1 }}
+            />
           </div>
         )}
         {valueType === "single" && (
@@ -86,7 +90,11 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
           </a>
         )}
       </div>
-      <Handle type="target" position={Position.Bottom} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="w-2 h-2 rounded-full bg-neutral-300 border-none translate-y-[7px]"
+      />
     </>
   );
 });

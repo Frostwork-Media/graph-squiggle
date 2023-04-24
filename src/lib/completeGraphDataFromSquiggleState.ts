@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import cytoscape, { ElementsDefinition } from "cytoscape";
 import klay from "cytoscape-klay";
+import coseBilkent from "cytoscape-cose-bilkent";
 import { sqProjectToCyElements } from "./sqProjectToCyElements";
 import { useFileState } from "./useFileState";
 import { squiggleNodeType } from "./constants";
@@ -16,6 +17,7 @@ import { NODE_WIDTH } from "../components/CustomNode";
 // @ts-ignore
 if (!cytoscape.__hasInit) {
   cytoscape.use(klay);
+  cytoscape.use(coseBilkent);
   // @ts-ignore
   cytoscape.__hasInit = true;
 }
@@ -122,17 +124,18 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
         if (id)
           edges.push({
             id,
-            source: edge.data.source,
-            target: edge.data.target,
+            target: edge.data.source,
+            source: edge.data.target,
+            // animated: true,
             style: {
-              strokeWidth: 4,
+              strokeWidth: 3,
               stroke: "#ccc",
             },
-            markerStart: {
+            markerEnd: {
               type: MarkerType.Arrow,
-              height: 24,
-              width: 24,
-              strokeWidth: 0.5,
+              height: 20,
+              width: 20,
+              strokeWidth: 1,
               color: "#ccc",
             },
           });
@@ -178,12 +181,13 @@ function getPositions(elements: ElementsDefinition) {
     });
     cy.layout({
       name: "klay",
-      spacingFactor: 1.5,
+      // @ts-ignore
+      spacingFactor: 1.25,
       klay: {
         direction: "UP",
         nodePlacement: "SIMPLE",
       },
-    } as any).run();
+    }).run();
 
     const positions: NonNullable<GraphState["positions"]> = {};
     for (const node of Array.from(cy.nodes())) {
