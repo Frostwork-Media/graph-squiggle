@@ -1,5 +1,10 @@
 // import { useGraphState } from "../lib/useGraphState";
-import ReactFlow, { Controls, Background, BackgroundVariant } from "reactflow";
+import ReactFlow, {
+  Controls,
+  Background,
+  BackgroundVariant,
+  OnNodesChange,
+} from "reactflow";
 import "reactflow/dist/style.css";
 import { useGraphState } from "../lib/completeGraphDataFromSquiggleState";
 import { nodeTypes } from "../lib/constants";
@@ -16,6 +21,7 @@ export function Graph() {
       nodeTypes={nodeTypes}
       minZoom={0.2}
       maxZoom={2}
+      onNodesChange={onNodesChange}
     >
       <Background
         color="#f0f0f0"
@@ -26,3 +32,8 @@ export function Graph() {
     </ReactFlow>
   );
 }
+
+const onNodesChange: OnNodesChange = (changes) => {
+  console.log(changes);
+  // console.log("nodes changed");
+};

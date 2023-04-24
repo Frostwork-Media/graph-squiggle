@@ -150,7 +150,8 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
 }
 
 /**
- * This builds a temporary cytoscape instance to get the positions of the nodes
+ * This builds a temporary cytoscape instance to get the positions of the nodes.
+ * Also looks up any manually set positions
  * */
 function getPositions(elements: ElementsDefinition) {
   try {

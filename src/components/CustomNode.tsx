@@ -4,15 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { ManifoldResponse, SquiggleVariableValue } from "../lib/types";
 import { useFileState } from "../lib/useFileState";
 import { SquiggleChart } from "@quri/squiggle-components";
+import { DotsSixVertical } from "phosphor-react";
 import rangeSlider from "range-slider-input";
 import "range-slider-input/dist/style.css";
 import {
-  updateSquiggleLineSingle,
-  updateSquiggleLineDistribution,
   throttleSingleUpdate,
   throttleDistributionUpdate,
 } from "../lib/updateSquiggleLineSingle";
-import produce from "immer";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -42,8 +40,11 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   return (
     <>
       <Handle type="source" position={Position.Top} />
-      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8">
-        <div className="grid gap-1">
+      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default">
+        <div className="flex gap-1 justify-between">
+          <div className="drag-handle translate-x-[-5px] translate-y-[-2.5px] opacity-25 hover:opacity-75 active:opacity-100 cursor-move">
+            <DotsSixVertical size={24} />
+          </div>
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
@@ -173,7 +174,7 @@ function RangeSlider({
   return (
     <div className="grid gap-2">
       <MedianDisplay>
-        {value[0]} to {value[1]}
+        {value[0].toFixed(2)} to {value[1].toFixed(2)}
       </MedianDisplay>
       <div className="mt-6" ref={divRef} />
     </div>
@@ -182,7 +183,7 @@ function RangeSlider({
 
 function MedianDisplay({ children }: { children: ReactNode }) {
   return (
-    <p className="text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter">
+    <p className="text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
       {children}
     </p>
   );

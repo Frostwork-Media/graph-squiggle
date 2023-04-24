@@ -1,11 +1,16 @@
-- ~~should also update for two variables~~
-- ~~hoist the slider number storage up to the node~~
-- ~~display that number so that it stays up to date with the slider~~
-- ~~throttle the slider so that it doesn't update the code too often~~
+LAYOUT:
+
+- drag and forget
+  - create location cache
+  - lookup location when running cytoscape
+- drag and remember
+- force directed non-animated
+- force directed animated
 
 FIX:
 
 - it should be derived if there are any variable references in it. should not show a slider (y = x to 4) should NOT show a slider
+- the bug
 
 # []: # Path: TODO.md
 
