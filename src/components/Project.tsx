@@ -16,11 +16,13 @@ import { serializeProject, useFileState } from "../lib/useFileState";
 import { Bindings } from "./Bindings";
 import { Project as ProjectType } from "../lib/schema";
 import debounce from "lodash.debounce";
+import { GraphControls } from "./GraphControls";
 
 /**
  * Mounted when a valid project is opened
  */
 export function Project() {
+  // Use watch project sets up all the subscriptions necessary for keeping derived state up to date
   useWatchProject();
   const fileHandle = useFileState((state) => state.fileHandle);
   const ref = useRef<ImperativePanelHandle>(null);
@@ -116,8 +118,9 @@ export function Project() {
             </Tabs.Trigger>
           </Tabs.List>
         </PanelResizeHandle>
-        <Panel>
+        <Panel className="relative">
           <Graph />
+          <GraphControls />
         </Panel>
       </PanelGroup>
     </Tabs.Root>

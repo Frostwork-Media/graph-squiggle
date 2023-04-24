@@ -9,6 +9,7 @@ import {
   baseGraphState,
   useGraphState,
 } from "./completeGraphDataFromSquiggleState";
+import { useNodeLocation } from "./useNodeLocation";
 
 /**
  * Create a new project
@@ -26,6 +27,9 @@ export function create() {
   useGraphState.setState(baseGraphState, true, "create");
 }
 
+/**
+ * loadFile load a file
+ */
 export async function open() {
   try {
     // Open file picker and destructure the result the first handle
@@ -49,7 +53,29 @@ export async function open() {
     // try to parse it as JSON
     try {
       const json = JSON.parse(contents);
+
+      // if no subject, add empty one
+      if (!json.subject) {
+        json.subject = "";
+      }
+
+      // delete old unused "context" property if it exists
+      if (json.context) {
+        delete json.context;
+      }
+
+      // if no nodeLocation exists, add an empty one
+      if (!json.nodeLocation) {
+        json.nodeLocation = {};
+      }
+
+      console.log(json);
+
       const project = projectSchema.parse(json);
+
+      // set the nodeLocation state
+      useNodeLocation.setState(json.nodeLocation);
+
       useFileState.setState(
         {
           ...baseFileState,
@@ -149,6 +175,9 @@ export async function loadFromHash() {
         false,
         "loadFromHash"
       );
+
+      // set the nodeLocation state
+      useNodeLocation.setState(project.nodeLocation ?? {});
     }
   } catch (error) {
     if (isError(error)) {

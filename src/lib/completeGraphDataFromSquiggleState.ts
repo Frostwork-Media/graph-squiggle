@@ -130,8 +130,8 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
             },
             markerStart: {
               type: MarkerType.Arrow,
-              height: 33,
-              width: 33,
+              height: 24,
+              width: 24,
               strokeWidth: 0.5,
               color: "#ccc",
             },
@@ -162,6 +162,7 @@ function getPositions(elements: ElementsDefinition) {
     const cy = cytoscape({
       elements,
       container: div,
+      layout: { name: "preset" },
       style: [
         {
           selector: "node",
@@ -183,6 +184,7 @@ function getPositions(elements: ElementsDefinition) {
         nodePlacement: "SIMPLE",
       },
     } as any).run();
+
     const positions: NonNullable<GraphState["positions"]> = {};
     for (const node of Array.from(cy.nodes())) {
       const id = node.id();

@@ -93,12 +93,10 @@ export function sqProjectToCyElements(
       // Create nodes for an dependencies that don't already exist
       for (const dependency of dependencies) {
         if (!nodes.find((n) => n.data.id === dependency.variable)) {
-          console.log("adding node", dependency.variable);
           nodes.push({
             data: {
               id: dependency.variable,
               line: dependency.line,
-              value: dependency.value,
             },
           });
         }

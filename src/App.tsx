@@ -114,7 +114,7 @@ function Nav({
         </NavButton>
         <input
           type="password"
-          className="bg-neutral-100 font-mono"
+          className="bg-neutral-100 font-mono text-sm p-1 rounded text-neutral-500"
           placeholder="Paste OpenAI API Key"
           value={apiKey}
           onChange={(e) => {

@@ -6,6 +6,7 @@ import debounce from "lodash.debounce";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { useEffect } from "react";
 import { completeGraphDataFromSquiggleState } from "./completeGraphDataFromSquiggleState";
+import { useNodeLocation, writeNodeLocation } from "./useNodeLocation";
 
 /**
  * Stores the processed squiggle code, along with the code that was run
@@ -47,6 +48,14 @@ export function useWatchProject() {
     return () => {
       unsub();
     };
+  }, []);
+
+  // here we watch our nodeLocation store and write it back the project in a debounced way
+  useEffect(() => {
+    const unsubscribe = useNodeLocation.subscribe((state) => {
+      writeNodeLocation(state);
+    });
+    return unsubscribe;
   }, []);
 }
 

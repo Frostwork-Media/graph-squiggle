@@ -1,35 +1,27 @@
 import * as z from "zod";
 
-// This is the schema for the project file
+export type Project = z.infer<typeof projectSchema>;
 
-const variableSchema = z
-  .object({
-    description: z.string(),
-    location: z.number(),
-    market: z.string(),
-  })
-  .strict();
+const location = z.object({
+  x: z.number(),
+  y: z.number(),
+});
 
-export type Variable = z.infer<typeof variableSchema>;
+const nodeLocation = z.record(location);
 
-const contextSchema = z.record(variableSchema);
-
-export type Context = z.infer<typeof contextSchema>;
+export type NodeLocation = z.infer<typeof nodeLocation>;
 
 export const projectSchema = z
   .object({
     squiggle: z.string(),
-    context: contextSchema,
     subject: z.string(),
+    nodeLocation: z.optional(nodeLocation),
   })
   .strict();
-
-export type Project = z.infer<typeof projectSchema>;
 
 // This is a blank project file
 
 export const getEmptyProject: () => Project = () => ({
   squiggle: "",
-  context: {},
   subject: "",
 });
