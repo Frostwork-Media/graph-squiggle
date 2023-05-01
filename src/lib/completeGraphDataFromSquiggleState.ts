@@ -107,7 +107,6 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
               label: id,
             },
             draggable: true,
-            dragHandle: ".drag-handle",
             position: { x, y },
           };
         }

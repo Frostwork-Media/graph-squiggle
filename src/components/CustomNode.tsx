@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ManifoldResponse, SquiggleVariableValue } from "../lib/types";
 import { useFileState } from "../lib/useFileState";
 import { SquiggleChart } from "@quri/squiggle-components";
+import { DotsSixVertical } from "phosphor-react";
 import rangeSlider from "range-slider-input";
 import "range-slider-input/dist/style.css";
 import {
@@ -41,14 +42,13 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   return (
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />
-      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default relative">
-        <div className="drag-handle w-full h-full absolute" />
-        <div className="flex gap-1 justify-between pointer-events-none">
+      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default">
+        <div className="flex gap-1 justify-end">
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
         </div>
-        <p className="text-lg pointer-events-none">{data.comment}</p>
+        <p className="text-lg">{data.comment}</p>
         {valueType === "derived" && (
           <div className="squiggle-chart">
             <SquiggleChart
@@ -70,7 +70,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
         )}
         {market.data && !market.isError && !("error" in market.data) ? (
           <a
-            className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start pointer-events-none"
+            className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start"
             href={market.data.url}
             target="_blank"
             rel="noreferrer"
@@ -82,7 +82,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
             />
             <span className="text-sm grow">{market.data.question}</span>
             <span
-              className="text-xs font-mono max-w-[60px] overflow-hidden whitespace-nowrap overflow-ellipsis rounded-full bg-purple-200 px-1 pointer-events-auto"
+              className="text-xs font-mono max-w-[60px] overflow-hidden whitespace-nowrap overflow-ellipsis rounded-full bg-purple-200 px-1"
               title={market.data.probability.toString()}
             >
               {market.data.probability}
@@ -156,7 +156,7 @@ function Single({
       <input
         type="range"
         ref={inputRef}
-        className="w-full mt-6 pointer-events-auto h-4 z-20"
+        className="w-full mt-6 nodrag"
         defaultValue={initialValue}
         min={0}
         max={max}
@@ -225,14 +225,14 @@ function Distribution({
       <MedianDisplay>
         {value[0].toFixed(2)} to {value[1].toFixed(2)}
       </MedianDisplay>
-      <div className="mt-6 pointer-events-auto" ref={divRef} />
+      <div className="mt-6 nodrag" ref={divRef} />
     </div>
   );
 }
 
 function MedianDisplay({ children }: { children: ReactNode }) {
   return (
-    <p className="pointer-events-none text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
+    <p className="text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
       {children}
     </p>
   );
