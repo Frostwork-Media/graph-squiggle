@@ -52,3 +52,10 @@
 .squiggle-chart > div > div.flex:nth-child(2) > .overflow-auto {
   overflow: hidden;
 }
+
+/* Fix the squiggle chart single value size */
+.squiggle-chart .font-semibold.text-slate-600 {
+  font-size: 2.5rem;
+  font-weight: 400 !important;
+  @apply font-mono;
+}
