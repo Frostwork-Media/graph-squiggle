@@ -56,7 +56,6 @@ const handler: VercelApiHandler = async (req, res) => {
 
   // call the function that calls the OpenAI API
   const response = await fromPrompt({ apiKey, subject, code, prompt });
-  console.log(response);
 
   res.status(200).send(response);
 };

@@ -70,8 +70,6 @@ export async function loadFile() {
         json.nodeLocation = {};
       }
 
-      console.log(json);
-
       const project = projectSchema.parse(json);
 
       // set the nodeLocation state

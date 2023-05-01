@@ -7,11 +7,16 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { useGraphState } from "../lib/completeGraphDataFromSquiggleState";
-import { nodeTypes } from "../lib/constants";
 import {
   preferCustomNodeLocation,
   useNodeLocation,
 } from "../lib/useNodeLocation";
+
+import { CustomNode } from "../components/CustomNode";
+
+export const nodeTypes = {
+  squiggleNodeType: CustomNode,
+};
 
 export function Graph() {
   const nodes = useGraphState((state) => state.nodes);
@@ -28,6 +33,7 @@ export function Graph() {
       minZoom={0.2}
       maxZoom={2}
       onNodesChange={onNodesChange}
+      nodesConnectable={false}
     >
       <Background
         color="#f0f0f0"
@@ -45,6 +51,9 @@ const onNodesChange: OnNodesChange = (changes) => {
       useNodeLocation.setState({
         [change.id]: { x: change.position.x, y: change.position.y },
       });
+    } else if (change.type === "select") {
+      // need to manually update the node value here
+      // expand our auxillary state to include selection state
     }
   }
 };

@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ManifoldResponse, SquiggleVariableValue } from "../lib/types";
 import { useFileState } from "../lib/useFileState";
 import { SquiggleChart } from "@quri/squiggle-components";
-import { DotsSixVertical } from "phosphor-react";
 import rangeSlider from "range-slider-input";
 import "range-slider-input/dist/style.css";
 import {
@@ -16,7 +15,7 @@ const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
 
-export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
+export function CustomNode({ data }: NodeProps) {
   const code = useFileState((state) => state.project?.squiggle ?? "");
   const market = useQuery(
     ["market", data.marketSlug],
@@ -42,7 +41,9 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
   return (
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />
-      <div className="bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default">
+      <div
+        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default`}
+      >
         <div className="flex gap-1 justify-end">
           <div className="overflow-hidden">
             <Chip label={data.label} />
@@ -97,7 +98,7 @@ export const CustomNode = memo(function CustomNodeBase({ data }: NodeProps) {
       />
     </>
   );
-});
+}
 
 export function Chip({ label }: { label: string }) {
   return (

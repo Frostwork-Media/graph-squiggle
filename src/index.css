@@ -17,6 +17,10 @@
   width: var(--node-width);
 }
 
+.react-flow__node.selected {
+  outline: 4px rgb(165, 160, 160) dashed !important;
+}
+
 /* .react-flow__handle { */
 .top-handle {
   position: absolute;

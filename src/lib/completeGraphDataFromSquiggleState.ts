@@ -6,13 +6,13 @@ import klay from "cytoscape-klay";
 import coseBilkent from "cytoscape-cose-bilkent";
 import { sqProjectToCyElements } from "./sqProjectToCyElements";
 import { useFileState } from "./useFileState";
-import { squiggleNodeType } from "./constants";
 import {
   Node as ReactFlowNode,
   Edge as ReactFlowEdge,
   MarkerType,
 } from "reactflow";
 import { NODE_WIDTH } from "../components/CustomNode";
+import { squiggleNodeType } from "../components/Graph";
 
 // @ts-ignore
 if (!cytoscape.__hasInit) {
@@ -99,7 +99,7 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
 
           return {
             id,
-            type: squiggleNodeType,
+            type: "squiggleNodeType",
             data: {
               ...nodeInElements.data,
               comment,
