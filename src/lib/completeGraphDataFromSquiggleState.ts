@@ -12,7 +12,6 @@ import {
   MarkerType,
 } from "reactflow";
 import { NODE_WIDTH } from "../components/CustomNode";
-import { squiggleNodeType } from "../components/Graph";
 
 // @ts-ignore
 if (!cytoscape.__hasInit) {
