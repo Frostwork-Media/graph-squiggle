@@ -17,6 +17,14 @@
   width: var(--node-width);
 }
 
+.selecting .react-flow__node-squiggleNodeType {
+  opacity: 0.5;
+}
+
+.selecting .react-flow__node-squiggleNodeType.selected {
+  opacity: 1;
+}
+
 .react-flow__node.selected {
   outline: 4px rgb(165, 160, 160) dashed !important;
 }
@@ -62,4 +70,8 @@
   font-size: 2.5rem;
   font-weight: 400 !important;
   @apply font-mono;
+}
+
+.react-flow__panel {
+  background-color: white;
 }

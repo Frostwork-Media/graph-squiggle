@@ -7,14 +7,13 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { useGraphState } from "../lib/completeGraphDataFromSquiggleState";
-import {
-  preferCustomNodeLocation,
-  useNodeLocation,
-} from "../lib/useNodeLocation";
+import { useNodeLocation } from "../lib/useNodeLocation";
 
 import { CustomNode } from "../components/CustomNode";
+import { useCallback, useState } from "react";
+import { augmentNodes } from "../lib/augmentNodes";
 
-export const nodeTypes = {
+const nodeTypes = {
   squiggleNodeType: CustomNode,
 };
 
@@ -22,7 +21,27 @@ export function Graph() {
   const nodes = useGraphState((state) => state.nodes);
   const edges = useGraphState((state) => state.edges);
   const nodeLocation = useNodeLocation();
-  const _nodes = preferCustomNodeLocation(nodes, nodeLocation);
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
+  const _nodes = augmentNodes(nodes, nodeLocation, selectedNodes);
+
+  const onNodesChange: OnNodesChange = useCallback((changes) => {
+    for (const change of changes) {
+      if (change.type === "position" && change.position) {
+        useNodeLocation.setState({
+          [change.id]: { x: change.position.x, y: change.position.y },
+        });
+      } else if (change.type === "select") {
+        const { id, selected } = change;
+        if (selected) {
+          setSelectedNodes((selectedNodes) => [...selectedNodes, id]);
+        } else {
+          setSelectedNodes((selectedNodes) =>
+            selectedNodes.filter((nodeId) => nodeId !== id)
+          );
+        }
+      }
+    }
+  }, []);
 
   return (
     <ReactFlow
@@ -34,6 +53,7 @@ export function Graph() {
       maxZoom={2}
       onNodesChange={onNodesChange}
       nodesConnectable={false}
+      className={selectedNodes.length > 0 ? "selecting" : ""}
     >
       <Background
         color="#f0f0f0"
@@ -44,16 +64,3 @@ export function Graph() {
     </ReactFlow>
   );
 }
-
-const onNodesChange: OnNodesChange = (changes) => {
-  for (const change of changes) {
-    if (change.type === "position" && change.position) {
-      useNodeLocation.setState({
-        [change.id]: { x: change.position.x, y: change.position.y },
-      });
-    } else if (change.type === "select") {
-      // need to manually update the node value here
-      // expand our auxillary state to include selection state
-    }
-  }
-};
