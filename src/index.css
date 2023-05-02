@@ -87,5 +87,5 @@
 
 .range-slider .range-slider__range,
 .range-slider .range-slider__thumb {
-  @apply bg-blue-600;
+  @apply bg-blue-400;
 }

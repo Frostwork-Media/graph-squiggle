@@ -168,8 +168,8 @@ function Single({
         ref={inputRef}
       >
         <Slider.Track>
-          <Slider.Range className="h-6 bg-blue-600 absolute left-0" />
-          <Slider.Thumb className="w-6 h-6 bg-blue-600 border-none" />
+          <Slider.Range className="h-6 bg-blue-400 absolute left-0" />
+          <Slider.Thumb className="w-6 h-6 bg-blue-400 border-none" />
         </Slider.Track>
       </Slider.Root>
     </div>
