@@ -75,3 +75,17 @@
 .react-flow__panel {
   background-color: white;
 }
+
+.range-slider,
+.range-slider .range-slider__thumb {
+  @apply h-6;
+}
+
+.range-slider .range-slider__thumb {
+  @apply w-12 rounded-none;
+}
+
+.range-slider .range-slider__range,
+.range-slider .range-slider__thumb {
+  @apply bg-blue-600;
+}

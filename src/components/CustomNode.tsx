@@ -11,6 +11,7 @@ import {
   throttleDistributionUpdate,
 } from "../lib/updateSquiggleLineSingle";
 import { useCodeEdited } from "./SquiggleEditor";
+import * as Slider from "@radix-ui/react-slider";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -52,7 +53,7 @@ export function CustomNode({ data }: NodeProps) {
         <p className="text-lg">{data.comment}</p>
         {valueType === "derived" && (
           <div className="squiggle-chart">
-            <SquiggleChart
+            <DebouceSquiggleChart
               code={squiggleCode}
               enableLocalSettings
               distributionChartSettings={{ minX: 0, maxX: 1 }}
@@ -154,19 +155,23 @@ function Single({
   return (
     <div className="grid gap-2">
       <MedianDisplay>{value}</MedianDisplay>
-      <input
-        type="range"
-        ref={inputRef}
-        className="w-full mt-6 nodrag"
-        defaultValue={initialValue}
+      <Slider.Root
+        className="h-6 w-full mt-6 nodrag bg-neutral-200 overflow-hidden relative"
+        onValueChange={(value) => {
+          setValue(Number(value[0]));
+          throttleSingleUpdate(line, value.toString());
+        }}
+        value={[value]}
+        step={max / 100}
         min={0}
         max={max}
-        step={max / 100}
-        onChange={(e) => {
-          setValue(Number(e.target.value));
-          throttleSingleUpdate(line, e.target.value);
-        }}
-      />
+        ref={inputRef}
+      >
+        <Slider.Track>
+          <Slider.Range className="h-6 bg-blue-600 absolute left-0" />
+          <Slider.Thumb className="w-6 h-6 bg-blue-600 border-none" />
+        </Slider.Track>
+      </Slider.Root>
     </div>
   );
 }
@@ -237,4 +242,32 @@ function MedianDisplay({ children }: { children: ReactNode }) {
       {children}
     </p>
   );
+}
+
+/** Forward Props to SquiggleChart but debouce them */
+function DebouceSquiggleChart(props: Parameters<typeof SquiggleChart>[0]) {
+  const debouncedProps = useDebounce(props, 250);
+  return <SquiggleChart {...debouncedProps} />;
+}
+
+// Hook
+function useDebounce(value: any, delay: number) {
+  // State and setters for debounced value
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(
+    () => {
+      // Update debounced value after delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+      // Cancel the timeout if value changes (also on delay change or unmount)
+      // This is how we prevent debounced value from updating if value is changed ...
+      // .. within the delay period. Timeout gets cleared and restarted.
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    [value, delay] // Only re-call effect if value or delay changes
+  );
+  return debouncedValue;
 }
