@@ -10,13 +10,19 @@ import {
 } from "react-resizable-panels";
 import { X, Code, ArrowLineRight, Chats, ChartBar } from "phosphor-react";
 import { IconButton } from "../ui/IconButton";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { serializeProject, useFileState } from "../lib/useFileState";
 import { Bindings } from "./Bindings";
 import { Project as ProjectType } from "../lib/schema";
 import debounce from "lodash.debounce";
 import { GraphControls } from "./GraphControls";
+import { create } from "zustand";
+
+const useViewState = create<{
+  isCollapsed: boolean;
+  collapse: () => void;
+}>(() => ({ isCollapsed: true, collapse: () => {} }));
 
 /**
  * Mounted when a valid project is opened
@@ -26,13 +32,13 @@ export function Project() {
   useWatchProject();
   const fileHandle = useFileState((state) => state.fileHandle);
   const ref = useRef<ImperativePanelHandle>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const isCollapsed = useViewState((state) => state.isCollapsed);
 
   const collapsePanel = () => {
     const panel = ref.current;
     if (panel) {
       panel.collapse();
-      setIsCollapsed(true);
+      useViewState.setState({ isCollapsed: true });
     }
   };
 
@@ -40,7 +46,7 @@ export function Project() {
     const panel = ref.current;
     if (panel) {
       panel.expand();
-      setIsCollapsed(false);
+      useViewState.setState({ isCollapsed: false });
     }
   };
 
@@ -63,20 +69,20 @@ export function Project() {
   }, []);
 
   return (
-    <Tabs.Root defaultValue="prompt">
+    <Tabs.Root defaultValue="code">
       <PanelGroup
         className="h-full relative border-t border-neutral-200"
         direction="horizontal"
       >
         <Panel
-          defaultSize={25}
+          defaultSize={0}
           collapsible
           ref={ref}
           onResize={(size) => {
             if (size === 0) {
-              setIsCollapsed(true);
+              useViewState.setState({ isCollapsed: true });
             } else if (isCollapsed) {
-              setIsCollapsed(false);
+              useViewState.setState({ isCollapsed: false });
             }
           }}
         >

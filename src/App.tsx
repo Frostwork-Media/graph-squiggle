@@ -191,8 +191,9 @@ function CopyShareUrl() {
           url.hash = projectUrl ?? "";
           await navigator.clipboard.writeText(url.toString());
           setSuccess(true);
-          setTimeout(() => setSuccess(false), 2000);
+          setTimeout(() => setSuccess(false), 1500);
         }}
+        className={success ? "text-green-500" : ""}
       >
         Copy Share URL
       </NavButton>
@@ -208,14 +209,16 @@ function CopyShareUrl() {
 function NavButton({
   children,
   onClick,
+  className = "",
 }: {
   children: React.ReactNode;
   onClick: () => void;
+  className?: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2 p-2 rounded hover:bg-neutral-100 active:bg-neutral-200"
+      className={`transition-colors flex items-center gap-2 p-2 rounded hover:bg-neutral-100 active:bg-neutral-200 ${className}`}
     >
       {children}
     </button>
