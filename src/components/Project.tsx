@@ -97,12 +97,6 @@ export function Project() {
             <IconButton icon={X} onClick={collapsePanel} />
           )}
           <Tabs.List className="grid gap-2">
-            <Tabs.Trigger value="prompt" asChild>
-              <IconButton
-                icon={Chats}
-                className="data-[state=active]:bg-neutral-300"
-              />
-            </Tabs.Trigger>
             <Tabs.Trigger value="code" asChild>
               <IconButton
                 icon={Code}
@@ -112,6 +106,12 @@ export function Project() {
             <Tabs.Trigger value="bindings" asChild>
               <IconButton
                 icon={ChartBar}
+                className="data-[state=active]:bg-neutral-300"
+              />
+            </Tabs.Trigger>
+            <Tabs.Trigger value="prompt" asChild>
+              <IconButton
+                icon={Chats}
                 className="data-[state=active]:bg-neutral-300"
               />
             </Tabs.Trigger>
