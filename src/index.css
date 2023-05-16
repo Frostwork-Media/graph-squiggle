@@ -67,9 +67,9 @@
 
 /* Fix the squiggle chart single value size */
 .squiggle-chart .font-semibold.text-slate-600 {
-  font-size: 2.5rem;
+  /* Set to match probability in manifold market */
   font-weight: 400 !important;
-  @apply font-mono;
+  @apply font-mono text-3xl;
 }
 
 .react-flow__panel {

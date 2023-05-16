@@ -87,7 +87,7 @@ export function CustomNode({ data }: NodeProps) {
             <span className="text-sm grow">{market.data.question}</span>
             </div>
             <span
-              className="text-2xl text-center font-mono p-4 overflow-hidden whitespace-nowrap overflow-ellipsis bg-purple-100"
+              className="text-3xl text-center font-mono p-4 overflow-hidden whitespace-nowrap overflow-ellipsis bg-purple-100"
               title={market.data.probability.toString()}
             >
               {numberToPercentage(market.data.probability)}
@@ -123,6 +123,9 @@ function Single({
   initialValue: number;
   line: number;
 }) {
+  const renderPercentages = useFileState(
+    (state) => state.project?.renderPercentages ?? false
+  )
   const lastEdited = useCodeEdited((state) => state.lastEdited);
   const shouldUpdate = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -157,7 +160,7 @@ function Single({
 
   return (
     <div className="grid gap-2">
-      <MedianDisplay>{value}</MedianDisplay>
+      <MedianDisplay>{renderPercentages ? numberToPercentage(value) : value}</MedianDisplay>
       <Slider.Root
         className="h-6 w-full mt-6 nodrag bg-neutral-200 overflow-hidden relative"
         onValueChange={(value) => {
@@ -195,6 +198,9 @@ function Distribution({
   const init = useRef<[number, number]>([lower, upper]);
   const [value, setValue] = useState([lower, upper]);
   const [max, setMax] = useState(getMax(upper));
+  const renderPercentages = useFileState(
+    (state) => state.project?.renderPercentages ?? false
+  )
 
   // Watch lastEdited and allow reset on initialValue after code change
   useEffect(() => {
@@ -229,10 +235,13 @@ function Distribution({
     };
   }, [line, max, resetCounter]);
 
+  const from = renderPercentages ? numberToPercentage(value[0]) : value[0].toFixed(2);
+  const to = renderPercentages ? numberToPercentage(value[1]) : value[1].toFixed(2);
+
   return (
     <div className="grid gap-2">
       <MedianDisplay>
-        {value[0].toFixed(2)} to {value[1].toFixed(2)}
+        {from} to {to}
       </MedianDisplay>
       <div className="mt-6 nodrag" ref={divRef} />
     </div>
