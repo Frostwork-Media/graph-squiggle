@@ -176,7 +176,7 @@ function getPositions(elements: ElementsDefinition) {
     cy.layout({
       name: "klay",
       // @ts-ignore
-      spacingFactor: 1.25,
+      spacingFactor: 1.1,
       klay: {
         direction: "UP",
         nodePlacement: "SIMPLE",

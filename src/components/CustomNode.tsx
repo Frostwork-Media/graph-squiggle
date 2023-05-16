@@ -250,7 +250,7 @@ function Distribution({
 
 function MedianDisplay({ children }: { children: ReactNode }) {
   return (
-    <p className="text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
+    <p className="text-3xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
       {children}
     </p>
   );
