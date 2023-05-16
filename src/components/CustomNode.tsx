@@ -12,6 +12,7 @@ import {
 } from "../lib/updateSquiggleLineSingle";
 import { useCodeEdited } from "./SquiggleEditor";
 import * as Slider from "@radix-ui/react-slider";
+import { numberToPercentage } from "../lib/numberToPercentage";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -43,16 +44,16 @@ export function CustomNode({ data }: NodeProps) {
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />
       <div
-        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default`}
+        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-0 gap-1 rounded-xl border-b-8 cursor-default`}
       >
-        <div className="flex gap-1 justify-end">
+        <div className="flex gap-1 justify-end p-1">
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
         </div>
-        <p className="text-lg">{data.comment}</p>
+        <p className="text-xl px-2 mb-2">{data.comment}</p>
         {valueType === "derived" && (
-          <div className="squiggle-chart">
+          <div className="squiggle-chart px-3">
             <DebouceSquiggleChart
               code={squiggleCode}
               enableLocalSettings
@@ -72,22 +73,24 @@ export function CustomNode({ data }: NodeProps) {
         )}
         {market.data && !market.isError && !("error" in market.data) ? (
           <a
-            className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start"
+            className="bg-purple-50 grid gap-2 text-purple-800 rounded items-start overflow-hidden mt-4"
             href={market.data.url}
             target="_blank"
             rel="noreferrer"
           >
+            <div className="flex gap-2 items-center p-3">
             <img
               src="/manifold-market-logo.svg"
               className="w-6 h-6"
               alt="Manifold Markets Logo"
             />
             <span className="text-sm grow">{market.data.question}</span>
+            </div>
             <span
-              className="text-xs font-mono max-w-[60px] overflow-hidden whitespace-nowrap overflow-ellipsis rounded-full bg-purple-200 px-1"
+              className="text-2xl text-center font-mono p-4 overflow-hidden whitespace-nowrap overflow-ellipsis bg-purple-100"
               title={market.data.probability.toString()}
             >
-              {market.data.probability}
+              {numberToPercentage(market.data.probability)}
             </span>
           </a>
         ) : null}
@@ -103,7 +106,7 @@ export function CustomNode({ data }: NodeProps) {
 
 export function Chip({ label }: { label: string }) {
   return (
-    <div className="bg-blue-50 rounded-lg inline-block p-1 px-2 text-[10px] text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
+    <div className="bg-blue-500 text-neutral-50 rounded-lg inline-block p-1 px-2 text-xs text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
       {label}
     </div>
   );
