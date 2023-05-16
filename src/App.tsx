@@ -179,7 +179,7 @@ function ProjectNav({
 }
 
 function CopyShareUrl() {
-  const projectUrl = useFileState((state) => state.projectUrl);
+  const projectHash = useFileState((state) => state.projectHash);
   const [success, setSuccess] = useState(false);
   return (
     <>
@@ -187,8 +187,8 @@ function CopyShareUrl() {
         onClick={async () => {
           // current url
           let url = new URL(window.location.href);
-          // add projectURL as hash
-          url.hash = projectUrl ?? "";
+          // add projectHash as hash
+          url.hash = projectHash ?? "";
           await navigator.clipboard.writeText(url.toString());
           setSuccess(true);
           setTimeout(() => setSuccess(false), 1500);

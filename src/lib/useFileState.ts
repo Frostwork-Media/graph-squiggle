@@ -12,8 +12,8 @@ type FileState = {
   fileHandle?: FileSystemFileHandle;
   /** The error that occurred when loading the file */
   loadFileError?: Error;
-  /** Project URL */
-  projectUrl?: string;
+  /** Project encoded in a base64 string (does not include `#`) */
+  projectHash?: string;
 };
 
 export const baseFileState: FileState = {
@@ -21,7 +21,7 @@ export const baseFileState: FileState = {
   previousContents: undefined,
   fileHandle: undefined,
   loadFileError: undefined,
-  projectUrl: undefined,
+  projectHash: undefined,
 };
 
 /**

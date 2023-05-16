@@ -54,15 +54,15 @@ export function Project() {
    * Subscribe to changes in the project, and serialize the project data in a url using pako
    */
   useEffect(() => {
-    const debounceSetProjectUrl = debounce((project?: ProjectType) => {
+    const debounceSetProjectHash = debounce((project?: ProjectType) => {
       if (!project) return;
       const base64 = serializeProject(project);
-      useFileState.setState({ projectUrl: base64 });
+      useFileState.setState({ projectHash: base64 });
     }, 1000);
 
     const unsub = useFileState.subscribe(
       (state) => state.project,
-      debounceSetProjectUrl
+      debounceSetProjectHash
     );
 
     return unsub;
