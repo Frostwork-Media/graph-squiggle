@@ -13,12 +13,13 @@ import {
 import { useCodeEdited } from "./SquiggleEditor";
 import * as Slider from "@radix-ui/react-slider";
 import { numberToPercentage } from "../lib/numberToPercentage";
+import { useSquiggleState } from "../lib/useSquiggleState";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
 
 export function CustomNode({ data }: NodeProps) {
-  const code = useFileState((state) => state.project?.squiggle ?? "");
+  const code = useSquiggleState((state) => state.squiggleCode);
   const market = useQuery(
     ["market", data.marketSlug],
     async () => {
@@ -37,7 +38,7 @@ export function CustomNode({ data }: NodeProps) {
 
   let squiggleCode = "";
   if (valueType === "derived") {
-    squiggleCode = code + "\n" + data.label;
+    squiggleCode = code + "\n\n" + data.label;
   }
 
   return (
@@ -79,12 +80,12 @@ export function CustomNode({ data }: NodeProps) {
             rel="noreferrer"
           >
             <div className="flex gap-2 items-center p-3">
-            <img
-              src="/manifold-market-logo.svg"
-              className="w-6 h-6"
-              alt="Manifold Markets Logo"
-            />
-            <span className="text-sm grow">{market.data.question}</span>
+              <img
+                src="/manifold-market-logo.svg"
+                className="w-6 h-6"
+                alt="Manifold Markets Logo"
+              />
+              <span className="text-sm grow">{market.data.question}</span>
             </div>
             <span
               className="text-3xl text-center font-mono p-4 overflow-hidden whitespace-nowrap overflow-ellipsis bg-purple-100"
@@ -125,7 +126,7 @@ function Single({
 }) {
   const renderPercentages = useFileState(
     (state) => state.project?.renderPercentages ?? false
-  )
+  );
   const lastEdited = useCodeEdited((state) => state.lastEdited);
   const shouldUpdate = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -160,7 +161,9 @@ function Single({
 
   return (
     <div className="grid gap-2">
-      <MedianDisplay>{renderPercentages ? numberToPercentage(value) : value}</MedianDisplay>
+      <MedianDisplay>
+        {renderPercentages ? numberToPercentage(value) : value}
+      </MedianDisplay>
       <Slider.Root
         className="h-6 w-full mt-6 nodrag bg-neutral-200 overflow-hidden relative"
         onValueChange={(value) => {
@@ -200,7 +203,7 @@ function Distribution({
   const [max, setMax] = useState(getMax(upper));
   const renderPercentages = useFileState(
     (state) => state.project?.renderPercentages ?? false
-  )
+  );
 
   // Watch lastEdited and allow reset on initialValue after code change
   useEffect(() => {
@@ -235,8 +238,12 @@ function Distribution({
     };
   }, [line, max, resetCounter]);
 
-  const from = renderPercentages ? numberToPercentage(value[0]) : value[0].toFixed(2);
-  const to = renderPercentages ? numberToPercentage(value[1]) : value[1].toFixed(2);
+  const from = renderPercentages
+    ? numberToPercentage(value[0])
+    : value[0].toFixed(2);
+  const to = renderPercentages
+    ? numberToPercentage(value[1])
+    : value[1].toFixed(2);
 
   return (
     <div className="grid gap-2">

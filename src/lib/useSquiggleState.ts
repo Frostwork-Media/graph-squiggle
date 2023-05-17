@@ -33,7 +33,10 @@ export const useSquiggleState = create<SquiggleState>()(
 export function useWatchProject() {
   useEffect(() => {
     // here we will subscribe to the squiggle state and update the graph
-    return useSquiggleState.subscribe(completeGraphDataFromSquiggleState);
+    return useSquiggleState.subscribe(state => {
+      console.log("useSquiggleState changed");
+      completeGraphDataFromSquiggleState(state)
+    });
   }, []);
 
   useEffect(() => {
@@ -80,7 +83,7 @@ function runSquiggle(code: string | undefined) {
       } else {
         useSquiggleState.setState(
           {
-            squiggleRunError: result.value.toString(),
+            squiggleRunError: `${result.value.toStringWithStackTrace()}`,
           },
           false,
           "run squiggle / error"

@@ -48,6 +48,7 @@ export const useGraphState = create<GraphState>()(
  * Prepares graph data from squiggle state
  */
 export function completeGraphDataFromSquiggleState(state: SquiggleState) {
+  console.log("completeGraphDataFromSquiggleState")
   // if there is an error, don't change latest graph state
   if (state.squiggleRunError) return;
   if (!state.squiggleRunResult) {
