@@ -1,4 +1,4 @@
-import { ReactNode, memo, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "reactflow";
 import { useQuery } from "@tanstack/react-query";
 import { ManifoldResponse, SquiggleVariableValue } from "../lib/types";
@@ -12,6 +12,7 @@ import {
 } from "../lib/updateSquiggleLineSingle";
 import { useCodeEdited } from "./SquiggleEditor";
 import * as Slider from "@radix-ui/react-slider";
+import { numberToPercentage } from "../lib/numberToPercentage";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -43,16 +44,16 @@ export function CustomNode({ data }: NodeProps) {
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />
       <div
-        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-3 gap-1 rounded-xl border-b-8 cursor-default`}
+        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-0 gap-1 rounded-xl border-b-8 cursor-default`}
       >
-        <div className="flex gap-1 justify-end">
+        <div className="flex gap-1 justify-end p-1">
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
         </div>
-        <p className="text-lg">{data.comment}</p>
+        <p className="text-xl px-2 mb-2">{data.comment}</p>
         {valueType === "derived" && (
-          <div className="squiggle-chart">
+          <div className="squiggle-chart px-3">
             <DebouceSquiggleChart
               code={squiggleCode}
               enableLocalSettings
@@ -72,22 +73,24 @@ export function CustomNode({ data }: NodeProps) {
         )}
         {market.data && !market.isError && !("error" in market.data) ? (
           <a
-            className="bg-purple-50 p-2 flex gap-2 text-purple-800 rounded-lg items-start"
+            className="bg-purple-50 grid gap-2 text-purple-800 rounded items-start overflow-hidden mt-4"
             href={market.data.url}
             target="_blank"
             rel="noreferrer"
           >
+            <div className="flex gap-2 items-center p-3">
             <img
               src="/manifold-market-logo.svg"
               className="w-6 h-6"
               alt="Manifold Markets Logo"
             />
             <span className="text-sm grow">{market.data.question}</span>
+            </div>
             <span
-              className="text-xs font-mono max-w-[60px] overflow-hidden whitespace-nowrap overflow-ellipsis rounded-full bg-purple-200 px-1"
+              className="text-3xl text-center font-mono p-4 overflow-hidden whitespace-nowrap overflow-ellipsis bg-purple-100"
               title={market.data.probability.toString()}
             >
-              {market.data.probability}
+              {numberToPercentage(market.data.probability)}
             </span>
           </a>
         ) : null}
@@ -103,7 +106,7 @@ export function CustomNode({ data }: NodeProps) {
 
 export function Chip({ label }: { label: string }) {
   return (
-    <div className="bg-blue-50 rounded-lg inline-block p-1 px-2 text-[10px] text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
+    <div className="bg-blue-500 text-neutral-50 rounded-lg inline-block p-1 px-2 text-xs text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
       {label}
     </div>
   );
@@ -120,6 +123,9 @@ function Single({
   initialValue: number;
   line: number;
 }) {
+  const renderPercentages = useFileState(
+    (state) => state.project?.renderPercentages ?? false
+  )
   const lastEdited = useCodeEdited((state) => state.lastEdited);
   const shouldUpdate = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -154,7 +160,7 @@ function Single({
 
   return (
     <div className="grid gap-2">
-      <MedianDisplay>{value}</MedianDisplay>
+      <MedianDisplay>{renderPercentages ? numberToPercentage(value) : value}</MedianDisplay>
       <Slider.Root
         className="h-6 w-full mt-6 nodrag bg-neutral-200 overflow-hidden relative"
         onValueChange={(value) => {
@@ -192,6 +198,9 @@ function Distribution({
   const init = useRef<[number, number]>([lower, upper]);
   const [value, setValue] = useState([lower, upper]);
   const [max, setMax] = useState(getMax(upper));
+  const renderPercentages = useFileState(
+    (state) => state.project?.renderPercentages ?? false
+  )
 
   // Watch lastEdited and allow reset on initialValue after code change
   useEffect(() => {
@@ -226,10 +235,13 @@ function Distribution({
     };
   }, [line, max, resetCounter]);
 
+  const from = renderPercentages ? numberToPercentage(value[0]) : value[0].toFixed(2);
+  const to = renderPercentages ? numberToPercentage(value[1]) : value[1].toFixed(2);
+
   return (
     <div className="grid gap-2">
       <MedianDisplay>
-        {value[0].toFixed(2)} to {value[1].toFixed(2)}
+        {from} to {to}
       </MedianDisplay>
       <div className="mt-6 nodrag" ref={divRef} />
     </div>
@@ -238,7 +250,7 @@ function Distribution({
 
 function MedianDisplay({ children }: { children: ReactNode }) {
   return (
-    <p className="text-4xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
+    <p className="text-3xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
       {children}
     </p>
   );

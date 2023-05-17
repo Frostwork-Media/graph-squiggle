@@ -75,7 +75,7 @@ export async function loadFile() {
       // set the nodeLocation state
       useNodeLocation.setState(json.nodeLocation);
 
-      const projectUrl = serializeProject(project);
+      const projectHash = serializeProject(project);
 
       useFileState.setState(
         {
@@ -83,7 +83,7 @@ export async function loadFile() {
           project,
           previousContents: contents,
           fileHandle,
-          projectUrl,
+          projectHash,
         },
         false,
         "open"
@@ -161,8 +161,8 @@ export async function save(_fileHandle?: FileSystemFileHandle) {
     );
 
     // update the project url
-    const projectUrl = serializeProject(project);
-    useFileState.setState({ projectUrl }, false, "saveAs");
+    const projectHash = serializeProject(project);
+    useFileState.setState({ projectHash }, false, "saveAs");
   } catch (error) {
     console.error(error);
   }
@@ -178,7 +178,7 @@ export async function loadFromHash() {
         {
           ...baseFileState,
           project,
-          projectUrl: window.location.href,
+          projectHash: base64,
         },
         false,
         "loadFromHash"

@@ -71,7 +71,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
             .finally(() => setIsLoading(false));
         }}
       >
-        <div className="grid gap-4 p-4 gap-4 content-start">
+        <div className="grid gap-4 p-4 gap-3 content-start">
           {subject && (
             <div className="grid gap-1">
               <button
