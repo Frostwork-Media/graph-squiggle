@@ -1,6 +1,6 @@
 import { SquiggleEditor } from "./SquiggleEditor";
 import { Graph } from "./Graph";
-import { useWatchProject } from "../lib/useSquiggleState";
+import { useSquiggleState, useWatchProject } from "../lib/useSquiggleState";
 import { PromptEditor } from "./PromptEditor";
 import {
   PanelGroup,
@@ -126,8 +126,22 @@ export function Project() {
         <Panel className="relative">
           <Graph />
           <GraphControls />
+          <ErrorNotice />
         </Panel>
       </PanelGroup>
     </Tabs.Root>
+  );
+}
+
+function ErrorNotice() {
+  const error = useSquiggleState((state) => state.squiggleRunError);
+  if (!error) return null;
+  return (
+    <>
+      <div className="backdrop absolute inset-0 bg-white/50 z-10 blur"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 text-center bg-red-100 text-red z-10 p-4 rounded-lg border-2 border-red-500 border-dashed">
+        {error}
+      </div>
+    </>
   );
 }
