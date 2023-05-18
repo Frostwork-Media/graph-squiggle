@@ -179,7 +179,7 @@ function ProjectNav({
 }
 
 function CopyShareUrl() {
-  const projectUrl = useFileState((state) => state.projectUrl);
+  const projectHash = useFileState((state) => state.projectHash);
   const [success, setSuccess] = useState(false);
   return (
     <>
@@ -187,12 +187,13 @@ function CopyShareUrl() {
         onClick={async () => {
           // current url
           let url = new URL(window.location.href);
-          // add projectURL as hash
-          url.hash = projectUrl ?? "";
+          // add projectHash as hash
+          url.hash = projectHash ?? "";
           await navigator.clipboard.writeText(url.toString());
           setSuccess(true);
-          setTimeout(() => setSuccess(false), 2000);
+          setTimeout(() => setSuccess(false), 1500);
         }}
+        className={success ? "text-green-500" : ""}
       >
         Copy Share URL
       </NavButton>
@@ -208,14 +209,16 @@ function CopyShareUrl() {
 function NavButton({
   children,
   onClick,
+  className = "",
 }: {
   children: React.ReactNode;
   onClick: () => void;
+  className?: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2 p-2 rounded hover:bg-neutral-100 active:bg-neutral-200"
+      className={`transition-colors flex items-center gap-2 p-2 rounded hover:bg-neutral-100 active:bg-neutral-200 ${className}`}
     >
       {children}
     </button>

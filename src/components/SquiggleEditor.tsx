@@ -1,6 +1,5 @@
 import { useFileState } from "../lib/useFileState";
 import produce from "immer";
-import { useSquiggleState } from "../lib/useSquiggleState";
 import { forwardRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import { create } from "zustand";
@@ -16,7 +15,6 @@ export const useCodeEdited = create<{ lastEdited: string }>((set) => ({
 export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
   function SquiggleEditor(_props, ref) {
     const squiggle = useFileState((state) => state.project?.squiggle);
-    const error = useSquiggleState((state) => state.squiggleRunError);
     const onChange = useCallback((value: string | undefined) => {
       useFileState.setState(
         produce((draft) => {
@@ -42,10 +40,11 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
           options={{
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
-            lineNumbers: "off",
-            lineDecorationsWidth: 0,
+            lineNumbers: "on",
+            lineDecorationsWidth: 14,
             folding: false,
             fontSize: 14,
+            lineNumbersMinChars: 3,
             renderLineHighlight: "none",
             overviewRulerBorder: false,
             overviewRulerLanes: 0,
@@ -87,11 +86,6 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
             });
           }}
         />
-        {error && (
-          <div className="absolute z-10 bottom-2 left-2 right-2 p-2 rounded bg-red-100 text-red-700 text-sm">
-            {error}
-          </div>
-        )}
       </div>
     );
   }

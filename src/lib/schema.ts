@@ -16,6 +16,7 @@ export const projectSchema = z
     squiggle: z.string(),
     subject: z.string(),
     nodeLocation: z.optional(nodeLocation),
+    renderPercentages: z.optional(z.boolean()),
   })
   .strict();
 
@@ -24,4 +25,6 @@ export const projectSchema = z
 export const getEmptyProject: () => Project = () => ({
   squiggle: "",
   subject: "",
+  nodeLocation: {},
+  renderPercentages: false,
 });

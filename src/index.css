@@ -67,9 +67,9 @@
 
 /* Fix the squiggle chart single value size */
 .squiggle-chart .font-semibold.text-slate-600 {
-  font-size: 2.5rem;
+  /* Set to match probability in manifold market */
   font-weight: 400 !important;
-  @apply font-mono;
+  @apply font-mono text-3xl;
 }
 
 .react-flow__panel {
@@ -82,7 +82,7 @@
 }
 
 .range-slider .range-slider__thumb {
-  @apply w-12 rounded-none;
+  @apply w-6 rounded-none hover:bg-blue-500;
 }
 
 .range-slider .range-slider__range,
