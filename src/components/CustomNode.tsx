@@ -62,8 +62,13 @@ export function CustomNode({ data }: NodeProps) {
             />
           </div>
         )}
-        {valueType === "single" && (
+        {valueType === "single" && "numValue" in data && (
           <Single initialValue={data.numValue} line={data.line} />
+        )}
+        {valueType === "single" && !("numValue" in data) && (
+          <span className="text-3xl font-mono text-center pb-2">
+            {data.value.toString()}
+          </span>
         )}
         {valueType === "distribution" && (
           <Distribution
