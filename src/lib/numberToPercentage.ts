@@ -6,9 +6,15 @@
  * it returns the number rounded to 2 decimal places
  */
 export function numberToPercentage(n: number) {
+  try {
     if (n >= 0 && n <= 1) {
-        return `${(n * 100).toFixed(2)}%`;
+      return `${(n * 100).toFixed(2)}%`;
     } else {
-        return n.toFixed(2);
+      return n.toFixed(2);
     }
+  } catch (error) {
+    console.error(`Recieved ${n} as input`);
+    console.error(error);
+    return n;
+  }
 }

@@ -17,12 +17,7 @@ import { Bindings } from "./Bindings";
 import { Project as ProjectType } from "../lib/schema";
 import debounce from "lodash.debounce";
 import { GraphControls } from "./GraphControls";
-import { create } from "zustand";
-
-const useViewState = create<{
-  isCollapsed: boolean;
-  collapse: () => void;
-}>(() => ({ isCollapsed: true, collapse: () => {} }));
+import { useViewState } from "../lib/useViewState";
 
 /**
  * Mounted when a valid project is opened
@@ -51,6 +46,12 @@ export function Project() {
   };
 
   /**
+   * Whether the editor is focused. If it is, with allow overflow
+   * to accomodate the autocomplete menu
+   */
+  const editorFocused = useViewState((state) => state.editorFocused);
+
+  /**
    * Subscribe to changes in the project, and serialize the project data in a url using pako
    */
   useEffect(() => {
@@ -77,6 +78,7 @@ export function Project() {
         <Panel
           defaultSize={0}
           collapsible
+          style={editorFocused ? { overflow: "visible" } : {}}
           ref={ref}
           onResize={(size) => {
             if (size === 0) {
