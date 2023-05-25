@@ -3,6 +3,7 @@ import produce from "immer";
 import { forwardRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import { create } from "zustand";
+import { useViewState } from "../lib/useViewState";
 
 // Tiny client-side store to know when the code has been edited
 export const useCodeEdited = create<{ lastEdited: string }>((set) => ({
@@ -25,15 +26,20 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
         "squiggle editor"
       );
     }, []);
+    const editorFocused = useViewState((state) => state.editorFocused);
     if (squiggle == null) return null;
     return (
       <div
-        className="relative pt-4 pl-4 bg-white/50 h-full grid grid-rows-[minmax(0,1fr)_auto] max-w-[100%] overflow-hidden"
+        className={`relative pt-4 pl-4 bg-white/50 h-full grid grid-rows-[minmax(0,1fr)_auto] max-w-[100%] ${
+          editorFocused ? "" : "overflow-hidden"
+        }`}
         ref={ref}
       >
         <Editor
           wrapperProps={{
-            className: "w-full max-w-[100%] h-full overflow-hidden",
+            className: `w-full max-w-[100%] h-full ${
+              editorFocused ? "" : "overflow-hidden"
+            }`,
           }}
           width="100%"
           language="squiggle"
@@ -83,6 +89,13 @@ export const SquiggleEditor = forwardRef<HTMLDivElement, {}>(
             // bind a keydown event to the editor
             editor.onKeyDown((e) => {
               useCodeEdited.setState({ lastEdited: Date.now().toString() });
+            });
+            // bind on focus and onblur events to the editor
+            editor.onDidFocusEditorText(() => {
+              useViewState.setState({ editorFocused: true });
+            });
+            editor.onDidBlurEditorText(() => {
+              useViewState.setState({ editorFocused: false });
             });
           }}
         />
