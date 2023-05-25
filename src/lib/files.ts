@@ -92,7 +92,7 @@ export async function loadFile() {
       // set the project url
     } catch (error) {
       if (isError(error)) {
-        console.log(error.message);
+        console.error(error.message);
       }
       useFileState.setState(
         {
@@ -189,7 +189,7 @@ export async function loadFromHash() {
     }
   } catch (error) {
     if (isError(error)) {
-      console.log(error.message);
+      console.error(error.message);
     }
 
     useFileState.setState(

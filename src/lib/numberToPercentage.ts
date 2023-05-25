@@ -13,7 +13,7 @@ export function numberToPercentage(n: number) {
       return n.toFixed(2);
     }
   } catch (error) {
-    console.log(`Recieved ${n} as input`);
+    console.error(`Recieved ${n} as input`);
     console.error(error);
     return n;
   }
