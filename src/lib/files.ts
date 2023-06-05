@@ -26,6 +26,8 @@ export function create() {
     "create"
   );
   useGraphState.setState(baseGraphState, true, "create");
+  // clear hash if it exists
+  window.history.replaceState({}, document.title, "/");
 }
 
 /**
