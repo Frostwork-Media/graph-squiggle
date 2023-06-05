@@ -12,8 +12,13 @@ export default function App() {
     const hash = window.location.hash;
     // if there is a hash that's longer then 1 character, then it may be a project
     if (hash.length > 1) {
-      // try to load it
-      loadFromHash();
+      // check if it is "#new" and create a new chart if so
+      if (hash === "#new") {
+        create();
+      } else {
+        // try to load it
+        loadFromHash();
+      }
     }
   }, []);
   const project = useFileState((state) => state.project);
