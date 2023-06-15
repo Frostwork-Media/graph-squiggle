@@ -13,7 +13,8 @@
     "db": "workspace:*",
     "jsonwebtoken": "^9.0.0",
     "nanoid": "^3.3.6",
-    "project-name-generator": "^2.1.9"
+    "project-name-generator": "^2.1.9",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.2",

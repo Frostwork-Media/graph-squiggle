@@ -3,8 +3,9 @@ import { create, loadFromHash, loadFile, save } from "../lib/files";
 import { CSSProperties, useEffect, useState } from "react";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
 import { Project } from "../components/Project";
-import { Check, Warning } from "phosphor-react";
+import { Check } from "phosphor-react";
 import { NODE_WIDTH } from "../components/CustomNode";
+import { LoadFileError } from "./LoadFileError";
 
 export function Temp() {
   useEffect(() => {
@@ -128,26 +129,6 @@ function Nav({
         />
       </div>
     </nav>
-  );
-}
-
-/**
- * If a file fails to load, this screen displays the error
- */
-function LoadFileError({ loadFileError }: { loadFileError: Error | null }) {
-  return (
-    <div className="h-full grid justify-center content-center">
-      <h2 className="text-xl flex items-center gap-2 mb-4 justify-self-center text-red-600">
-        <Warning size={24} />
-        Unable to Load File
-      </h2>
-      <div className="p-4 bg-red-50 text-red-700 rounded grid gap-2 min-w-[50vw]">
-        <p>Read the error and edit the file accordingly.</p>
-        <pre className="text-xs font-mono overflow-auto text-red-400">
-          {JSON.stringify(loadFileError, null, 2)}
-        </pre>
-      </div>
-    </div>
   );
 }
 

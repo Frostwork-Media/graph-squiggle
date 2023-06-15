@@ -5,7 +5,7 @@ import {
   useFileState,
 } from "./useFileState";
 import { isError } from "./isError";
-import { getEmptyProject, projectSchema } from "./schema";
+import { getEmptyProject, projectSchema } from "shared";
 import {
   baseGraphState,
   useGraphState,

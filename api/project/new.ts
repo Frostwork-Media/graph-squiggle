@@ -4,8 +4,14 @@ import generate from "project-name-generator";
 import { prisma } from "db";
 import { nanoid } from "nanoid";
 import { withAuth } from "../lib/_withAuth";
+import { Project } from "shared";
 
 const CONTENT_VERSION = 1;
+
+const defaultProjectJson: Project = {
+  squiggle: "",
+  subject: "",
+};
 
 const handler: VercelApiHandler = withAuth(async (req, res, userId) => {
   const id = nanoid(12);
@@ -15,7 +21,7 @@ const handler: VercelApiHandler = withAuth(async (req, res, userId) => {
     data: {
       id,
       name,
-      content: "",
+      content: defaultProjectJson,
       public: false,
       publicName: "",
       userId,

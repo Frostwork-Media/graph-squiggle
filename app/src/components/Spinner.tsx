@@ -1,6 +1,6 @@
 export function Spinner({ size = "w-8 h-8" }: { size?: string }) {
   return (
-    <div role="status">
+    <span role="status">
       <svg
         aria-hidden="true"
         className={`${size} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600`}
@@ -18,6 +18,14 @@ export function Spinner({ size = "w-8 h-8" }: { size?: string }) {
         />
       </svg>
       <span className="sr-only">Loading...</span>
+    </span>
+  );
+}
+
+export function FullScreenSpinner() {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <Spinner />
     </div>
   );
 }

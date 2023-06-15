@@ -5,6 +5,9 @@ import { IconButton } from "../ui/IconButton";
 import { Gear, Trash } from "phosphor-react";
 import { format } from "date-fns";
 import { Project2 } from "../components/Project2";
+import { loadProject, useProject } from "../lib/useProject";
+import { LoadFileError } from "./LoadFileError";
+import { FullScreenSpinner } from "../components/Spinner";
 
 export function Project() {
   const params = useParams<{ id: string }>();
@@ -23,8 +26,14 @@ export function Project() {
     {
       enabled: !!params.id,
       suspense: true,
+      onSuccess: (data) => {
+        loadProject(data.content);
+      },
+      staleTime: 0,
+      cacheTime: 0,
     }
   );
+  const loadProjectError = useProject((state) => state.loadFileError);
   if (!project.data) return null;
   return (
     <div className="grid grid-rows-[auto_minmax(0,1fr)] border-t">
@@ -45,7 +54,13 @@ export function Project() {
           <IconButton icon={Trash} onClick={() => {}} />
         </div>
       </div>
-      <Project2 content={project.data.content} />
+      {project.isLoading ? (
+        <FullScreenSpinner />
+      ) : loadProjectError ? (
+        <LoadFileError loadFileError={loadProjectError} />
+      ) : (
+        <Project2 />
+      )}
     </div>
   );
 }

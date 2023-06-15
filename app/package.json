@@ -47,7 +47,8 @@
     "reactflow": "^11.7.0",
     "zod": "^3.21.4",
     "zustand": "^4.3.7",
-    "db": "workspace:*"
+    "db": "workspace:*",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/cookies": "^0.7.7",

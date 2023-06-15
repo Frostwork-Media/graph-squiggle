@@ -14,7 +14,7 @@ import { SquiggleEditor } from "./SquiggleEditor";
 /**
  * This will eventually replace the Project component.
  */
-export function Project2({ content: _content }: { content: string }) {
+export function Project2() {
   const ref = useRef<ImperativePanelHandle>(null);
   const isCollapsed = useViewState((state) => state.isCollapsed);
 
@@ -40,7 +40,7 @@ export function Project2({ content: _content }: { content: string }) {
    */
   const editorFocused = useViewState((state) => state.editorFocused);
 
-  const [content, setContent] = useState<string>(_content);
+  const [content, setContent] = useState<string>("");
   const onChange = useCallback(
     (content?: string) => {
       if (content) setContent(content);
