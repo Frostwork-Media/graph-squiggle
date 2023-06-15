@@ -16,6 +16,8 @@ export function Section({ children }: { children: React.ReactNode }) {
 
 export function Page({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid gap-16 max-w-3xl mx-auto mt-12 px-4">{children}</div>
+    <div className="grid gap-16 max-w-3xl mx-auto mt-12 px-4 content-start w-full">
+      {children}
+    </div>
   );
 }

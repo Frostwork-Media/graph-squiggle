@@ -1,17 +1,28 @@
 import { useAuth, useUser, SignOutButton } from "@clerk/clerk-react";
-import { Outlet, Link, NavLink } from "react-router-dom";
+import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useEffect } from "react";
 
 export function Layout() {
   const { isLoaded } = useAuth();
   const { user } = useUser();
+  const navigate = useNavigate();
+
+  // if there is a user and the person has come to /#new then redirect them to /temp/#new
+  // this is because the editor is not yet ready
+  useEffect(() => {
+    if (!user) return;
+    if (window.location.hash === "#new") {
+      navigate("/temp/#new");
+    }
+  }, [navigate, user]);
 
   // In case the user signs out while on the page.
   if (!isLoaded || !user) {
     return null;
   }
   return (
-    <div>
+    <div className="h-screen grid grid-rows-[auto_minmax(0,1fr)]">
       <nav className="p-4 flex items-center gap-2 justify-between w-full bg-gradient-to-t from-white to-slate-50">
         <div className="flex items-center gap-2">
           <NavLink
@@ -45,7 +56,7 @@ export function Layout() {
                   Profile
                 </Link>
               </DropdownMenu.Item>
-              <DropdownMenu.Item asChild>
+              <DropdownMenu.Item className="hover:outline-none">
                 <SignOutButton>
                   <button className="hover:outline-none hover:text-blue-600 text-left">
                     Sign Out

@@ -10,6 +10,7 @@ import {
 } from "@clerk/clerk-react";
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "./Router";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <SignedOut>
             <RedirectToSignIn />
           </SignedOut>
+          <ReactQueryDevtools initialIsOpen={false} />
         </BrowserRouter>
       </ClerkProvider>
     </QueryClientProvider>
