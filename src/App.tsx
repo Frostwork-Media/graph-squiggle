@@ -48,7 +48,7 @@ export default function App() {
 
   return (
     <div
-      className="h-screen grid grid-rows-[auto_minmax(0,1fr)]"
+      className="grid grid-rows-[auto_minmax(0,1fr)] border-t"
       style={{ "--node-width": NODE_WIDTH } as CSSProperties}
     >
       <Nav

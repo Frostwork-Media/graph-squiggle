@@ -31,14 +31,14 @@ pnpm vercel dev
 
 Converting the squiggle code into nodes and edges. This is done in `src/lib/squiggleToGraph.ts`.
 
----
+## Database
 
-_To Explain_
+Hosted on https://railway.app
 
-[system]
+To update the schema change `/prisma/schema.prisma` then run:
 
-[user question]
+```
+pnpm prisma migrate dev --name your-migration
+```
 
-[current code state]
-
-[user modification request]
+To generate the client run `pnpm prisma generate`.
