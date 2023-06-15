@@ -1,32 +1,20 @@
-import { SquiggleEditor } from "./SquiggleEditor";
-import { Graph } from "./Graph";
-import { useSquiggleState, useWatchProject } from "../lib/useSquiggleState";
-import { PromptEditor } from "./PromptEditor";
 import {
-  PanelGroup,
-  Panel,
-  PanelResizeHandle,
   ImperativePanelHandle,
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
 } from "react-resizable-panels";
-import { X, Code, ArrowLineRight, Chats, ChartBar } from "phosphor-react";
-import { IconButton } from "../ui/IconButton";
-import { useCallback, useEffect, useRef } from "react";
-import * as Tabs from "@radix-ui/react-tabs";
-import { serializeProject, useFileState } from "../lib/useFileState";
-import { Bindings } from "./Bindings";
-import { Project as ProjectType } from "../lib/schema";
-import debounce from "lodash.debounce";
-import { GraphControls } from "./GraphControls";
 import { useViewState } from "../lib/useViewState";
-import produce from "immer";
+import { useCallback, useRef, useState } from "react";
+import * as Tabs from "@radix-ui/react-tabs";
+import { IconButton } from "../ui/IconButton";
+import { ArrowLineRight, ChartBar, Chats, Code, X } from "phosphor-react";
+import { SquiggleEditor } from "./SquiggleEditor";
 
 /**
- * Mounted when a valid project is opened
+ * This will eventually replace the Project component.
  */
-export function Project() {
-  // Use watch project sets up all the subscriptions necessary for keeping derived state up to date
-  useWatchProject();
-  const fileHandle = useFileState((state) => state.fileHandle);
+export function Project2({ content: _content }: { content: string }) {
   const ref = useRef<ImperativePanelHandle>(null);
   const isCollapsed = useViewState((state) => state.isCollapsed);
 
@@ -52,35 +40,13 @@ export function Project() {
    */
   const editorFocused = useViewState((state) => state.editorFocused);
 
-  /**
-   * Subscribe to changes in the project, and serialize the project data in a url using pako
-   */
-  useEffect(() => {
-    const debounceSetProjectHash = debounce((project?: ProjectType) => {
-      if (!project) return;
-      const base64 = serializeProject(project);
-      useFileState.setState({ projectHash: base64 });
-    }, 1000);
-
-    const unsub = useFileState.subscribe(
-      (state) => state.project,
-      debounceSetProjectHash
-    );
-
-    return unsub;
-  }, []);
-
-  const squiggle = useFileState((state) => state.project?.squiggle ?? "");
-  const onChange = useCallback((value: string | undefined) => {
-    useFileState.setState(
-      produce((draft) => {
-        if (!draft.project) return;
-        draft.project.squiggle = value ?? "";
-      }),
-      false,
-      "squiggle editor"
-    );
-  }, []);
+  const [content, setContent] = useState<string>(_content);
+  const onChange = useCallback(
+    (content?: string) => {
+      if (content) setContent(content);
+    },
+    [setContent]
+  );
 
   return (
     <Tabs.Root defaultValue="code">
@@ -102,13 +68,15 @@ export function Project() {
           }}
         >
           <Tabs.Content value="prompt" asChild>
-            <PromptEditor key={fileHandle?.name ?? ""} />
+            Prompt
+            {/* <PromptEditor /> */}
           </Tabs.Content>
           <Tabs.Content value="code" asChild>
-            <SquiggleEditor content={squiggle} onChange={onChange} />
+            <SquiggleEditor content={content} onChange={onChange} />
           </Tabs.Content>
           <Tabs.Content value="bindings" asChild>
-            <Bindings />
+            Bindings
+            {/* <Bindings /> */}
           </Tabs.Content>
         </Panel>
         <PanelResizeHandle className="border-x border-neutral-300 grid content-start p-1 gap-2">
@@ -139,24 +107,12 @@ export function Project() {
           </Tabs.List>
         </PanelResizeHandle>
         <Panel className="relative">
-          <Graph />
+          {/* <Graph />
           <GraphControls />
-          <ErrorNotice />
+          <ErrorNotice /> */}
+          Graph
         </Panel>
       </PanelGroup>
     </Tabs.Root>
-  );
-}
-
-function ErrorNotice() {
-  const error = useSquiggleState((state) => state.squiggleRunError);
-  if (!error) return null;
-  return (
-    <>
-      <div className="backdrop absolute inset-0 bg-white/50 z-10 blur"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 text-center bg-red-100 text-red z-10 p-4 rounded-lg border-2 border-red-500 border-dashed">
-        {error}
-      </div>
-    </>
   );
 }
