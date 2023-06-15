@@ -6,7 +6,8 @@
   "scripts": {
     "build": "pnpm -F app build",
     "dev": "pnpm -F app dev --",
-    "postinstall": "pnpm -F db generate"
+    "postinstall": "pnpm -F db generate",
+    "env:pull": "vercel env pull .env && cp .env db/.env"
   },
   "keywords": [],
   "author": "",

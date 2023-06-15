@@ -8,6 +8,7 @@ Pre-requisites:
 Install dependencies:
 
 ```
+pnpm add -g vercel turbo
 pnpm install
 ```
 
@@ -19,10 +20,16 @@ pnpm install
 
 ## Development
 
+Pull dependencies:
+
+```
+pnpm env:pull
+```
+
 Start the development server:
 
 ```
-pnpm vercel dev
+vercel dev
 ```
 
 ## Major Building Blocks
