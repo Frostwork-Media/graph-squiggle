@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "turbo run build",
+    "build": "pnpm -F app build",
     "dev": "pnpm -F app dev --",
     "postinstall": "pnpm -F db generate"
   },
