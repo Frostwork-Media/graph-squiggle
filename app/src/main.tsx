@@ -11,8 +11,7 @@ import {
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "./Router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const queryClient = new QueryClient();
+import { queryClient } from "./lib/queryClient";
 
 if (!import.meta.env.VITE_CLERK_PUBLIC_KEY) {
   throw new Error("VITE_CLERK_PUBLIC_KEY is not defined");

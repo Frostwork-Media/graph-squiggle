@@ -1,5 +1,5 @@
-import { prisma } from "../_prisma";
-import { withAuth } from "../_withAuth";
+import { prisma } from "db";
+import { withAuth } from "../lib/_withAuth";
 
 export default withAuth(async (req, res, userId) => {
   const projects = await prisma.project.findMany({
@@ -13,6 +13,9 @@ export default withAuth(async (req, res, userId) => {
       updatedAt: true,
       public: true,
       publicName: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
     },
   });
 

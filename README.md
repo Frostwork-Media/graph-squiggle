@@ -41,4 +41,4 @@ To update the schema change `/prisma/schema.prisma` then run:
 pnpm prisma migrate dev --name your-migration
 ```
 
-To generate the client run `pnpm prisma generate`.
+To generate the client run `pnpm -F db generate`.
