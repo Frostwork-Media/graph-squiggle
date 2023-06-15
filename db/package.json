@@ -1,0 +1,21 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "generate": "prisma generate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "4.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.18",
+    "prisma": "4.15.0",
+    "typescript": "^4.9.3"
+  }
+}

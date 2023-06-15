@@ -1,9 +1,9 @@
 import { VercelApiHandler } from "@vercel/node";
 
-import { nanoid } from "nanoid";
 import generate from "project-name-generator";
-import { prisma } from "../_prisma";
-import { withAuth } from "../_withAuth.js";
+import { prisma } from "db";
+import { nanoid } from "nanoid";
+import { withAuth } from "../lib/_withAuth";
 
 const CONTENT_VERSION = 1;
 

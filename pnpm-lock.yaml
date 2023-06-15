@@ -4,198 +4,246 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@clerk/clerk-react':
-    specifier: ^4.18.0
-    version: 4.18.0(react@18.2.0)
-  '@monaco-editor/react':
-    specifier: ^4.4.6
-    version: 4.4.6(monaco-editor@0.36.1)(react-dom@18.2.0)(react@18.2.0)
-  '@prisma/client':
-    specifier: 4.15.0
-    version: 4.15.0(prisma@4.15.0)
-  '@quri/squiggle-components':
-    specifier: ^0.6.0
-    version: 0.6.0(react-dom@18.2.0)(react@18.2.0)
-  '@quri/squiggle-lang':
-    specifier: ^0.6.0
-    version: 0.6.0
-  '@radix-ui/react-dropdown-menu':
-    specifier: ^2.0.5
-    version: 2.0.5(@types/react-dom@18.0.11)(@types/react@18.0.28)(react-dom@18.2.0)(react@18.2.0)
-  '@radix-ui/react-slider':
-    specifier: ^1.1.1
-    version: 1.1.1(react-dom@18.2.0)(react@18.2.0)
-  '@radix-ui/react-tabs':
-    specifier: ^1.0.3
-    version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
-  '@tanstack/react-query':
-    specifier: ^4.28.0
-    version: 4.28.0(react-dom@18.2.0)(react@18.2.0)
-  '@tanstack/react-query-devtools':
-    specifier: ^4.29.12
-    version: 4.29.12(@tanstack/react-query@4.28.0)(react-dom@18.2.0)(react@18.2.0)
-  canvas:
-    specifier: ^2.11.2
-    version: 2.11.2
-  cookies:
-    specifier: ^0.8.0
-    version: 0.8.0
-  cytoscape:
-    specifier: ^3.23.0
-    version: 3.23.0
-  cytoscape-cose-bilkent:
-    specifier: ^4.1.0
-    version: 4.1.0(cytoscape@3.23.0)
-  cytoscape-klay:
-    specifier: ^3.1.4
-    version: 3.1.4(cytoscape@3.23.0)
-  immer:
-    specifier: ^9.0.21
-    version: 9.0.21
-  jsonwebtoken:
-    specifier: ^9.0.0
-    version: 9.0.0
-  lodash.debounce:
-    specifier: ^4.0.8
-    version: 4.0.8
-  lodash.throttle:
-    specifier: ^4.1.1
-    version: 4.1.1
-  nanoid:
-    specifier: ^4.0.2
-    version: 4.0.2
-  openai:
-    specifier: ^3.2.1
-    version: 3.2.1
-  pako:
-    specifier: ^2.1.0
-    version: 2.1.0
-  peggy:
-    specifier: ^3.0.2
-    version: 3.0.2
-  phosphor-react:
-    specifier: ^1.4.1
-    version: 1.4.1(react@18.2.0)
-  project-name-generator:
-    specifier: ^2.1.9
-    version: 2.1.9
-  range-slider-input:
-    specifier: ^2.4.4
-    version: 2.4.4
-  react:
-    specifier: ^18.2.0
-    version: 18.2.0
-  react-dom:
-    specifier: ^18.2.0
-    version: 18.2.0(react@18.2.0)
-  react-resizable-panels:
-    specifier: ^0.0.39
-    version: 0.0.39(react-dom@18.2.0)(react@18.2.0)
-  react-router-dom:
-    specifier: ^6.12.1
-    version: 6.12.1(react-dom@18.2.0)(react@18.2.0)
-  reactflow:
-    specifier: ^11.7.0
-    version: 11.7.0(immer@9.0.21)(react-dom@18.2.0)(react@18.2.0)
-  zod:
-    specifier: ^3.21.4
-    version: 3.21.4
-  zustand:
-    specifier: ^4.3.7
-    version: 4.3.7(immer@9.0.21)(react@18.2.0)
+importers:
 
-devDependencies:
-  '@types/cookies':
-    specifier: ^0.7.7
-    version: 0.7.7
-  '@types/cytoscape':
-    specifier: ^3.19.9
-    version: 3.19.9
-  '@types/jsonwebtoken':
-    specifier: ^9.0.2
-    version: 9.0.2
-  '@types/lodash.debounce':
-    specifier: ^4.0.7
-    version: 4.0.7
-  '@types/lodash.throttle':
-    specifier: ^4.1.7
-    version: 4.1.7
-  '@types/node':
-    specifier: ^20.2.5
-    version: 20.2.5
-  '@types/pako':
-    specifier: ^2.0.0
-    version: 2.0.0
-  '@types/project-name-generator':
-    specifier: ^2.1.1
-    version: 2.1.1
-  '@types/react':
-    specifier: ^18.0.28
-    version: 18.0.28
-  '@types/react-dom':
-    specifier: ^18.0.11
-    version: 18.0.11
-  '@types/wicg-file-system-access':
-    specifier: ^2020.9.5
-    version: 2020.9.5
-  '@typescript-eslint/eslint-plugin':
-    specifier: '4'
-    version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)(typescript@4.9.3)
-  '@typescript-eslint/parser':
-    specifier: '4'
-    version: 4.33.0(eslint@7.32.0)(typescript@4.9.3)
-  '@vercel/node':
-    specifier: ^2.10.2
-    version: 2.10.2
-  '@vitejs/plugin-react':
-    specifier: ^3.1.0
-    version: 3.1.0(vite@4.2.0)
-  autoprefixer:
-    specifier: ^10.4.14
-    version: 10.4.14(postcss@8.4.21)
-  babel-eslint:
-    specifier: ^10.1.0
-    version: 10.1.0(eslint@7.32.0)
-  eslint:
-    specifier: '7'
-    version: 7.32.0
-  eslint-config-react-app:
-    specifier: ^7.0.1
-    version: 7.0.1(@babel/plugin-syntax-flow@7.21.4)(@babel/plugin-transform-react-jsx@7.21.0)(eslint@7.32.0)(typescript@4.9.3)
-  eslint-plugin-flowtype:
-    specifier: '5'
-    version: 5.10.0(eslint@7.32.0)
-  eslint-plugin-import:
-    specifier: ^2.27.5
-    version: 2.27.5(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)
-  eslint-plugin-jsx-a11y:
-    specifier: ^6.7.1
-    version: 6.7.1(eslint@7.32.0)
-  eslint-plugin-react:
-    specifier: ^7.32.2
-    version: 7.32.2(eslint@7.32.0)
-  eslint-plugin-react-hooks:
-    specifier: ^4.6.0
-    version: 4.6.0(eslint@7.32.0)
-  postcss:
-    specifier: ^8.4.21
-    version: 8.4.21
-  prisma:
-    specifier: ^4.15.0
-    version: 4.15.0
-  tailwindcss:
-    specifier: ^3.3.1
-    version: 3.3.1(postcss@8.4.21)
-  typescript:
-    specifier: ^4.9.3
-    version: 4.9.3
-  vite:
-    specifier: ^4.2.0
-    version: 4.2.0(@types/node@20.2.5)
-  vitest:
-    specifier: ^0.29.8
-    version: 0.29.8
+  .: {}
+
+  api:
+    dependencies:
+      db:
+        specifier: workspace:*
+        version: link:../db
+      jsonwebtoken:
+        specifier: ^9.0.0
+        version: 9.0.0
+      nanoid:
+        specifier: ^3.3.6
+        version: 3.3.6
+      project-name-generator:
+        specifier: ^2.1.9
+        version: 2.1.9
+    devDependencies:
+      '@types/jsonwebtoken':
+        specifier: ^9.0.2
+        version: 9.0.2
+      '@types/node':
+        specifier: ^18.16.18
+        version: 18.16.18
+      '@types/project-name-generator':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@vercel/node':
+        specifier: ^2.10.2
+        version: 2.10.2
+      typescript:
+        specifier: ^4.9.3
+        version: 4.9.3
+
+  app:
+    dependencies:
+      '@clerk/clerk-react':
+        specifier: ^4.18.0
+        version: 4.18.0(react@18.2.0)
+      '@monaco-editor/react':
+        specifier: ^4.4.6
+        version: 4.4.6(monaco-editor@0.36.1)(react-dom@18.2.0)(react@18.2.0)
+      '@quri/squiggle-components':
+        specifier: ^0.6.0
+        version: 0.6.0(react-dom@18.2.0)(react@18.2.0)
+      '@quri/squiggle-lang':
+        specifier: ^0.6.0
+        version: 0.6.0
+      '@radix-ui/react-dropdown-menu':
+        specifier: ^2.0.5
+        version: 2.0.5(@types/react-dom@18.0.11)(@types/react@18.0.28)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-slider':
+        specifier: ^1.1.1
+        version: 1.1.1(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-tabs':
+        specifier: ^1.0.3
+        version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query':
+        specifier: ^4.28.0
+        version: 4.28.0(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query-devtools':
+        specifier: ^4.29.12
+        version: 4.29.12(@tanstack/react-query@4.28.0)(react-dom@18.2.0)(react@18.2.0)
+      canvas:
+        specifier: ^2.11.2
+        version: 2.11.2
+      cookies:
+        specifier: ^0.8.0
+        version: 0.8.0
+      cytoscape:
+        specifier: ^3.23.0
+        version: 3.23.0
+      cytoscape-cose-bilkent:
+        specifier: ^4.1.0
+        version: 4.1.0(cytoscape@3.23.0)
+      cytoscape-klay:
+        specifier: ^3.1.4
+        version: 3.1.4(cytoscape@3.23.0)
+      date-fns:
+        specifier: ^2.30.0
+        version: 2.30.0
+      immer:
+        specifier: ^9.0.21
+        version: 9.0.21
+      jsonwebtoken:
+        specifier: ^9.0.0
+        version: 9.0.0
+      lodash.debounce:
+        specifier: ^4.0.8
+        version: 4.0.8
+      lodash.throttle:
+        specifier: ^4.1.1
+        version: 4.1.1
+      nanoid:
+        specifier: ^4.0.2
+        version: 4.0.2
+      openai:
+        specifier: ^3.2.1
+        version: 3.2.1
+      pako:
+        specifier: ^2.1.0
+        version: 2.1.0
+      peggy:
+        specifier: ^3.0.2
+        version: 3.0.2
+      phosphor-react:
+        specifier: ^1.4.1
+        version: 1.4.1(react@18.2.0)
+      project-name-generator:
+        specifier: ^2.1.9
+        version: 2.1.9
+      range-slider-input:
+        specifier: ^2.4.4
+        version: 2.4.4
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-resizable-panels:
+        specifier: ^0.0.39
+        version: 0.0.39(react-dom@18.2.0)(react@18.2.0)
+      react-router-dom:
+        specifier: ^6.12.1
+        version: 6.12.1(react-dom@18.2.0)(react@18.2.0)
+      reactflow:
+        specifier: ^11.7.0
+        version: 11.7.0(immer@9.0.21)(react-dom@18.2.0)(react@18.2.0)
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
+      zustand:
+        specifier: ^4.3.7
+        version: 4.3.7(immer@9.0.21)(react@18.2.0)
+    devDependencies:
+      '@types/cookies':
+        specifier: ^0.7.7
+        version: 0.7.7
+      '@types/cytoscape':
+        specifier: ^3.19.9
+        version: 3.19.9
+      '@types/jsonwebtoken':
+        specifier: ^9.0.2
+        version: 9.0.2
+      '@types/lodash.debounce':
+        specifier: ^4.0.7
+        version: 4.0.7
+      '@types/lodash.throttle':
+        specifier: ^4.1.7
+        version: 4.1.7
+      '@types/node':
+        specifier: ^18.16.18
+        version: 18.16.18
+      '@types/pako':
+        specifier: ^2.0.0
+        version: 2.0.0
+      '@types/project-name-generator':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@types/react':
+        specifier: ^18.0.28
+        version: 18.0.28
+      '@types/react-dom':
+        specifier: ^18.0.11
+        version: 18.0.11
+      '@types/wicg-file-system-access':
+        specifier: ^2020.9.5
+        version: 2020.9.5
+      '@typescript-eslint/eslint-plugin':
+        specifier: '4'
+        version: 4.33.0(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)(typescript@4.9.3)
+      '@typescript-eslint/parser':
+        specifier: '4'
+        version: 4.33.0(eslint@7.32.0)(typescript@4.9.3)
+      '@vercel/node':
+        specifier: ^2.10.2
+        version: 2.10.2
+      '@vitejs/plugin-react':
+        specifier: ^3.1.0
+        version: 3.1.0(vite@4.2.0)
+      autoprefixer:
+        specifier: ^10.4.14
+        version: 10.4.14(postcss@8.4.21)
+      babel-eslint:
+        specifier: ^10.1.0
+        version: 10.1.0(eslint@7.32.0)
+      eslint:
+        specifier: '7'
+        version: 7.32.0
+      eslint-config-react-app:
+        specifier: ^7.0.1
+        version: 7.0.1(@babel/plugin-syntax-flow@7.21.4)(@babel/plugin-transform-react-jsx@7.21.0)(eslint@7.32.0)(typescript@4.9.3)
+      eslint-plugin-flowtype:
+        specifier: '5'
+        version: 5.10.0(eslint@7.32.0)
+      eslint-plugin-import:
+        specifier: ^2.27.5
+        version: 2.27.5(@typescript-eslint/parser@4.33.0)(eslint@7.32.0)
+      eslint-plugin-jsx-a11y:
+        specifier: ^6.7.1
+        version: 6.7.1(eslint@7.32.0)
+      eslint-plugin-react:
+        specifier: ^7.32.2
+        version: 7.32.2(eslint@7.32.0)
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.0(eslint@7.32.0)
+      postcss:
+        specifier: ^8.4.21
+        version: 8.4.21
+      tailwindcss:
+        specifier: ^3.3.1
+        version: 3.3.1(postcss@8.4.21)
+      typescript:
+        specifier: ^4.9.3
+        version: 4.9.3
+      vite:
+        specifier: ^4.2.0
+        version: 4.2.0(@types/node@18.16.18)
+      vitest:
+        specifier: ^0.29.8
+        version: 0.29.8
+
+  db:
+    dependencies:
+      '@prisma/client':
+        specifier: 4.15.0
+        version: 4.15.0(prisma@4.15.0)
+    devDependencies:
+      '@types/node':
+        specifier: ^18.16.18
+        version: 18.16.18
+      prisma:
+        specifier: 4.15.0
+        version: 4.15.0
+      typescript:
+        specifier: ^4.9.3
+        version: 4.9.3
 
 packages:
 
@@ -1868,18 +1916,8 @@ packages:
       - supports-color
     dev: true
 
-  /@floating-ui/core@1.2.5:
-    resolution: {integrity: sha512-qrcbyfnRVziRlB6IYwjCopYhO7Vud750JlJyuljruIXcPxr22y8zdckcJGsuOdnQ639uVD1tTXddrcH3t3QYIQ==}
-    dev: false
-
   /@floating-ui/core@1.2.6:
     resolution: {integrity: sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg==}
-    dev: false
-
-  /@floating-ui/dom@1.2.5:
-    resolution: {integrity: sha512-+sAUfpQ3Frz+VCbPCqj+cZzvEESy3fjSeT/pDWkYCWOBXYNNKZfuVsHuv8/JO2zze8+Eb/Q7a6hZVgzS81fLbQ==}
-    dependencies:
-      '@floating-ui/core': 1.2.5
     dev: false
 
   /@floating-ui/dom@1.2.9:
@@ -1908,7 +1946,7 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      '@floating-ui/dom': 1.2.5
+      '@floating-ui/dom': 1.2.9
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -3092,7 +3130,7 @@ packages:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 20.2.5
+      '@types/node': 18.16.18
     dev: true
 
   /@types/chai-subset@1.3.3:
@@ -3314,7 +3352,7 @@ packages:
   /@types/express-serve-static-core@4.17.35:
     resolution: {integrity: sha512-wALWQwrgiB2AWTT91CB62b6Yt0sNHpznUXeZEcnPU3DRdlDIz74x8Qg1UUYKSVFi+va5vKOLYRBI1bRKiLLKIg==}
     dependencies:
-      '@types/node': 20.2.5
+      '@types/node': 18.16.18
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
       '@types/send': 0.17.1
@@ -3348,7 +3386,7 @@ packages:
   /@types/jsonwebtoken@9.0.2:
     resolution: {integrity: sha512-drE6uz7QBKq1fYqqoFKTDRdFCPHd5TCub75BM+D+cMx7NU9hUz7SESLfC2fSCXVFMO5Yj8sOWHuGqPgjc+fz0Q==}
     dependencies:
-      '@types/node': 20.2.5
+      '@types/node': 18.16.18
     dev: true
 
   /@types/keygrip@1.0.2:
@@ -3380,6 +3418,10 @@ packages:
 
   /@types/node@14.18.33:
     resolution: {integrity: sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==}
+    dev: true
+
+  /@types/node@18.16.18:
+    resolution: {integrity: sha512-/aNaQZD0+iSBAGnvvN2Cx92HqE5sZCPZtx2TsK+4nvV23fFe09jVDvpArXr2j9DnYlzuU9WuoykDDc6wqvpNcw==}
     dev: true
 
   /@types/node@20.2.5:
@@ -3432,14 +3474,14 @@ packages:
     resolution: {integrity: sha512-Cwo8LE/0rnvX7kIIa3QHCkcuF21c05Ayb0ZfxPiv0W8VRiZiNW/WuRupHKpqqGVGf7SUA44QSOUKaEd9lIrd/Q==}
     dependencies:
       '@types/mime': 1.3.2
-      '@types/node': 20.2.5
+      '@types/node': 18.16.18
     dev: true
 
   /@types/serve-static@1.15.1:
     resolution: {integrity: sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==}
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 20.2.5
+      '@types/node': 18.16.18
     dev: true
 
   /@types/uuid@9.0.1:
@@ -3746,7 +3788,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.21.4)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.2.0(@types/node@20.2.5)
+      vite: 4.2.0(@types/node@18.16.18)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4666,6 +4708,13 @@ packages:
   /damerau-levenshtein@1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.21.0
+    dev: false
 
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -6590,7 +6639,6 @@ packages:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: true
 
   /nanoid@4.0.2:
     resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
@@ -8468,6 +8516,40 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: true
+
+  /vite@4.2.0(@types/node@18.16.18):
+    resolution: {integrity: sha512-AbDTyzzwuKoRtMIRLGNxhLRuv1FpRgdIw+1y6AQG73Q5+vtecmvzKo/yk8X/vrHDpETRTx01ABijqUHIzBXi0g==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 18.16.18
+      esbuild: 0.17.14
+      postcss: 8.4.21
+      resolve: 1.22.1
+      rollup: 3.20.2
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /vite@4.2.0(@types/node@20.2.5):

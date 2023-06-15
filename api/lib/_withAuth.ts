@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import jwt from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 
 export const withAuth = (
   handler: (
@@ -33,7 +33,7 @@ export const withAuth = (
 
     try {
       // verify the JWT
-      const decoded = jwt.verify(session, publicKey);
+      const decoded = verify(session, publicKey);
 
       if (typeof decoded === "string") {
         res.status(401).send("Unauthorized");
