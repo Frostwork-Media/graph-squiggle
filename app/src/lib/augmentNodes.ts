@@ -1,5 +1,5 @@
 import { Node as ReactFlowNode } from "reactflow";
-import { NodeLocation } from "./schema";
+import { NodeLocation } from "shared";
 
 /**
  * Receives the nodes before they are passed to react flow
