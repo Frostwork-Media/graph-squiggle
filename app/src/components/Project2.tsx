@@ -8,7 +8,14 @@ import { useViewState } from "../lib/useViewState";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { IconButton } from "../ui/IconButton";
-import { ArrowLineRight, ChartBar, Chats, Code, X } from "phosphor-react";
+import {
+  ArrowLineRight,
+  ChartBar,
+  Chats,
+  Check,
+  Code,
+  X,
+} from "phosphor-react";
 import { SquiggleEditor } from "./SquiggleEditor";
 import { updateSquiggle, useProject } from "../lib/useProject";
 import debounce from "lodash.debounce";
@@ -20,6 +27,10 @@ import { useSquiggleState } from "../lib/useSquiggleState";
 import { Graph } from "./Graph";
 import { GraphControls } from "./GraphControls";
 import { useNodeLocation, writeNodeLocation } from "../lib/useNodeLocation";
+import { queryClient } from "../lib/queryClient";
+import isEqual from "fast-deep-equal";
+import { Project } from "db";
+import { Spinner } from "./Spinner";
 
 /**
  * This will eventually replace the Project component.
@@ -66,15 +77,34 @@ export function Project2({ id }: { id: string }) {
         }),
       });
     },
+    // onSuccess you should manually update the query cache
+    onSuccess: (_response, storedProjectContent) => {
+      queryClient.setQueryData<Project>(["project", id], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          content: storedProjectContent,
+        };
+      });
+    },
   });
 
   const debounceSyncProjectContent = useMemo(
     () =>
       debounce((content: ProjectType) => {
+        // check what's currently in the query cache and deep compare it the queryCache
+        const cached = queryClient.getQueryData<Project>(["project", id]);
+        // It means you didn't really ever load the project, should never happen
+        if (!cached) return;
+        // Don't try to update if they are equal
+        if (isEqual(cached.content, content)) {
+          console.log("cached and content are equal, not updating");
+          return;
+        }
         syncProjectContent.mutate(content);
-      }, 1000),
+      }, 3000),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [id]
   );
 
   const runCode = useCallback((squiggle: string) => {
@@ -131,7 +161,7 @@ export function Project2({ id }: { id: string }) {
         direction="horizontal"
       >
         <Panel
-          defaultSize={0}
+          defaultSize={33}
           collapsible
           style={editorFocused ? { overflow: "visible" } : {}}
           ref={ref}
@@ -155,33 +185,41 @@ export function Project2({ id }: { id: string }) {
             {/* <Bindings /> */}
           </Tabs.Content>
         </Panel>
-        <PanelResizeHandle className="border-x border-neutral-300 grid content-start p-1 gap-2">
-          {isCollapsed ? (
-            <IconButton icon={ArrowLineRight} onClick={expandPanel} />
-          ) : (
-            <IconButton icon={X} onClick={collapsePanel} />
-          )}
-          <Tabs.List className="grid gap-2">
-            <Tabs.Trigger value="code" asChild>
-              <IconButton
-                icon={Code}
-                className="data-[state=active]:bg-neutral-300"
-              />
-            </Tabs.Trigger>
-            <Tabs.Trigger value="bindings" asChild>
-              <IconButton
-                icon={ChartBar}
-                className="data-[state=active]:bg-neutral-300"
-              />
-            </Tabs.Trigger>
-            <Tabs.Trigger value="prompt" asChild>
-              <IconButton
-                icon={Chats}
-                className="data-[state=active]:bg-neutral-300"
-              />
-            </Tabs.Trigger>
-          </Tabs.List>
-          {syncProjectContent.isLoading ? <>{"..."}</> : null}
+        <PanelResizeHandle className="border-x border-neutral-300 grid content-between p-1 gap-2">
+          <div className="grid content-start gap-2">
+            {isCollapsed ? (
+              <IconButton icon={ArrowLineRight} onClick={expandPanel} />
+            ) : (
+              <IconButton icon={X} onClick={collapsePanel} />
+            )}
+            <Tabs.List className="grid gap-2">
+              <Tabs.Trigger value="code" asChild>
+                <IconButton
+                  icon={Code}
+                  className="data-[state=active]:bg-neutral-300"
+                />
+              </Tabs.Trigger>
+              <Tabs.Trigger value="bindings" asChild>
+                <IconButton
+                  icon={ChartBar}
+                  className="data-[state=active]:bg-neutral-300"
+                />
+              </Tabs.Trigger>
+              <Tabs.Trigger value="prompt" asChild>
+                <IconButton
+                  icon={Chats}
+                  className="data-[state=active]:bg-neutral-300"
+                />
+              </Tabs.Trigger>
+            </Tabs.List>
+          </div>
+          <div className="w-full aspect-square grid place-content-center bg-blue-50 rounded">
+            {syncProjectContent.isLoading ? (
+              <Spinner size="w-6 h-6" className="w-6" />
+            ) : (
+              <Check className="text-blue-500 w-6 h-6 block" weight="bold" />
+            )}
+          </div>
         </PanelResizeHandle>
         <Panel className="relative">
           <Graph />

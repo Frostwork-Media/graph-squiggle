@@ -1,9 +1,15 @@
-export function Spinner({ size = "w-8 h-8" }: { size?: string }) {
+export function Spinner({
+  size = "w-8 h-8",
+  className = "",
+}: {
+  size?: string;
+  className?: string;
+}) {
   return (
-    <span role="status">
+    <span role="status" className={className}>
       <svg
         aria-hidden="true"
-        className={`${size} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600`}
+        className={`${size} mr-2 text-blue-200 animate-spin dark:text-blue-600 fill-blue-600`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
