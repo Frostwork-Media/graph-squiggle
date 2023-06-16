@@ -5,16 +5,24 @@ import {
   PanelResizeHandle,
 } from "react-resizable-panels";
 import { useViewState } from "../lib/useViewState";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { IconButton } from "../ui/IconButton";
 import { ArrowLineRight, ChartBar, Chats, Code, X } from "phosphor-react";
 import { SquiggleEditor } from "./SquiggleEditor";
+import { updateSquiggle, useProject } from "../lib/useProject";
+import debounce from "lodash.debounce";
+import { useMutation } from "@tanstack/react-query";
+import { ProjectContent as ProjectType } from "shared";
+import { runSquiggle } from "../lib/runSquiggle";
+import { completeGraphDataFromSquiggleState } from "../lib/completeGraphDataFromSquiggleState";
+import { useSquiggleState } from "../lib/useSquiggleState";
+import { Graph } from "./Graph";
 
 /**
  * This will eventually replace the Project component.
  */
-export function Project2() {
+export function Project2({ id }: { id: string }) {
   const ref = useRef<ImperativePanelHandle>(null);
   const isCollapsed = useViewState((state) => state.isCollapsed);
 
@@ -40,13 +48,68 @@ export function Project2() {
    */
   const editorFocused = useViewState((state) => state.editorFocused);
 
-  const [content, setContent] = useState<string>("");
-  const onChange = useCallback(
-    (content?: string) => {
-      if (content) setContent(content);
+  /**
+   * Mutation that syncs data back to the server
+   */
+  const syncProjectContent = useMutation({
+    mutationFn: (content: ProjectType) => {
+      return fetch("/api/project/updateById", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          content,
+        }),
+      });
     },
-    [setContent]
+  });
+
+  const debounceSyncProjectContent = useMemo(
+    () =>
+      debounce((content: ProjectType) => {
+        syncProjectContent.mutate(content);
+      }, 1000),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
+
+  const runCode = useCallback((squiggle: string) => {
+    console.log("running code");
+    runSquiggle(squiggle);
+    const squiggleState = useSquiggleState.getState();
+    completeGraphDataFromSquiggleState(squiggleState);
+  }, []);
+  const debounceRunCode = useMemo(() => debounce(runCode, 1000), [runCode]);
+
+  const content = useProject((state) => state.projectContent?.squiggle ?? "");
+  const onChange = useCallback(
+    (squiggle = "") => {
+      // Update the squiggle in the store
+      updateSquiggle(squiggle);
+      debounceRunCode(squiggle);
+    },
+    [debounceRunCode]
+  );
+
+  /**
+   * Subscribe to changes on the on the content
+   * and debounce updates to the server
+   */
+  useEffect(() => {
+    const unsubscribe = useProject.subscribe(
+      (state) => state.projectContent,
+      (projectContent) => {
+        if (!projectContent) return;
+        debounceSyncProjectContent(projectContent);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [debounceSyncProjectContent]);
 
   return (
     <Tabs.Root defaultValue="code">
@@ -107,8 +170,8 @@ export function Project2() {
           </Tabs.List>
         </PanelResizeHandle>
         <Panel className="relative">
-          {/* <Graph />
-          <GraphControls />
+          <Graph />
+          {/* <GraphControls />
           <ErrorNotice /> */}
           Graph
         </Panel>

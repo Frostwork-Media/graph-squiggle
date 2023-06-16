@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { SqProject, run } from "@quri/squiggle-lang";
+import { SqProject } from "@quri/squiggle-lang";
 import { useFileState } from "./useFileState";
-import { isError } from "./isError";
 import debounce from "lodash.debounce";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { useEffect } from "react";
 import { completeGraphDataFromSquiggleState } from "./completeGraphDataFromSquiggleState";
 import { useNodeLocation, writeNodeLocation } from "./useNodeLocation";
+import { runSquiggle } from "./runSquiggle";
 
 /**
  * Stores the processed squiggle code, along with the code that was run
@@ -59,56 +59,4 @@ export function useWatchProject() {
     });
     return unsubscribe;
   }, []);
-}
-
-/**
- * Run the squiggle code and update the state
- */
-function runSquiggle(code: string | undefined) {
-  if (code) {
-    try {
-      const result = run(code).result;
-      // When it ran successfully
-      if (result.ok) {
-        useSquiggleState.setState(
-          {
-            squiggleCode: code,
-            squiggleRunResult: result.value.location.project,
-            squiggleRunError: undefined,
-          },
-          false,
-          "run squiggle / ok"
-        );
-      } else {
-        useSquiggleState.setState(
-          {
-            squiggleRunError: `${result.value.toStringWithStackTrace()}`,
-          },
-          false,
-          "run squiggle / error"
-        );
-      }
-    } catch (e) {
-      // When there is a syntax error
-      let message = isError(e) ? e.message : "Unknown error";
-      useSquiggleState.setState(
-        {
-          squiggleRunError: message,
-        },
-        false,
-        "run squiggle / Unknown error"
-      );
-    }
-  } else {
-    // When there is no code at all
-    useSquiggleState.setState(
-      {
-        squiggleCode: undefined,
-        squiggleRunResult: undefined,
-        squiggleRunError: undefined,
-      },
-      false,
-      "run squiggle / no code"
-    );
-  }
 }

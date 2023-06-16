@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { serializeProject, useFileState } from "../lib/useFileState";
 import { Bindings } from "./Bindings";
-import { Project as ProjectType } from "../lib/schema";
+import { ProjectContent as ProjectType } from "shared";
 import debounce from "lodash.debounce";
 import { GraphControls } from "./GraphControls";
 import { useViewState } from "../lib/useViewState";

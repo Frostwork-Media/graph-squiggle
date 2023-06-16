@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { Project } from "./schema";
+import { ProjectContent } from "shared";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 import pako from "pako";
 
 type FileState = {
   /** The current project */
-  project?: Project;
+  project?: ProjectContent;
   /** The previous contents of the file */
   previousContents?: string;
   /** The file handle for the current project */
@@ -37,7 +37,7 @@ export const useFileState = create<FileState>()(
   )
 );
 
-export function serializeProject(project: Project) {
+export function serializeProject(project: ProjectContent) {
   const json = JSON.stringify(project);
   const compressed = pako.deflate(json);
   const base64 = btoa(String.fromCharCode(...compressed));

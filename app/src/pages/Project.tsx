@@ -25,7 +25,6 @@ export function Project() {
     },
     {
       enabled: !!params.id,
-      suspense: true,
       onSuccess: (data) => {
         loadProject(data.content);
       },
@@ -34,10 +33,10 @@ export function Project() {
     }
   );
   const loadProjectError = useProject((state) => state.loadFileError);
-  if (!project.data) return null;
+  if (!project.data || !params.id) return <FullScreenSpinner />;
   return (
     <div className="grid grid-rows-[auto_minmax(0,1fr)] border-t">
-      <div className="flex gap-2 justify-between items-center p-4">
+      <div className="flex gap-2 justify-between items-center p-4 shadow-sm">
         <div className="flex gap-4 items-baseline">
           <h1 className="text-xl text-blue-500 font-bold">
             {project.data.name}
@@ -59,7 +58,7 @@ export function Project() {
       ) : loadProjectError ? (
         <LoadFileError loadFileError={loadProjectError} />
       ) : (
-        <Project2 />
+        <Project2 id={params.id} />
       )}
     </div>
   );
