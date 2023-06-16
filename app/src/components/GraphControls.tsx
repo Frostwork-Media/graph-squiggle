@@ -1,27 +1,32 @@
 import { Percent, Snowflake } from "phosphor-react";
 import { IconButton } from "../ui/IconButton";
 import { useNodeLocation } from "../lib/useNodeLocation";
-import { useFileState } from "../lib/useFileState";
 import { useCallback } from "react";
 import produce from "immer";
+import { useProject, useRenderPercentages } from "../lib/useProject";
 
 /**
  * Options for adjusting the graph
  */
 export function GraphControls() {
-  const renderPercentages = useFileState(state => state.project?.renderPercentages ?? false)
+  const renderPercentages = useRenderPercentages();
   const isNodeLocationSet = useNodeLocation(
     (state) => !!Object.keys(state).length
   );
 
   const toggleRenderPercentages = useCallback(() => {
-    useFileState.setState(state => {
-      return produce(state, draft => {
-        if (!draft.project) return;
-        draft.project.renderPercentages = !draft.project.renderPercentages
-      });
-    }, false, "toggleRenderPercentages")
-  }, [])
+    useProject.setState(
+      (state) => {
+        return produce(state, (draft) => {
+          if (!draft.projectContent) return;
+          draft.projectContent.renderPercentages =
+            !draft.projectContent.renderPercentages;
+        });
+      },
+      false,
+      "toggleRenderPercentages"
+    );
+  }, []);
 
   return (
     <div
@@ -46,7 +51,7 @@ export function GraphControls() {
             : ""
         }`}
         onClick={toggleRenderPercentages}
-        />
+      />
     </div>
   );
 }

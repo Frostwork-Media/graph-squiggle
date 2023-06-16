@@ -9,8 +9,8 @@ import "reactflow/dist/style.css";
 import { useGraphState } from "../lib/completeGraphDataFromSquiggleState";
 import { useNodeLocation } from "../lib/useNodeLocation";
 
-import { CustomNode } from "../components/CustomNode";
-import { useCallback, useState } from "react";
+import { CustomNode, NODE_WIDTH } from "../components/CustomNode";
+import { CSSProperties, useCallback, useState } from "react";
 import { augmentNodes } from "../lib/augmentNodes";
 
 const nodeTypes = {
@@ -54,6 +54,7 @@ export function Graph() {
       onNodesChange={onNodesChange}
       nodesConnectable={false}
       className={selectedNodes.length > 0 ? "selecting" : ""}
+      style={{ "--node-width": NODE_WIDTH } as CSSProperties}
     >
       <Background
         color="#f0f0f0"

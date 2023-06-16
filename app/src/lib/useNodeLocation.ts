@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 import debounce from "lodash.debounce";
-import { useFileState } from "./useFileState";
 import produce from "immer";
-import { NodeLocation } from "./schema";
+import { NodeLocation } from "shared";
+import { useProject } from "./useProject";
 
 export const useNodeLocation = create<NodeLocation>()(
   devtools((set) => ({}), {
@@ -19,10 +19,10 @@ export const useNodeLocation = create<NodeLocation>()(
  */
 export const writeNodeLocation = debounce(
   (nodeLocation: NodeLocation) => {
-    useFileState.setState((state) => {
+    useProject.setState((state) => {
       const nextState = produce(state, (draft) => {
-        if (!draft.project) return;
-        draft.project.nodeLocation = nodeLocation;
+        if (!draft.projectContent) return;
+        draft.projectContent.nodeLocation = nodeLocation;
       });
 
       return nextState;

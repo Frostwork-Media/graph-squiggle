@@ -18,6 +18,8 @@ import { runSquiggle } from "../lib/runSquiggle";
 import { completeGraphDataFromSquiggleState } from "../lib/completeGraphDataFromSquiggleState";
 import { useSquiggleState } from "../lib/useSquiggleState";
 import { Graph } from "./Graph";
+import { GraphControls } from "./GraphControls";
+import { useNodeLocation, writeNodeLocation } from "../lib/useNodeLocation";
 
 /**
  * This will eventually replace the Project component.
@@ -76,7 +78,6 @@ export function Project2({ id }: { id: string }) {
   );
 
   const runCode = useCallback((squiggle: string) => {
-    console.log("running code");
     runSquiggle(squiggle);
     const squiggleState = useSquiggleState.getState();
     completeGraphDataFromSquiggleState(squiggleState);
@@ -102,6 +103,7 @@ export function Project2({ id }: { id: string }) {
       (state) => state.projectContent,
       (projectContent) => {
         if (!projectContent) return;
+        console.log("projectContent changed");
         debounceSyncProjectContent(projectContent);
       }
     );
@@ -110,6 +112,17 @@ export function Project2({ id }: { id: string }) {
       unsubscribe();
     };
   }, [debounceSyncProjectContent]);
+
+  /**
+   * Subscribe to changes in the node location and write
+   * them to the project for syncing
+   **/
+  useEffect(() => {
+    const unsubscribe = useNodeLocation.subscribe((state) => {
+      writeNodeLocation(state);
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <Tabs.Root defaultValue="code">
@@ -168,12 +181,12 @@ export function Project2({ id }: { id: string }) {
               />
             </Tabs.Trigger>
           </Tabs.List>
+          {syncProjectContent.isLoading ? <>{"..."}</> : null}
         </PanelResizeHandle>
         <Panel className="relative">
           <Graph />
-          {/* <GraphControls />
-          <ErrorNotice /> */}
-          Graph
+          <GraphControls />
+          {/* <ErrorNotice /> */}
         </Panel>
       </PanelGroup>
     </Tabs.Root>

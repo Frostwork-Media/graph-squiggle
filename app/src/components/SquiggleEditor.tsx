@@ -1,6 +1,4 @@
-import { useFileState } from "../lib/useFileState";
-import produce from "immer";
-import { forwardRef, useCallback } from "react";
+import { forwardRef } from "react";
 import Editor from "@monaco-editor/react";
 import { create } from "zustand";
 import { useViewState } from "../lib/useViewState";

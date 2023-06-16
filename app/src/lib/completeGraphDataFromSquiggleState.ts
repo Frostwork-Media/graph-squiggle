@@ -5,13 +5,13 @@ import cytoscape, { ElementsDefinition } from "cytoscape";
 import klay from "cytoscape-klay";
 import coseBilkent from "cytoscape-cose-bilkent";
 import { sqProjectToCyElements } from "./sqProjectToCyElements";
-import { useFileState } from "./useFileState";
 import {
   Node as ReactFlowNode,
   Edge as ReactFlowEdge,
   MarkerType,
 } from "reactflow";
 import { NODE_WIDTH } from "../components/CustomNode";
+import { useProject } from "./useProject";
 
 // @ts-ignore
 if (!cytoscape.__hasInit) {
@@ -56,7 +56,7 @@ export function completeGraphDataFromSquiggleState(state: SquiggleState) {
   } else {
     try {
       // grab squiggle code for later use
-      const squiggle = useFileState.getState().project?.squiggle ?? "";
+      const squiggle = useProject.getState().projectContent?.squiggle ?? "";
 
       // Create cyto elements
       const elements = sqProjectToCyElements(

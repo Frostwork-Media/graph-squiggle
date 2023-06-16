@@ -2,7 +2,6 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { Handle, Position, NodeProps } from "reactflow";
 import { useQuery } from "@tanstack/react-query";
 import { ManifoldResponse, SquiggleVariableValue } from "../lib/types";
-import { useFileState } from "../lib/useFileState";
 import { SquiggleChart } from "@quri/squiggle-components";
 import rangeSlider from "range-slider-input";
 import "range-slider-input/dist/style.css";
@@ -14,6 +13,7 @@ import { useCodeEdited } from "./SquiggleEditor";
 import * as Slider from "@radix-ui/react-slider";
 import { numberToPercentage } from "../lib/numberToPercentage";
 import { useSquiggleState } from "../lib/useSquiggleState";
+import { useProject, useRenderPercentages } from "../lib/useProject";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -129,9 +129,7 @@ function Single({
   initialValue: number;
   line: number;
 }) {
-  const renderPercentages = useFileState(
-    (state) => state.project?.renderPercentages ?? false
-  );
+  const renderPercentages = useRenderPercentages();
   const lastEdited = useCodeEdited((state) => state.lastEdited);
   const shouldUpdate = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -206,9 +204,7 @@ function Distribution({
   const init = useRef<[number, number]>([lower, upper]);
   const [value, setValue] = useState([lower, upper]);
   const [max, setMax] = useState(getMax(upper));
-  const renderPercentages = useFileState(
-    (state) => state.project?.renderPercentages ?? false
-  );
+  const renderPercentages = useRenderPercentages();
 
   // Watch lastEdited and allow reset on initialValue after code change
   useEffect(() => {

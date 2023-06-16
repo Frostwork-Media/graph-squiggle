@@ -1,6 +1,6 @@
 import throttle from "lodash.throttle";
-import { useFileState } from "./useFileState";
 import produce from "immer";
+import { useProject } from "./useProject";
 /**
  * Takes in a code string and updates the value of a line
  * that sets a single variable to a new value.
@@ -55,16 +55,19 @@ export function updateSquiggleLineDistribution(
   return code;
 }
 
+/**
+ * Update the current code when changing a single value in the graph
+ */
 export const throttleSingleUpdate = throttle((line: number, value: string) => {
   const newCode = updateSquiggleLineSingle(
-    useFileState.getState().project?.squiggle ?? "",
+    useProject.getState().projectContent?.squiggle ?? "",
     line,
     value
   );
-  useFileState.setState(
+  useProject.setState(
     produce((draft) => {
-      if (!draft.project) return;
-      draft.project.squiggle = newCode;
+      if (!draft.projectContent) return;
+      draft.projectContent.squiggle = newCode;
     }),
     false,
     "throttleSingleUpdate"
@@ -74,15 +77,15 @@ export const throttleSingleUpdate = throttle((line: number, value: string) => {
 export const throttleDistributionUpdate = throttle(
   (line: number, lowerBound: number, upperBound: number) => {
     const newCode = updateSquiggleLineDistribution(
-      useFileState.getState().project?.squiggle ?? "",
+      useProject.getState().projectContent?.squiggle ?? "",
       line,
       lowerBound,
       upperBound
     );
-    useFileState.setState(
+    useProject.setState(
       produce((draft) => {
-        if (!draft.project) return;
-        draft.project.squiggle = newCode;
+        if (!draft.projectContent) return;
+        draft.projectContent.squiggle = newCode;
       }),
       false,
       "throttleDistributionUpdate"

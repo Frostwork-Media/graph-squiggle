@@ -6,6 +6,7 @@ import type { Prisma } from "db";
 import { runSquiggle } from "./runSquiggle";
 import { useSquiggleState } from "./useSquiggleState";
 import { completeGraphDataFromSquiggleState } from "./completeGraphDataFromSquiggleState";
+import { useNodeLocation } from "./useNodeLocation";
 
 export const useProject = create<{
   /** The current project's content () */
@@ -30,6 +31,9 @@ export function loadProject(content: Prisma.JsonValue) {
       projectContent,
       loadFileError: undefined,
     });
+    if (projectContent.nodeLocation) {
+      useNodeLocation.setState(projectContent.nodeLocation);
+    }
     const squiggle = projectContent.squiggle;
     runSquiggle(squiggle);
     const squiggleState = useSquiggleState.getState();
@@ -58,4 +62,10 @@ export function updateSquiggle(squiggle: string) {
       },
     };
   });
+}
+
+export function useRenderPercentages() {
+  return useProject(
+    (state) => state.projectContent?.renderPercentages ?? false
+  );
 }
