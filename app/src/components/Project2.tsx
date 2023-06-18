@@ -32,6 +32,7 @@ import isEqual from "fast-deep-equal";
 import { Project } from "db";
 import { Spinner } from "./Spinner";
 import { PromptEditor } from "./PromptEditor";
+import { Bindings } from "./Bindings";
 
 /**
  * This will eventually replace the Project component.
@@ -198,8 +199,7 @@ export function Project2({ id }: { id: string }) {
             <SquiggleEditor content={content} onChange={onChange} />
           </Tabs.Content>
           <Tabs.Content value="bindings" asChild>
-            Bindings
-            {/* <Bindings /> */}
+            <Bindings />
           </Tabs.Content>
         </Panel>
         <PanelResizeHandle className="border-x border-neutral-300 grid content-between p-1 gap-2">
