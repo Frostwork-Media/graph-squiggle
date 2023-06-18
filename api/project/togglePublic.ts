@@ -1,5 +1,6 @@
 import { withAuth } from "../lib/_withAuth";
 import { prisma } from "db";
+import { slugify } from "./_slugify";
 
 const handler = withAuth(async (req, res) => {
   const { id } = req.body;
@@ -33,14 +34,3 @@ const handler = withAuth(async (req, res) => {
 });
 
 export default handler;
-
-function slugify(text: string) {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
-}

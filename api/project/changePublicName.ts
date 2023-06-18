@@ -1,5 +1,6 @@
 import { withAuth } from "../lib/_withAuth";
 import { prisma } from "db";
+import { slugify } from "./_slugify";
 
 const handler = withAuth(async (req, res) => {
   const { id, publicName } = req.body;
@@ -22,7 +23,7 @@ const handler = withAuth(async (req, res) => {
       id,
     },
     data: {
-      publicName,
+      publicName: slugify(publicName),
     },
   });
 

@@ -1,7 +1,7 @@
 import { Globe, Warning } from "phosphor-react";
 import { Paragraph } from "../ui/Shared";
 import { useMutation } from "@tanstack/react-query";
-import { forwardRef, useCallback } from "react";
+import { forwardRef, useCallback, useRef } from "react";
 import { queryClient } from "../lib/queryClient";
 import type { Project as ProjectType } from "db";
 import { useViewState } from "../lib/useViewState";
@@ -10,6 +10,8 @@ export const Settings = forwardRef<
   HTMLDivElement,
   { id: string; isPublic: boolean; publicName: string }
 >(({ id, isPublic, publicName }, ref) => {
+  const publicNameRef = useRef<HTMLInputElement>(null);
+
   const togglePublic = useMutation({
     mutationFn: async () => {
       const res = await fetch(`/api/project/togglePublic`, {
@@ -57,6 +59,11 @@ export const Settings = forwardRef<
           publicName: data.publicName,
         };
       });
+
+      // update the input value
+      if (publicNameRef.current) {
+        publicNameRef.current.value = data.publicName;
+      }
     },
     onSettled() {
       useViewState.setState({ isSyncing: false });
@@ -110,8 +117,10 @@ export const Settings = forwardRef<
         {isPublic && (
           <input
             type="text"
+            ref={publicNameRef}
             defaultValue={publicName}
-            className="w-full p-2 border border-neutral-300 rounded-md font-mono text-sm bg-neutral-50 text-neutral-700"
+            disabled={changePublicName.isLoading}
+            className="w-full p-2 border border-neutral-300 rounded-md font-mono text-sm bg-neutral-50 text-neutral-700 disabled:opacity-50"
             onKeyDown={handlePublicNameKeyDown}
             onBlur={(e) => {
               handleChangePublicName(e.currentTarget.value);
