@@ -8,10 +8,20 @@ import {
   Section,
   SectionTitle,
 } from "../ui/Shared";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import type { User } from "db";
+import { queryClient } from "../lib/queryClient";
+import { useState } from "react";
+import { slugify } from "shared";
 
 export function Profile() {
   const { user } = useUser();
   const openAiKey = useGlobalSettings((store) => store.openAIAPIKey);
+  const username = useQuery<User>(["username"], async () => {
+    const res = await fetch(`/api/user/username`);
+    return await res.json();
+  });
+
   if (!user) return <Spinner />;
   return (
     <Page>
@@ -23,6 +33,18 @@ export function Profile() {
             <button className="text-blue-600 hover:underline">Sign Out</button>
           </SignOutButton>
         </p>
+      </Section>
+      <Section>
+        <SectionTitle>Username</SectionTitle>
+        <Paragraph>
+          Your username is used to identify you in the community. It is required
+          to publish your projects.
+        </Paragraph>
+        {username.isLoading ? (
+          <Spinner />
+        ) : (
+          <ChangeUsername username={username.data?.username ?? ""} />
+        )}
       </Section>
       <Section>
         <SectionTitle>Open AI API Key</SectionTitle>
@@ -43,4 +65,57 @@ export function Profile() {
       </Section>
     </Page>
   );
+}
+
+function ChangeUsername({ username: initialUsername }: { username: string }) {
+  const [username, setUsername] = useState(initialUsername);
+  const setUsernameMutation = useMutation({
+    mutationFn: async (username: string) => {
+      const res = await fetch(`/api/user/setUsername`, {
+        method: "POST",
+        body: JSON.stringify({ username }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return await res.json();
+    },
+    onSuccess(data) {
+      // update the query cache
+      queryClient.setQueryData<User>(["username"], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          username: data.username,
+        };
+      });
+    },
+  });
+  return (
+    <div className="grid grid-cols-[1fr,auto] gap-2">
+      <input
+        type="text"
+        className="bg-neutral-100 font-mono p-3 rounded text-neutral-500"
+        placeholder="Username"
+        autoComplete="off"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        disabled={setUsernameMutation.isLoading}
+      />
+      <button
+        className="bg-blue-600 hover:bg-blue-700 text-white rounded p-3 disabled:opacity-50"
+        disabled={setUsernameMutation.isLoading || !isValidUsername(username)}
+        onClick={() => setUsernameMutation.mutate(username)}
+      >
+        {setUsernameMutation.isLoading ? "Saving..." : "Save"}
+      </button>
+    </div>
+  );
+}
+
+// test whether the username is valid, more than 5 characters, slug only
+function isValidUsername(username: string) {
+  if (username.length < 5) return false;
+  if (username !== slugify(username)) return false;
+  return true;
 }
