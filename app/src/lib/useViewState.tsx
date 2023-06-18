@@ -7,9 +7,11 @@ export const useViewState = create<{
   collapse: () => void;
   editorFocused: boolean;
   tab: Tab;
+  isSyncing: boolean;
 }>(() => ({
   isCollapsed: true,
   collapse: () => {},
   editorFocused: false,
   tab: "code",
+  isSyncing: false,
 }));

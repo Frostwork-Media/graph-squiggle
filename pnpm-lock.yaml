@@ -137,6 +137,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-input-autosize:
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
       react-resizable-panels:
         specifier: ^0.0.39
         version: 0.0.39(react-dom@18.2.0)(react@18.2.0)
@@ -189,6 +192,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.0.11
         version: 18.0.11
+      '@types/react-input-autosize':
+        specifier: ^2.2.1
+        version: 2.2.1
       '@types/wicg-file-system-access':
         specifier: ^2020.9.5
         version: 2020.9.5
@@ -3483,6 +3489,12 @@ packages:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
       '@types/react': 18.0.28
+
+  /@types/react-input-autosize@2.2.1:
+    resolution: {integrity: sha512-RxzEjd4gbLAAdLQ92Q68/AC+TfsAKTc4evsArUH1aIShIMqQMIMjsxoSnwyjtbFTO/AGIW/RQI94XSdvOxCz/w==}
+    dependencies:
+      '@types/react': 18.0.28
+    dev: true
 
   /@types/react@18.0.28:
     resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
@@ -7115,6 +7127,15 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
     dependencies:
+      react: 18.2.0
+    dev: false
+
+  /react-input-autosize@3.0.0(react@18.2.0):
+    resolution: {integrity: sha512-nL9uS7jEs/zu8sqwFE5MAPx6pPkNAriACQ2rGLlqmKr2sPGtN7TXTyDdQt4lbNXVx7Uzadb40x8qotIuru6Rhg==}
+    peerDependencies:
+      react: ^16.3.0 || ^17.0.0
+    dependencies:
+      prop-types: 15.8.1
       react: 18.2.0
     dev: false
 

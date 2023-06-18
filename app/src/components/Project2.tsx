@@ -168,6 +168,8 @@ export function Project2({ id }: { id: string }) {
     [debounceRunCode]
   );
 
+  const isSyncing = useViewState((state) => state.isSyncing);
+
   return (
     <Tabs.Root
       value={tab}
@@ -231,7 +233,7 @@ export function Project2({ id }: { id: string }) {
             </Tabs.List>
           </div>
           <div className="w-full aspect-square grid place-content-center bg-blue-50 rounded">
-            {syncProjectContent.isLoading ? (
+            {syncProjectContent.isLoading || isSyncing ? (
               <Spinner size="w-6 h-6" className="w-6" />
             ) : (
               <Check className="text-blue-500 w-6 h-6 block" weight="bold" />

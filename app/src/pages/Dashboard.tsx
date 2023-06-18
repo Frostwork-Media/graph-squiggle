@@ -80,7 +80,7 @@ export function Dashboard() {
                     {project.name}
                   </span>
                   <span className="text-neutral-400 text-sm">
-                    {format(new Date(project.createdAt), "MMM d, yyyy")}
+                    {format(new Date(project.updatedAt), "MMM d, yyyy")}
                   </span>
                 </Link>
               </li>
