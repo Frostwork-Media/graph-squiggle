@@ -26,10 +26,11 @@ export function Project() {
     {
       enabled: !!params.id,
       onSuccess: (data) => {
+        // load the content into zustand state
         loadProject(data.content);
       },
-      staleTime: 0,
-      cacheTime: 0,
+      staleTime: Infinity,
+      cacheTime: Infinity,
     }
   );
   const loadProjectError = useProject((state) => state.loadFileError);

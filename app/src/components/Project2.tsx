@@ -79,6 +79,7 @@ export function Project2({ id }: { id: string }) {
     },
     // onSuccess you should manually update the query cache
     onSuccess: (_response, storedProjectContent) => {
+      console.log("syncProjectContent success");
       queryClient.setQueryData<Project>(["project", id], (old) => {
         if (!old) return old;
         return {
@@ -89,39 +90,29 @@ export function Project2({ id }: { id: string }) {
     },
   });
 
-  const debounceSyncProjectContent = useMemo(
-    () =>
-      debounce((content: ProjectType) => {
-        // check what's currently in the query cache and deep compare it the queryCache
-        const cached = queryClient.getQueryData<Project>(["project", id]);
-        // It means you didn't really ever load the project, should never happen
-        if (!cached) return;
-        // Don't try to update if they are equal
-        if (isEqual(cached.content, content)) {
-          console.log("cached and content are equal, not updating");
-          return;
-        }
-        syncProjectContent.mutate(content);
-      }, 3000),
+  const syncIfSafe = useCallback(
+    (content: ProjectType) => {
+      // check what's currently in the query cache and deep compare it the queryCache
+      const cached = queryClient.getQueryData<Project>(["project", id]);
+
+      // It means you didn't really ever load the project (should never happen)
+      if (!cached) return;
+
+      // Don't try to update if they are equal
+      if (isEqual(cached.content, content)) {
+        console.log("cached and content are equal, not updating");
+        return;
+      }
+      console.log("updating project content");
+      syncProjectContent.mutate(content);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [id]
   );
 
-  const runCode = useCallback((squiggle: string) => {
-    runSquiggle(squiggle);
-    const squiggleState = useSquiggleState.getState();
-    completeGraphDataFromSquiggleState(squiggleState);
-  }, []);
-  const debounceRunCode = useMemo(() => debounce(runCode, 1000), [runCode]);
-
-  const content = useProject((state) => state.projectContent?.squiggle ?? "");
-  const onChange = useCallback(
-    (squiggle = "") => {
-      // Update the squiggle in the store
-      updateSquiggle(squiggle);
-      debounceRunCode(squiggle);
-    },
-    [debounceRunCode]
+  const debounceSyncProjectContent = useMemo(
+    () => debounce(syncIfSafe, 1500),
+    [syncIfSafe]
   );
 
   /**
@@ -153,6 +144,26 @@ export function Project2({ id }: { id: string }) {
     });
     return unsubscribe;
   }, []);
+
+  /**
+   * Updating our graph from our local state
+   */
+  const runCode = useCallback((squiggle: string) => {
+    runSquiggle(squiggle);
+    const squiggleState = useSquiggleState.getState();
+    completeGraphDataFromSquiggleState(squiggleState);
+  }, []);
+  const debounceRunCode = useMemo(() => debounce(runCode, 1000), [runCode]);
+
+  const content = useProject((state) => state.projectContent?.squiggle ?? "");
+  const onChange = useCallback(
+    (squiggle = "") => {
+      // Update the squiggle in the store
+      updateSquiggle(squiggle);
+      debounceRunCode(squiggle);
+    },
+    [debounceRunCode]
+  );
 
   return (
     <Tabs.Root defaultValue="code">

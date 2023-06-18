@@ -146,6 +146,9 @@ importers:
       shared:
         specifier: workspace:*
         version: link:../shared
+      use-react-query-auto-sync:
+        specifier: ^0.1.0
+        version: 0.1.0(@tanstack/react-query@4.28.0)(react-dom@18.2.0)(react@18.2.0)
       zod:
         specifier: ^3.21.4
         version: 3.21.4
@@ -8089,6 +8092,19 @@ packages:
       '@types/react': 18.0.28
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /use-react-query-auto-sync@0.1.0(@tanstack/react-query@4.28.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-rGfbVWEl4/vbhBI7BPRvORGfXnhkArqZemgAxE65YLgFAlXshf8fJYThiPWl0mcjNGvXKxgpu+1S3HZCYjUr5w==}
+    peerDependencies:
+      '@tanstack/react-query': ^4.7.2
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      '@tanstack/react-query': 4.28.0(react-dom@18.2.0)(react@18.2.0)
+      lodash.debounce: 4.0.8
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /use-sidecar@1.1.2(@types/react@18.0.28)(react@18.2.0):
