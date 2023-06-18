@@ -19,6 +19,9 @@ importers:
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
+      openai:
+        specifier: ^3.2.1
+        version: 3.2.1
       project-name-generator:
         specifier: ^2.1.9
         version: 2.1.9

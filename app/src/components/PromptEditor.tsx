@@ -1,17 +1,21 @@
 import produce from "immer";
 import { forwardRef, useState } from "react";
-import { useFileState } from "../lib/useFileState";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
 import { Chats, X } from "phosphor-react";
 import { Textarea } from "../ui/Textarea";
+import { useProject } from "../lib/useProject";
+import { runSquiggle } from "../lib/runSquiggle";
+import { useSquiggleState } from "../lib/useSquiggleState";
+import { completeGraphDataFromSquiggleState } from "../lib/completeGraphDataFromSquiggleState";
+import { useViewState } from "../lib/useViewState";
 
 export const PromptEditor = forwardRef<HTMLFormElement, {}>(
   function PromptEditor(_props, ref) {
     const [value, setValue] = useState("");
     const apiKey = useGlobalSettings((state) => state.openAIAPIKey);
     const [isLoading, setIsLoading] = useState(false);
-    const code = useFileState((state) => state.project?.squiggle ?? "");
-    const subject = useFileState((state) => state.project?.subject ?? "");
+    const code = useProject((state) => state.projectContent?.squiggle ?? "");
+    const subject = useProject((state) => state.projectContent?.subject ?? "");
     if (!apiKey) return null;
 
     return (
@@ -54,16 +58,29 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
                     alert("Error: " + data);
                     return;
                   } else {
-                    useFileState.setState((state) =>
+                    useProject.setState((state) =>
                       produce(state, (draft) => {
-                        if (draft.project) {
-                          draft.project.squiggle = data;
-                          if (!draft.project.subject) {
-                            draft.project.subject = value;
+                        if (draft.projectContent) {
+                          draft.projectContent.squiggle = data;
+                          if (!draft.projectContent.subject) {
+                            draft.projectContent.subject = value;
                           }
                         }
                       })
                     );
+                    // load it into the project state
+                    useProject.setState((state) => {
+                      return produce(state, (draft) => {
+                        if (!draft.projectContent) return;
+                        draft.projectContent.squiggle = data;
+                      });
+                    });
+                    // finally process the changes
+                    runSquiggle(data);
+                    const squiggleState = useSquiggleState.getState();
+                    completeGraphDataFromSquiggleState(squiggleState);
+                    // update the current tab
+                    useViewState.setState({ tab: "code" });
                   }
                 });
               }
@@ -77,10 +94,10 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
               <button
                 className="text-neutral-300 hover:text-neutral-500 active:text-neutral-700 justify-self-end"
                 onClick={() => {
-                  useFileState.setState((state) =>
+                  useProject.setState((state) =>
                     produce(state, (draft) => {
-                      if (draft.project) {
-                        draft.project.subject = "";
+                      if (draft.projectContent) {
+                        draft.projectContent.subject = "";
                       }
                     })
                   );

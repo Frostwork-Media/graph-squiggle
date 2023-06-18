@@ -4,7 +4,7 @@ import {
   PanelGroup,
   PanelResizeHandle,
 } from "react-resizable-panels";
-import { useViewState } from "../lib/useViewState";
+import { Tab, useViewState } from "../lib/useViewState";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { IconButton } from "../ui/IconButton";
@@ -31,6 +31,7 @@ import { queryClient } from "../lib/queryClient";
 import isEqual from "fast-deep-equal";
 import { Project } from "db";
 import { Spinner } from "./Spinner";
+import { PromptEditor } from "./PromptEditor";
 
 /**
  * This will eventually replace the Project component.
@@ -38,6 +39,7 @@ import { Spinner } from "./Spinner";
 export function Project2({ id }: { id: string }) {
   const ref = useRef<ImperativePanelHandle>(null);
   const isCollapsed = useViewState((state) => state.isCollapsed);
+  const tab = useViewState((state) => state.tab);
 
   const collapsePanel = () => {
     const panel = ref.current;
@@ -166,7 +168,12 @@ export function Project2({ id }: { id: string }) {
   );
 
   return (
-    <Tabs.Root defaultValue="code">
+    <Tabs.Root
+      value={tab}
+      onValueChange={(state) => {
+        useViewState.setState({ tab: state as Tab });
+      }}
+    >
       <PanelGroup
         className="h-full relative border-t border-neutral-200"
         direction="horizontal"
@@ -185,8 +192,7 @@ export function Project2({ id }: { id: string }) {
           }}
         >
           <Tabs.Content value="prompt" asChild>
-            Prompt
-            {/* <PromptEditor /> */}
+            <PromptEditor />
           </Tabs.Content>
           <Tabs.Content value="code" asChild>
             <SquiggleEditor content={content} onChange={onChange} />
@@ -235,9 +241,22 @@ export function Project2({ id }: { id: string }) {
         <Panel className="relative">
           <Graph />
           <GraphControls />
-          {/* <ErrorNotice /> */}
+          <ErrorNotice />
         </Panel>
       </PanelGroup>
     </Tabs.Root>
+  );
+}
+
+function ErrorNotice() {
+  const error = useSquiggleState((state) => state.squiggleRunError);
+  if (!error) return null;
+  return (
+    <>
+      <div className="backdrop absolute inset-0 bg-white/50 z-10 blur"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 text-center bg-red-100 text-red z-10 p-4 rounded-lg border-2 border-red-500 border-dashed">
+        {error}
+      </div>
+    </>
   );
 }
