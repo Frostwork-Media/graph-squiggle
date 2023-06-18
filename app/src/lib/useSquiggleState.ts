@@ -60,3 +60,7 @@ export function useWatchProject() {
     return unsubscribe;
   }, []);
 }
+
+export function resetSquiggleState() {
+  useSquiggleState.setState(baseSquiggleState);
+}

@@ -209,3 +209,7 @@ export function parseComment(comment: string) {
   }
   return { comment, slug: "" };
 }
+
+export function resetGraphState() {
+  useGraphState.setState(baseGraphState, true, "reset graph state");
+}

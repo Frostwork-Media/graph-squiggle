@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type Tab = "prompt" | "code" | "bindings";
+export type Tab = "prompt" | "code" | "bindings" | "settings";
 
 export const useViewState = create<{
   isCollapsed: boolean;

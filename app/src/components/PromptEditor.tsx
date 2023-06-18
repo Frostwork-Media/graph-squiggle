@@ -156,7 +156,9 @@ function OpeningQuestion({ setValue }: { setValue: (value: string) => void }) {
 
   return (
     <div className="grid gap-2 h-full grid-rows-[auto_minmax(0,1fr)]">
-      <h2 className="text-lg">What do you want to estimate?</h2>
+      <h2 className="px-2 text-neutral-500 text-lg">
+        What do you want to estimate?
+      </h2>
       <Textarea
         placeholder="The number of people in the world in 2030"
         value={prompt}

@@ -14,6 +14,7 @@ import {
   Chats,
   Check,
   Code,
+  Gear,
   X,
 } from "phosphor-react";
 import { SquiggleEditor } from "./SquiggleEditor";
@@ -33,11 +34,20 @@ import { Project } from "db";
 import { Spinner } from "./Spinner";
 import { PromptEditor } from "./PromptEditor";
 import { Bindings } from "./Bindings";
+import { Settings } from "./Settings";
 
 /**
  * This will eventually replace the Project component.
  */
-export function Project2({ id }: { id: string }) {
+export function Project2({
+  id,
+  isPublic,
+  publicName,
+}: {
+  id: string;
+  isPublic: boolean;
+  publicName: string;
+}) {
   const ref = useRef<ImperativePanelHandle>(null);
   const isCollapsed = useViewState((state) => state.isCollapsed);
   const tab = useViewState((state) => state.tab);
@@ -203,6 +213,9 @@ export function Project2({ id }: { id: string }) {
           <Tabs.Content value="bindings" asChild>
             <Bindings />
           </Tabs.Content>
+          <Tabs.Content value="settings" asChild>
+            <Settings id={id} isPublic={isPublic} publicName={publicName} />
+          </Tabs.Content>
         </Panel>
         <PanelResizeHandle className="border-x border-neutral-300 grid content-between p-1 gap-2">
           <div className="grid content-start gap-2">
@@ -227,6 +240,12 @@ export function Project2({ id }: { id: string }) {
               <Tabs.Trigger value="prompt" asChild>
                 <IconButton
                   icon={Chats}
+                  className="data-[state=active]:bg-neutral-300"
+                />
+              </Tabs.Trigger>
+              <Tabs.Trigger value="settings" asChild>
+                <IconButton
+                  icon={Gear}
                   className="data-[state=active]:bg-neutral-300"
                 />
               </Tabs.Trigger>

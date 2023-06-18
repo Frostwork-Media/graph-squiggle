@@ -9,9 +9,11 @@ import { loadProject, useProject } from "../lib/useProject";
 import { LoadFileError } from "./LoadFileError";
 import { FullScreenSpinner } from "../components/Spinner";
 import AutosizeInput from "react-input-autosize";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { queryClient } from "../lib/queryClient";
 import { useViewState } from "../lib/useViewState";
+import { resetSquiggleState, useSquiggleState } from "../lib/useSquiggleState";
+import { resetGraphState } from "../lib/completeGraphDataFromSquiggleState";
 
 export function Project() {
   const params = useParams<{ id: string }>();
@@ -33,11 +35,26 @@ export function Project() {
         // load the content into zustand state
         loadProject(data.content);
       },
-      staleTime: Infinity,
-      cacheTime: Infinity,
+      staleTime: 0,
+      cacheTime: 0,
     }
   );
   const loadProjectError = useProject((state) => state.loadFileError);
+  /**
+   * Unload the project when the component unmounts
+   */
+  useEffect(() => {
+    return () => {
+      // unset the project content
+      useProject.setState({
+        projectContent: undefined,
+        loadFileError: undefined,
+      });
+
+      resetSquiggleState();
+      resetGraphState();
+    };
+  }, []);
 
   if (!project.data || !params.id) return <FullScreenSpinner />;
   return (
@@ -52,17 +69,17 @@ export function Project() {
             Created {format(new Date(project.data.createdAt), "MMMM dd, yyyy")}
           </span>
         </div>
-        <div className="flex gap-2 items-center">
-          <IconButton icon={Gear} onClick={() => {}} />
-          <IconButton icon={Trash} onClick={() => {}} />
-        </div>
       </div>
       {project.isLoading ? (
         <FullScreenSpinner />
       ) : loadProjectError ? (
         <LoadFileError loadFileError={loadProjectError} />
       ) : (
-        <Project2 id={params.id} />
+        <Project2
+          id={params.id}
+          isPublic={project.data.public}
+          publicName={project.data.publicName}
+        />
       )}
     </div>
   );
@@ -76,6 +93,7 @@ function RenameTitle({
   id: string;
 }) {
   const [inputValue, setInputValue] = useState(projectTitle);
+
   const updateName = useMutation({
     mutationFn: async (name: string) => {
       const res = await fetch(`/api/project/updateNameById`, {
@@ -101,6 +119,28 @@ function RenameTitle({
     },
   });
 
+  const handleBlur = useCallback(() => {
+    // if the name is not the same as the one in the query cache, update it
+    const cachedProject = queryClient.getQueryData<ProjectType>([
+      "project",
+      id,
+    ]);
+    if (!cachedProject) return;
+    if (cachedProject.name === inputValue) return;
+    useViewState.setState({ isSyncing: true });
+    updateName.mutate(inputValue);
+  }, [id, inputValue, updateName]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleBlur();
+      }
+    },
+    [handleBlur]
+  );
+
   return (
     <AutosizeInput
       value={inputValue}
@@ -109,17 +149,8 @@ function RenameTitle({
       }}
       inputClassName="focus:outline-none"
       className="text-xl text-blue-500 font-bold p-2 -ml-2 cursor-text border rounded border-transparent hover:border-neutral-300 focus-within:border-neutral-300 focus-within:shadow-inner"
-      onBlur={() => {
-        // if the name is not the same as the one in the query cache, update it
-        const cachedProject = queryClient.getQueryData<ProjectType>([
-          "project",
-          id,
-        ]);
-        if (!cachedProject) return;
-        if (cachedProject.name === inputValue) return;
-        useViewState.setState({ isSyncing: true });
-        updateName.mutate(inputValue);
-      }}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
     />
   );
 }
