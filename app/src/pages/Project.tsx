@@ -59,7 +59,7 @@ export function Project() {
   if (!project.data || !params.id) return <FullScreenSpinner />;
   return (
     <div className="grid grid-rows-[auto_minmax(0,1fr)] border-t">
-      <div className="flex gap-2 justify-between items-center p-4 shadow-sm">
+      <div className="flex gap-2 justify-between items-center p-2 px-4 shadow-sm">
         <div className="flex gap-4 items-baseline">
           <RenameTitle projectTitle={project.data.name} id={params.id} />
           <span className="text-sm text-gray-500">
