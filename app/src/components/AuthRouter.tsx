@@ -1,13 +1,15 @@
 import { Routes, Route, Link } from "react-router-dom";
-import { Layout } from "./components/Layout";
-import { Dashboard } from "./pages/Dashboard";
-import { Profile } from "./pages/Profile";
-import { Project } from "./pages/Project";
-import { Temp } from "./pages/Temp";
+import { Layout } from "./Layout";
+import { Dashboard } from "../pages/Dashboard";
+import { Profile } from "../pages/Profile";
+import { Project } from "../pages/Project";
+import { Temp } from "../pages/Temp";
+import { PublicView } from "../pages/PublicView";
 
-export function Router() {
+export function AuthRouter() {
   return (
     <Routes>
+      <Route path="public/:username/:slug" element={<PublicView />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />

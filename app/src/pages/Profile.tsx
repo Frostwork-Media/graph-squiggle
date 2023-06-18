@@ -8,19 +8,17 @@ import {
   Section,
   SectionTitle,
 } from "../ui/Shared";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type { User } from "db";
 import { queryClient } from "../lib/queryClient";
 import { useState } from "react";
 import { slugify } from "shared";
+import { useUsername } from "../lib/queries";
 
 export function Profile() {
   const { user } = useUser();
   const openAiKey = useGlobalSettings((store) => store.openAIAPIKey);
-  const username = useQuery<User>(["username"], async () => {
-    const res = await fetch(`/api/user/username`);
-    return await res.json();
-  });
+  const username = useUsername();
 
   if (!user) return <Spinner />;
   return (

@@ -5,13 +5,15 @@ import { forwardRef, useCallback, useRef } from "react";
 import { queryClient } from "../lib/queryClient";
 import type { Project as ProjectType } from "db";
 import { useViewState } from "../lib/useViewState";
+import { useUsername } from "../lib/queries";
+import { Link } from "react-router-dom";
 
 export const Settings = forwardRef<
   HTMLDivElement,
   { id: string; isPublic: boolean; publicName: string }
 >(({ id, isPublic, publicName }, ref) => {
   const publicNameRef = useRef<HTMLInputElement>(null);
-
+  const username = useUsername();
   const togglePublic = useMutation({
     mutationFn: async () => {
       const res = await fetch(`/api/project/togglePublic`, {
@@ -128,6 +130,16 @@ export const Settings = forwardRef<
             // slug regex
             pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
           />
+        )}
+        {isPublic && username.data?.username && (
+          <Link
+            to={`/public/${username.data.username}/${publicName}`}
+            className="text-xs text-neutral-500 underline"
+            target="_blank"
+          >
+            {window.location.origin}/public/{username.data.username}/
+            {publicName}
+          </Link>
         )}
       </div>
       <div className="grid gap-1">
