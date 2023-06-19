@@ -8,7 +8,7 @@ export const Textarea = forwardRef<
     <textarea
       ref={ref}
       {...props}
-      className={`rounded border border-gray-300 p-2 resize-none text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+      className={`rounded border border-gray-300 p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
         props.className ?? ""
       }`}
     />

@@ -8,9 +8,11 @@ import {
   SectionTitle,
 } from "../ui/Shared";
 import { format } from "date-fns";
+import type { Project as ProjectType } from "db";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../lib/queryClient";
+import { Globe } from "phosphor-react";
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export function Dashboard() {
     },
   });
 
-  const projects = useQuery(
+  const projects = useQuery<ProjectType[]>(
     ["projects"],
     () => fetch("/api/project/list").then((res) => res.json()),
     {
@@ -57,30 +59,31 @@ export function Dashboard() {
             </button>
             {createProjectMutation.isLoading && <Spinner size="w-4 h-4" />}
           </span>
-          <br />
-          Or, go to the{" "}
-          <Link to="/temp" className="text-blue-600 hover:underline">
-            Temporary Editor
-          </Link>
-          .
         </Paragraph>
       </Section>
       <Section>
-        <SectionTitle>Projects</SectionTitle>
-        {projects.isLoading && <Spinner />}
+        <div className="flex items-center gap-4">
+          <SectionTitle>Projects</SectionTitle>
+          {projects.isFetching && <Spinner size="w-6 h-6" />}
+        </div>
         {projects.data && (
-          <ul className="grid gap-2">
-            {projects.data.map((project: any) => (
+          <ul className="grid gap-2 pb-8">
+            {projects.data.map((project) => (
               <li key={project.id}>
                 <Link
                   to={`/project/${project.id}`}
                   className="flex items-center justify-between gap-2 rounded shadow-sm p-4 hover:bg-gray-100 border"
                 >
-                  <span className="text-neutral-800 text-xl">
-                    {project.name}
+                  <span className="flex items-center gap-2">
+                    {project.public && (
+                      <Globe size={20} className="text-blue-600" />
+                    )}
+                    <span className="text-neutral-800 text-xl">
+                      {project.name}
+                    </span>
                   </span>
                   <span className="text-neutral-400 text-sm">
-                    {format(new Date(project.createdAt), "MMM d, yyyy")}
+                    {format(new Date(project.updatedAt), "MMM d, yyyy")}
                   </span>
                 </Link>
               </li>

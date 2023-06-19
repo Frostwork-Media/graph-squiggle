@@ -1,17 +1,21 @@
 import produce from "immer";
 import { forwardRef, useState } from "react";
-import { useFileState } from "../lib/useFileState";
 import { useGlobalSettings } from "../lib/useGlobalSettings";
 import { Chats, X } from "phosphor-react";
 import { Textarea } from "../ui/Textarea";
+import { useProject } from "../lib/useProject";
+import { runSquiggle } from "../lib/runSquiggle";
+import { useSquiggleState } from "../lib/useSquiggleState";
+import { completeGraphDataFromSquiggleState } from "../lib/completeGraphDataFromSquiggleState";
+import { useViewState } from "../lib/useViewState";
 
 export const PromptEditor = forwardRef<HTMLFormElement, {}>(
   function PromptEditor(_props, ref) {
     const [value, setValue] = useState("");
     const apiKey = useGlobalSettings((state) => state.openAIAPIKey);
     const [isLoading, setIsLoading] = useState(false);
-    const code = useFileState((state) => state.project?.squiggle ?? "");
-    const subject = useFileState((state) => state.project?.subject ?? "");
+    const code = useProject((state) => state.projectContent?.squiggle ?? "");
+    const subject = useProject((state) => state.projectContent?.subject ?? "");
     if (!apiKey) return null;
 
     return (
@@ -54,16 +58,26 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
                     alert("Error: " + data);
                     return;
                   } else {
-                    useFileState.setState((state) =>
-                      produce(state, (draft) => {
-                        if (draft.project) {
-                          draft.project.squiggle = data;
-                          if (!draft.project.subject) {
-                            draft.project.subject = value;
+                    useProject.setState(
+                      (state) =>
+                        produce(state, (draft) => {
+                          if (draft.projectContent) {
+                            draft.projectContent.squiggle = data;
+                            if (!draft.projectContent.subject) {
+                              draft.projectContent.subject = value;
+                            }
                           }
-                        }
-                      })
+                        }),
+                      true,
+                      "prompt complete"
                     );
+
+                    // finally process the changes
+                    runSquiggle(data);
+                    const squiggleState = useSquiggleState.getState();
+                    completeGraphDataFromSquiggleState(squiggleState);
+                    // update the current tab
+                    useViewState.setState({ tab: "code" });
                   }
                 });
               }
@@ -77,12 +91,15 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
               <button
                 className="text-neutral-300 hover:text-neutral-500 active:text-neutral-700 justify-self-end"
                 onClick={() => {
-                  useFileState.setState((state) =>
-                    produce(state, (draft) => {
-                      if (draft.project) {
-                        draft.project.subject = "";
-                      }
-                    })
+                  useProject.setState(
+                    (state) =>
+                      produce(state, (draft) => {
+                        if (draft.projectContent) {
+                          draft.projectContent.subject = "";
+                        }
+                      }),
+                    true,
+                    "clear subject"
                   );
                 }}
               >
@@ -121,7 +138,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
  *
  * If it does not contain an " = " it's probably not squiggle code
  */
-export function isProbablyNotSquiggle(code: string) {
+function isProbablyNotSquiggle(code: string) {
   return !code.includes(" = ");
 }
 
@@ -139,7 +156,9 @@ function OpeningQuestion({ setValue }: { setValue: (value: string) => void }) {
 
   return (
     <div className="grid gap-2 h-full grid-rows-[auto_minmax(0,1fr)]">
-      <h2 className="text-lg">What do you want to estimate?</h2>
+      <h2 className="px-2 text-neutral-500 text-lg">
+        What do you want to estimate?
+      </h2>
       <Textarea
         placeholder="The number of people in the world in 2030"
         value={prompt}

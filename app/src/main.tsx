@@ -1,17 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  ClerkProvider,
-  RedirectToSignIn,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { BrowserRouter } from "react-router-dom";
-import { Router } from "./Router";
+import { AuthRouter } from "./components/AuthRouter";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "./lib/queryClient";
+import { UnauthRouter } from "./components/UnauthRouter";
 
 if (!import.meta.env.VITE_CLERK_PUBLIC_KEY) {
   throw new Error("VITE_CLERK_PUBLIC_KEY is not defined");
@@ -24,10 +20,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <ClerkProvider publishableKey={clerkPubKey}>
         <BrowserRouter>
           <SignedIn>
-            <Router />
+            <AuthRouter />
           </SignedIn>
           <SignedOut>
-            <RedirectToSignIn />
+            <UnauthRouter />
           </SignedOut>
           <ReactQueryDevtools initialIsOpen={false} />
         </BrowserRouter>

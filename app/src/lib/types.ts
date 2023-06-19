@@ -31,7 +31,7 @@ export interface ManifoldResponse {
   textDescription: string;
 }
 
-export interface Pool {
+interface Pool {
   NO: number;
   YES: number;
 }

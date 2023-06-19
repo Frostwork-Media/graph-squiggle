@@ -2,3 +2,4 @@ packages:
   - "app"
   - "api"
   - "db"
+  - "shared"

@@ -1,7 +1,17 @@
 import { create } from "zustand";
 
+export type Tab = "prompt" | "code" | "bindings" | "settings";
+
 export const useViewState = create<{
   isCollapsed: boolean;
   collapse: () => void;
   editorFocused: boolean;
-}>(() => ({ isCollapsed: true, collapse: () => {}, editorFocused: false }));
+  tab: Tab;
+  isSyncing: boolean;
+}>(() => ({
+  isCollapsed: true,
+  collapse: () => {},
+  editorFocused: false,
+  tab: "code",
+  isSyncing: false,
+}));

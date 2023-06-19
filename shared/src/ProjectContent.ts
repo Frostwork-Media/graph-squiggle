@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export type Project = z.infer<typeof projectSchema>;
+export type ProjectContent = z.infer<typeof projectSchema>;
 
 const location = z.object({
   x: z.number(),
@@ -22,9 +22,11 @@ export const projectSchema = z
 
 // This is a blank project file
 
-export const getEmptyProject: () => Project = () => ({
+export const getEmptyProject: () => ProjectContent = () => ({
   squiggle: "",
   subject: "",
   nodeLocation: {},
   renderPercentages: false,
 });
+
+export const CONTENT_VERSION = 1;
