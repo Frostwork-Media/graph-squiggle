@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import type { Project as ProjectType } from "db";
 import { format } from "date-fns";
-import { Project2 } from "../components/Project2";
+import { ActiveProject } from "../components/ActiveProject";
 import { loadProject, useProject } from "../lib/useProject";
 import { LoadFileError } from "./LoadFileError";
 import { FullScreenSpinner } from "../components/Spinner";
@@ -83,7 +83,7 @@ export function Project() {
       ) : loadProjectError ? (
         <LoadFileError loadFileError={loadProjectError} />
       ) : (
-        <Project2
+        <ActiveProject
           id={params.id}
           isPublic={project.data.public}
           publicName={project.data.publicName}

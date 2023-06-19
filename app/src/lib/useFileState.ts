@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { ProjectContent } from "shared";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
-import pako from "pako";
 
 type FileState = {
   /** The current project */
@@ -16,14 +15,6 @@ type FileState = {
   projectHash?: string;
 };
 
-export const baseFileState: FileState = {
-  project: undefined,
-  previousContents: undefined,
-  fileHandle: undefined,
-  loadFileError: undefined,
-  projectHash: undefined,
-};
-
 /**
  * This is global app state that is not persisted. It's wiped when the app
  * restarts.
@@ -36,17 +27,3 @@ export const useFileState = create<FileState>()(
     }
   )
 );
-
-export function serializeProject(project: ProjectContent) {
-  const json = JSON.stringify(project);
-  const compressed = pako.deflate(json);
-  const base64 = btoa(String.fromCharCode(...compressed));
-  return base64;
-}
-
-export function deserializeProject(base64: string) {
-  const compressed = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
-  const json = pako.inflate(compressed, { to: "string" });
-  const project = JSON.parse(json);
-  return project;
-}

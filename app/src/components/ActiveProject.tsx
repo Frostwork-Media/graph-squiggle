@@ -39,7 +39,7 @@ import { Settings } from "./Settings";
 /**
  * This will eventually replace the Project component.
  */
-export function Project2({
+export function ActiveProject({
   id,
   isPublic,
   publicName,

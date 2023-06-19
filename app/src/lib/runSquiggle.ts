@@ -53,37 +53,3 @@ export function runSquiggle(code: string | undefined) {
     );
   }
 }
-
-// rewrite runSquiggle below but return the new state instead of setting it
-export function runSquiggle2(code: string | undefined): SquiggleState {
-  if (code) {
-    try {
-      const result = run(code).result;
-      // When it ran successfully
-      if (result.ok) {
-        return {
-          squiggleCode: code,
-          squiggleRunResult: result.value.location.project,
-          squiggleRunError: undefined,
-        };
-      } else {
-        return {
-          squiggleRunError: `${result.value.toStringWithStackTrace()}`,
-        };
-      }
-    } catch (e) {
-      // When there is a syntax error
-      let message = isError(e) ? e.message : "Unknown error";
-      return {
-        squiggleRunError: message,
-      };
-    }
-  } else {
-    // When there is no code at all
-    return {
-      squiggleCode: undefined,
-      squiggleRunResult: undefined,
-      squiggleRunError: undefined,
-    };
-  }
-}
