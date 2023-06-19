@@ -71,7 +71,7 @@ export function Dashboard() {
         <SectionTitle>Projects</SectionTitle>
         {projects.isLoading && <Spinner />}
         {projects.data && (
-          <ul className="grid gap-2">
+          <ul className="grid gap-2 pb-8">
             {projects.data.map((project) => (
               <li key={project.id}>
                 <Link

@@ -6,7 +6,8 @@ import { queryClient } from "../lib/queryClient";
 import type { Project as ProjectType } from "db";
 import { useViewState } from "../lib/useViewState";
 import { useUsername } from "../lib/queries";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import * as AlertDialog from "../ui/Dialog";
 
 export const Settings = forwardRef<
   HTMLDivElement,
@@ -137,8 +138,7 @@ export const Settings = forwardRef<
             className="text-xs text-neutral-500 underline"
             target="_blank"
           >
-            {window.location.origin}/public/{username.data.username}/
-            {publicName}
+            {username.data.username}/{publicName}
           </Link>
         )}
       </div>
@@ -147,6 +147,7 @@ export const Settings = forwardRef<
           Delete
         </SmallTitleWithIcon>
         <Paragraph>Delete this project.</Paragraph>
+        <DeleteProject id={id} />
       </div>
     </div>
   );
@@ -164,5 +165,68 @@ function SmallTitleWithIcon({
       {icon}
       <h3 className="text-2xl font-bold text-neutral-700">{children}</h3>
     </div>
+  );
+}
+
+function DeleteProject({ id }: { id: string }) {
+  const navigate = useNavigate();
+  const deleteProjectMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/project/delete`, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return await res.json();
+    },
+    onSuccess() {
+      queryClient.invalidateQueries(["projects"]);
+      // remove the project from the cache
+      queryClient.removeQueries(["project", id]);
+      // filter out the project from the projects list
+      queryClient.setQueryData<ProjectType[] | undefined>(
+        ["projects"],
+        (oldData) => {
+          if (!oldData) return oldData;
+          return oldData.filter((project) => project.id !== id);
+        }
+      );
+      navigate("/");
+    },
+  });
+  return (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger asChild>
+        <button className="px-4 py-2 bg-red-500 text-white rounded-md font-bold hover:bg-red-600 mt-3">
+          Delete
+        </button>
+      </AlertDialog.Trigger>
+      <AlertDialog.Portal>
+        <AlertDialog.Overlay />
+        <AlertDialog.Content>
+          <AlertDialog.Title>Delete Project</AlertDialog.Title>
+          <AlertDialog.Description>
+            Are you sure you want to delete this project? This action cannot be
+            undone.
+          </AlertDialog.Description>
+          <div className="flex gap-2 justify-end mt-5">
+            <button
+              className="px-4 py-2 bg-red-500 text-white rounded-md font-bold hover:bg-red-600 disabled:opacity-50"
+              disabled={deleteProjectMutation.isLoading}
+              onClick={() => {
+                deleteProjectMutation.mutate();
+              }}
+            >
+              {deleteProjectMutation.isLoading ? "Deleting..." : "Delete"}
+            </button>
+            <AlertDialog.Close className="px-4 py-2 bg-neutral-500 text-white rounded-md font-bold hover:bg-neutral-600">
+              Cancel
+            </AlertDialog.Close>
+          </div>
+        </AlertDialog.Content>
+      </AlertDialog.Portal>
+    </AlertDialog.Root>
   );
 }
