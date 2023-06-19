@@ -201,7 +201,7 @@ function getPositions(elements: ElementsDefinition) {
 }
 
 /** Parse comment from label. Extract manifold markets slug if in parentheses at the end of the comment */
-export function parseComment(comment: string) {
+function parseComment(comment: string) {
   if (comment.match(/\(.*\)$/)) {
     const slug = comment.match(/\((.*)\)$/)?.[1] ?? "";
     comment = comment.replace(`(${slug})`, "").trim();

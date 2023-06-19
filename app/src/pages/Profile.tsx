@@ -101,8 +101,12 @@ function ChangeUsername({ username: initialUsername }: { username: string }) {
         disabled={setUsernameMutation.isLoading}
       />
       <button
-        className="bg-blue-600 hover:bg-blue-700 text-white rounded p-3 disabled:opacity-50"
-        disabled={setUsernameMutation.isLoading || !isValidUsername(username)}
+        className="bg-blue-600 hover:bg-blue-700 text-white rounded p-3 disabled:opacity-50 disabled:hover:bg-blue-600"
+        disabled={
+          setUsernameMutation.isLoading ||
+          !isValidUsername(username) ||
+          username === initialUsername
+        }
         onClick={() => setUsernameMutation.mutate(username)}
       >
         {setUsernameMutation.isLoading ? "Saving..." : "Save"}

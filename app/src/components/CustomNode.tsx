@@ -110,7 +110,7 @@ export function CustomNode({ data }: NodeProps) {
   );
 }
 
-export function Chip({ label }: { label: string }) {
+function Chip({ label }: { label: string }) {
   return (
     <div className="bg-blue-500 text-neutral-50 rounded-lg inline-block p-1 px-2 text-xs text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
       {label}

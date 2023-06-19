@@ -92,7 +92,6 @@ export function Project2({
     },
     // onSuccess you should manually update the query cache
     onSuccess: (_response, storedProjectContent) => {
-      console.log("syncProjectContent success");
       queryClient.setQueryData<Project>(["project", id], (old) => {
         if (!old) return old;
         return {
@@ -113,14 +112,11 @@ export function Project2({
 
       // Don't try to update if they are equal
       if (isEqual(cached.content, content)) {
-        console.log("cached and content are equal, not updating");
         return;
       }
-      console.log("updating project content");
       syncProjectContent.mutate(content);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id]
+    [id, syncProjectContent]
   );
 
   const debounceSyncProjectContent = useMemo(
@@ -137,8 +133,10 @@ export function Project2({
       (state) => state.projectContent,
       (projectContent) => {
         if (!projectContent) return;
-        console.log("projectContent changed");
         debounceSyncProjectContent(projectContent);
+      },
+      {
+        equalityFn: (a, b) => isEqual(a, b),
       }
     );
 

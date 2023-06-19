@@ -1,8 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import type { Project as ProjectType } from "db";
-import { IconButton } from "../ui/IconButton";
-import { Gear, Trash } from "phosphor-react";
 import { format } from "date-fns";
 import { Project2 } from "../components/Project2";
 import { loadProject, useProject } from "../lib/useProject";
@@ -12,10 +10,30 @@ import AutosizeInput from "react-input-autosize";
 import { useCallback, useEffect, useState } from "react";
 import { queryClient } from "../lib/queryClient";
 import { useViewState } from "../lib/useViewState";
-import { resetSquiggleState, useSquiggleState } from "../lib/useSquiggleState";
+import { resetSquiggleState } from "../lib/useSquiggleState";
 import { resetGraphState } from "../lib/completeGraphDataFromSquiggleState";
 
 export function Project() {
+  /**
+   * Unload the project when the component unmounts
+   */
+  useEffect(() => {
+    return () => {
+      // unset the project content
+      useProject.setState(
+        {
+          projectContent: undefined,
+          loadFileError: undefined,
+        },
+        false,
+        "unload project"
+      );
+
+      resetSquiggleState();
+      resetGraphState();
+    };
+  }, []);
+
   const params = useParams<{ id: string }>();
   const project = useQuery<ProjectType>(
     ["project", params.id],
@@ -31,30 +49,20 @@ export function Project() {
     },
     {
       enabled: !!params.id,
-      onSuccess: (data) => {
-        // load the content into zustand state
-        loadProject(data.content);
-      },
-      staleTime: 0,
-      cacheTime: 0,
+      staleTime: 20000,
+      cacheTime: Infinity,
     }
   );
-  const loadProjectError = useProject((state) => state.loadFileError);
-  /**
-   * Unload the project when the component unmounts
-   */
-  useEffect(() => {
-    return () => {
-      // unset the project content
-      useProject.setState({
-        projectContent: undefined,
-        loadFileError: undefined,
-      });
 
-      resetSquiggleState();
-      resetGraphState();
-    };
-  }, []);
+  // load project data into state the first time only
+  const [hasLoaded, setHasLoaded] = useState(false);
+  useEffect(() => {
+    if (!project.data || hasLoaded) return;
+    setHasLoaded(true);
+    loadProject(project.data.content);
+  }, [project.data, hasLoaded]);
+
+  const loadProjectError = useProject((state) => state.loadFileError);
 
   if (!project.data || !params.id) return <FullScreenSpinner />;
   return (
@@ -93,6 +101,7 @@ function RenameTitle({
   id: string;
 }) {
   const [inputValue, setInputValue] = useState(projectTitle);
+  const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
 
   const updateName = useMutation({
     mutationFn: async (name: string) => {
@@ -135,10 +144,11 @@ function RenameTitle({
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         e.preventDefault();
+        inputRef?.blur();
         handleBlur();
       }
     },
-    [handleBlur]
+    [handleBlur, inputRef]
   );
 
   return (
@@ -151,6 +161,7 @@ function RenameTitle({
       className="text-xl text-blue-500 font-bold p-2 -ml-2 cursor-text border rounded border-transparent hover:border-neutral-300 focus-within:border-neutral-300 focus-within:shadow-inner"
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
+      inputRef={setInputRef}
     />
   );
 }

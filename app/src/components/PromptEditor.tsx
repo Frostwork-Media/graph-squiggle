@@ -58,23 +58,20 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
                     alert("Error: " + data);
                     return;
                   } else {
-                    useProject.setState((state) =>
-                      produce(state, (draft) => {
-                        if (draft.projectContent) {
-                          draft.projectContent.squiggle = data;
-                          if (!draft.projectContent.subject) {
-                            draft.projectContent.subject = value;
+                    useProject.setState(
+                      (state) =>
+                        produce(state, (draft) => {
+                          if (draft.projectContent) {
+                            draft.projectContent.squiggle = data;
+                            if (!draft.projectContent.subject) {
+                              draft.projectContent.subject = value;
+                            }
                           }
-                        }
-                      })
+                        }),
+                      true,
+                      "prompt complete"
                     );
-                    // load it into the project state
-                    useProject.setState((state) => {
-                      return produce(state, (draft) => {
-                        if (!draft.projectContent) return;
-                        draft.projectContent.squiggle = data;
-                      });
-                    });
+
                     // finally process the changes
                     runSquiggle(data);
                     const squiggleState = useSquiggleState.getState();
@@ -94,12 +91,15 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
               <button
                 className="text-neutral-300 hover:text-neutral-500 active:text-neutral-700 justify-self-end"
                 onClick={() => {
-                  useProject.setState((state) =>
-                    produce(state, (draft) => {
-                      if (draft.projectContent) {
-                        draft.projectContent.subject = "";
-                      }
-                    })
+                  useProject.setState(
+                    (state) =>
+                      produce(state, (draft) => {
+                        if (draft.projectContent) {
+                          draft.projectContent.subject = "";
+                        }
+                      }),
+                    true,
+                    "clear subject"
                   );
                 }}
               >
@@ -138,7 +138,7 @@ export const PromptEditor = forwardRef<HTMLFormElement, {}>(
  *
  * If it does not contain an " = " it's probably not squiggle code
  */
-export function isProbablyNotSquiggle(code: string) {
+function isProbablyNotSquiggle(code: string) {
   return !code.includes(" = ");
 }
 

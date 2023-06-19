@@ -3,7 +3,6 @@ import { Layout } from "./Layout";
 import { Dashboard } from "../pages/Dashboard";
 import { Profile } from "../pages/Profile";
 import { Project } from "../pages/Project";
-import { Temp } from "../pages/Temp";
 import { PublicView } from "../pages/PublicView";
 
 export function AuthRouter() {
@@ -14,7 +13,6 @@ export function AuthRouter() {
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="project/:id" element={<Project />} />
-        <Route path="temp" element={<Temp />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>

@@ -19,14 +19,18 @@ export const useNodeLocation = create<NodeLocation>()(
  */
 export const writeNodeLocation = debounce(
   (nodeLocation: NodeLocation) => {
-    useProject.setState((state) => {
-      const nextState = produce(state, (draft) => {
-        if (!draft.projectContent) return;
-        draft.projectContent.nodeLocation = nodeLocation;
-      });
+    useProject.setState(
+      (state) => {
+        const nextState = produce(state, (draft) => {
+          if (!draft.projectContent) return;
+          draft.projectContent.nodeLocation = nodeLocation;
+        });
 
-      return nextState;
-    });
+        return nextState;
+      },
+      true,
+      "writeNodeLocation"
+    );
   },
   250,
   { leading: false, trailing: true }

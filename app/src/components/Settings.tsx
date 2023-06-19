@@ -1,13 +1,15 @@
-import { Globe, Warning } from "phosphor-react";
+import { FloppyDisk, Globe, Warning } from "phosphor-react";
 import { Paragraph } from "../ui/Shared";
 import { useMutation } from "@tanstack/react-query";
-import { forwardRef, useCallback, useRef } from "react";
+import { forwardRef, useCallback, useRef, useState } from "react";
 import { queryClient } from "../lib/queryClient";
 import type { Project as ProjectType } from "db";
 import { useViewState } from "../lib/useViewState";
 import { useUsername } from "../lib/queries";
 import { Link, useNavigate } from "react-router-dom";
-import * as AlertDialog from "../ui/Dialog";
+import * as Dialog from "../ui/Dialog";
+import { Button } from "../ui/Button";
+import { downloadProjectAsFile, openFile } from "../lib/useProject";
 
 export const Settings = forwardRef<
   HTMLDivElement,
@@ -33,6 +35,7 @@ export const Settings = forwardRef<
         return {
           ...oldData,
           public: data.public,
+          publicName: data.publicName,
         };
       });
     },
@@ -143,6 +146,16 @@ export const Settings = forwardRef<
         )}
       </div>
       <div className="grid gap-1">
+        <SmallTitleWithIcon icon={<FloppyDisk size={24} />}>
+          Save/Load
+        </SmallTitleWithIcon>
+        <Paragraph>Save or load this project to a file.</Paragraph>
+        <div className="flex gap-2 mt-2">
+          <Button onClick={downloadProjectAsFile}>Save to File</Button>
+          <LoadFromFile id={id} />
+        </div>
+      </div>
+      <div className="grid gap-1">
         <SmallTitleWithIcon icon={<Warning size={24} />}>
           Delete
         </SmallTitleWithIcon>
@@ -197,36 +210,76 @@ function DeleteProject({ id }: { id: string }) {
     },
   });
   return (
-    <AlertDialog.Root>
-      <AlertDialog.Trigger asChild>
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
         <button className="px-4 py-2 bg-red-500 text-white rounded-md font-bold hover:bg-red-600 mt-3">
           Delete
         </button>
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay />
-        <AlertDialog.Content>
-          <AlertDialog.Title>Delete Project</AlertDialog.Title>
-          <AlertDialog.Description>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content>
+          <Dialog.Title>Delete Project</Dialog.Title>
+          <Dialog.Description>
             Are you sure you want to delete this project? This action cannot be
             undone.
-          </AlertDialog.Description>
+          </Dialog.Description>
           <div className="flex gap-2 justify-end mt-5">
-            <button
-              className="px-4 py-2 bg-red-500 text-white rounded-md font-bold hover:bg-red-600 disabled:opacity-50"
+            <Button
+              color="red"
               disabled={deleteProjectMutation.isLoading}
               onClick={() => {
                 deleteProjectMutation.mutate();
               }}
             >
               {deleteProjectMutation.isLoading ? "Deleting..." : "Delete"}
-            </button>
-            <AlertDialog.Close className="px-4 py-2 bg-neutral-500 text-white rounded-md font-bold hover:bg-neutral-600">
+            </Button>
+            <Dialog.Close className="px-4 py-2 bg-neutral-500 text-white rounded-md font-bold hover:bg-neutral-600">
               Cancel
-            </AlertDialog.Close>
+            </Dialog.Close>
           </div>
-        </AlertDialog.Content>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}
+
+function LoadFromFile({ id }: { id: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <Dialog.Root
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+      }}
+    >
+      <Dialog.Trigger asChild>
+        <Button>Load from File</Button>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content>
+          <Dialog.Title>Load Project</Dialog.Title>
+          <Dialog.Description>
+            Load a project from a file. This will overwrite the current project!
+          </Dialog.Description>
+          <div className="flex gap-2 justify-end mt-5">
+            <Button
+              color="green"
+              onClick={() => {
+                openFile(id).then(() => {
+                  setIsOpen(false);
+                });
+              }}
+            >
+              Load File
+            </Button>
+            <Dialog.Close asChild>
+              <Button color="neutral">Cancel</Button>
+            </Dialog.Close>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

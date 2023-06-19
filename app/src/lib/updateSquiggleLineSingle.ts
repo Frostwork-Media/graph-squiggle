@@ -69,7 +69,7 @@ export const throttleSingleUpdate = throttle((line: number, value: string) => {
       if (!draft.projectContent) return;
       draft.projectContent.squiggle = newCode;
     }),
-    false,
+    true,
     "throttleSingleUpdate"
   );
 }, 250);

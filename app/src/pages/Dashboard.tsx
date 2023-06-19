@@ -59,17 +59,13 @@ export function Dashboard() {
             </button>
             {createProjectMutation.isLoading && <Spinner size="w-4 h-4" />}
           </span>
-          <br />
-          Or, go to the{" "}
-          <Link to="/temp" className="text-blue-600 hover:underline">
-            Temporary Editor
-          </Link>
-          .
         </Paragraph>
       </Section>
       <Section>
-        <SectionTitle>Projects</SectionTitle>
-        {projects.isLoading && <Spinner />}
+        <div className="flex items-center gap-4">
+          <SectionTitle>Projects</SectionTitle>
+          {projects.isFetching && <Spinner size="w-6 h-6" />}
+        </div>
         {projects.data && (
           <ul className="grid gap-2 pb-8">
             {projects.data.map((project) => (
