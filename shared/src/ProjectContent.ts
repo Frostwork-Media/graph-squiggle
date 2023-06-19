@@ -28,3 +28,5 @@ export const getEmptyProject: () => ProjectContent = () => ({
   nodeLocation: {},
   renderPercentages: false,
 });
+
+export const CONTENT_VERSION = 1;

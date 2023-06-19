@@ -1,20 +1,22 @@
-import { VercelApiHandler } from "@vercel/node";
-
-import generate from "project-name-generator";
 import { prisma } from "db";
-import { nanoid } from "nanoid";
 import { withAuth } from "../lib/_withAuth";
 import { CONTENT_VERSION, getEmptyProject } from "shared";
+import { nanoid } from "nanoid";
 
-const handler: VercelApiHandler = withAuth(async (req, res, userId) => {
+const handler = withAuth(async (req, res, userId) => {
+  const { name, content } = req.body;
+  if (!name || !content) {
+    res.status(400).json({ message: "Missing name or content" });
+    return;
+  }
+
   const id = nanoid(12);
-  const name = generate().spaced;
 
   const project = await prisma.project.create({
     data: {
       id,
       name,
-      content: getEmptyProject(),
+      content,
       public: false,
       publicName: "",
       userId,

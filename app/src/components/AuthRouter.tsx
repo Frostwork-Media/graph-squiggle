@@ -9,7 +9,7 @@ import { PublicView } from "../pages/PublicView";
 export function AuthRouter() {
   return (
     <Routes>
-      <Route path="public/:username/:slug" element={<PublicView />} />
+      <Route path="_/:username/:slug" element={<PublicView />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />

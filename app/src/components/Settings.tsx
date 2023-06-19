@@ -133,7 +133,7 @@ export const Settings = forwardRef<
         )}
         {isPublic && username.data?.username && (
           <Link
-            to={`/public/${username.data.username}/${publicName}`}
+            to={`/_/${username.data.username}/${publicName}`}
             className="text-xs text-neutral-500 underline"
             target="_blank"
           >

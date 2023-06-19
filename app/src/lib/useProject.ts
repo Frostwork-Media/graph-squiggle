@@ -38,6 +38,7 @@ export function loadProject(content: Prisma.JsonValue) {
     runSquiggle(squiggle);
     const squiggleState = useSquiggleState.getState();
     completeGraphDataFromSquiggleState(squiggleState);
+    return projectContent;
   } catch (error) {
     if (isError(error)) {
       console.error(error.message);
