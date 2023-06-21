@@ -25,9 +25,9 @@ importers:
       project-name-generator:
         specifier: ^2.1.9
         version: 2.1.9
-      shared:
-        specifier: workspace:*
-        version: link:../shared
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
     devDependencies:
       '@types/jsonwebtoken':
         specifier: ^9.0.2
@@ -80,6 +80,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^4.29.12
         version: 4.29.12(@tanstack/react-query@4.28.0)(react-dom@18.2.0)(react@18.2.0)
+      api:
+        specifier: workspace:*
+        version: link:../api
       canvas:
         specifier: ^2.11.2
         version: 2.11.2
@@ -158,9 +161,6 @@ importers:
       reactflow:
         specifier: ^11.7.0
         version: 11.7.0(immer@9.0.21)(react-dom@18.2.0)(react@18.2.0)
-      shared:
-        specifier: workspace:*
-        version: link:../shared
       use-react-query-auto-sync:
         specifier: ^0.1.0
         version: 0.1.0(@tanstack/react-query@4.28.0)(react-dom@18.2.0)(react@18.2.0)
@@ -277,16 +277,6 @@ importers:
       prisma:
         specifier: 4.15.0
         version: 4.15.0
-      typescript:
-        specifier: ^4.9.3
-        version: 4.9.3
-
-  shared:
-    dependencies:
-      zod:
-        specifier: ^3.21.4
-        version: 3.21.4
-    devDependencies:
       typescript:
         specifier: ^4.9.3
         version: 4.9.3

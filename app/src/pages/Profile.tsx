@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { User } from "db";
 import { queryClient } from "../lib/queryClient";
 import { useState } from "react";
-import { slugify } from "shared";
+import { slugify } from "api";
 import { useUsername } from "../lib/queries";
 
 export function Profile() {

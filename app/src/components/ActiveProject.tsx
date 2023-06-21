@@ -21,7 +21,7 @@ import { SquiggleEditor } from "./SquiggleEditor";
 import { updateSquiggle, useProject } from "../lib/useProject";
 import debounce from "lodash.debounce";
 import { useMutation } from "@tanstack/react-query";
-import { ProjectContent as ProjectType } from "shared";
+import { ProjectContent as ProjectType } from "api";
 import { runSquiggle } from "../lib/runSquiggle";
 import { completeGraphDataFromSquiggleState } from "../lib/completeGraphDataFromSquiggleState";
 import { useSquiggleState } from "../lib/useSquiggleState";

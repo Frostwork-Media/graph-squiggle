@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ProjectContent, projectSchema } from "shared";
+import { ProjectContent, projectSchema } from "api";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { isError } from "./isError";
 import type { Prisma, Project } from "db";

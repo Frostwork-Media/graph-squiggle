@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ProjectContent } from "shared";
+import { ProjectContent } from "api";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 
 type FileState = {

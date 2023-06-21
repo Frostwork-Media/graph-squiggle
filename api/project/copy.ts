@@ -1,6 +1,6 @@
 import { prisma } from "db";
 import { withAuth } from "../lib/_withAuth";
-import { CONTENT_VERSION, getEmptyProject } from "shared";
+import { CONTENT_VERSION } from "../shared";
 import { nanoid } from "nanoid";
 
 const handler = withAuth(async (req, res, userId) => {

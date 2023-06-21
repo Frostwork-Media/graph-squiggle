@@ -51,7 +51,7 @@
     "react-resizable-panels": "^0.0.39",
     "react-router-dom": "^6.12.1",
     "reactflow": "^11.7.0",
-    "shared": "workspace:*",
+    "api": "workspace:*",
     "use-react-query-auto-sync": "^0.1.0",
     "zod": "^3.21.4",
     "zustand": "^4.3.7"
