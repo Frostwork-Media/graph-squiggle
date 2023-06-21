@@ -1,4 +1,4 @@
-import { slugify } from "shared";
+import { slugify } from "../shared";
 import { withAuth } from "../lib/_withAuth";
 import { prisma } from "db";
 

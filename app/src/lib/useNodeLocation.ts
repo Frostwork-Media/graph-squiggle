@@ -3,7 +3,7 @@ import { devtools } from "zustand/middleware";
 
 import debounce from "lodash.debounce";
 import produce from "immer";
-import { NodeLocation } from "shared";
+import { NodeLocation } from "api";
 import { useProject } from "./useProject";
 
 export const useNodeLocation = create<NodeLocation>()(

@@ -4,7 +4,7 @@ import generate from "project-name-generator";
 import { prisma } from "db";
 import { nanoid } from "nanoid";
 import { withAuth } from "../lib/_withAuth";
-import { CONTENT_VERSION, getEmptyProject } from "shared";
+import { CONTENT_VERSION, getEmptyProject } from "../shared";
 
 const handler: VercelApiHandler = withAuth(async (req, res, userId) => {
   const id = nanoid(12);

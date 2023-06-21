@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "shared/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,7 +15,7 @@
     "nanoid": "^3.3.6",
     "openai": "^3.2.1",
     "project-name-generator": "^2.1.9",
-    "shared": "workspace:*"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.2",
