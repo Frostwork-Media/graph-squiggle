@@ -41,12 +41,15 @@ export function sqProjectToCyElements(
         statement.value.statements.length === 1
       ) {
         if (statement.value.statements[0].type !== "Call") {
-          valueType = "single";
           if (
             statement.value.statements[0].type === "Float" ||
             statement.value.statements[0].type === "Integer"
           ) {
+            valueType = "single";
             data.numValue = statement.value.statements[0].value;
+          } else {
+            // this a pass-through value
+            valueType = "pass-through";
           }
         } else {
           if (
@@ -149,6 +152,6 @@ export function sqProjectToCyElements(
   }
 }
 
-function isLetStatement(node: any): node is NodeLetStatement {
+export function isLetStatement(node: any): node is NodeLetStatement {
   return node.type === "LetStatement";
 }

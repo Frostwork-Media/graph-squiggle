@@ -40,4 +40,5 @@ export type SquiggleVariableValue =
   | "single"
   | "distribution"
   | "derived"
-  | "unknown";
+  | "unknown"
+  | "pass-through";

@@ -78,7 +78,7 @@
 
 .range-slider,
 .range-slider .range-slider__thumb {
-  @apply h-6;
+  @apply h-6 !important;
 }
 
 .range-slider .range-slider__thumb {

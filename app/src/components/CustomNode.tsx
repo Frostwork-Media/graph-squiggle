@@ -12,8 +12,8 @@ import {
 import { useCodeEdited } from "./SquiggleEditor";
 import * as Slider from "@radix-ui/react-slider";
 import { numberToPercentage } from "../lib/numberToPercentage";
-import { useSquiggleState } from "../lib/useSquiggleState";
-import { useProject, useRenderPercentages } from "../lib/useProject";
+import { lookupVariableValue, useSquiggleState } from "../lib/useSquiggleState";
+import { useRenderPercentages } from "../lib/useProject";
 const manifoldBasePath = "https://manifold.markets/api/v0/slug/";
 
 export const NODE_WIDTH = "400px";
@@ -35,6 +35,11 @@ export function CustomNode({ data }: NodeProps) {
   );
 
   const valueType = (data.valueType ?? "unknown") as SquiggleVariableValue;
+  let value = data.value.toString();
+  if (data.valueType === "pass-through") {
+    const id = data.value;
+    value = lookupVariableValue(id);
+  }
 
   let squiggleCode = "";
   if (valueType === "derived") {
@@ -45,31 +50,30 @@ export function CustomNode({ data }: NodeProps) {
     <>
       <Handle type="target" position={Position.Top} className="top-handle" />
       <div
-        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-300 p-0 gap-1 rounded-xl border-b-8 cursor-default`}
+        className={`bg-white grid grid-rows-[auto_minmax(0,1fr)_auto] h-full border border-neutral-400 p-0 rounded-md overflow-hidden shadow cursor-default`}
       >
-        <div className="flex gap-1 justify-end p-1">
+        <div className="p-2 grid gap-1">
           <div className="overflow-hidden">
             <Chip label={data.label} />
           </div>
+          <p className="text-xl">{data.comment}</p>
         </div>
-        <p className="text-xl px-2 mb-2">{data.comment}</p>
         {valueType === "derived" && (
-          <div className="squiggle-chart px-3">
-            <DebouceSquiggleChart
-              code={squiggleCode}
-              enableLocalSettings
-              distributionChartSettings={{ minX: 0, maxX: 1 }}
-            />
-          </div>
+          <>
+            <MedianDisplay>{value}</MedianDisplay>
+            <div className="squiggle-chart px-3">
+              <DebouceSquiggleChart
+                code={squiggleCode}
+                enableLocalSettings
+                distributionChartSettings={{ minX: 0, maxX: 1 }}
+              />
+            </div>
+          </>
         )}
         {valueType === "single" && "numValue" in data && (
           <Single initialValue={data.numValue} line={data.line} />
         )}
-        {valueType === "single" && !("numValue" in data) && (
-          <span className="text-3xl font-mono text-center pb-2">
-            {data.value.toString()}
-          </span>
-        )}
+        {valueType === "pass-through" && <MedianDisplay>{value}</MedianDisplay>}
         {valueType === "distribution" && (
           <Distribution
             lower={data.numLower}
@@ -112,7 +116,7 @@ export function CustomNode({ data }: NodeProps) {
 
 function Chip({ label }: { label: string }) {
   return (
-    <div className="bg-blue-500 text-neutral-50 rounded-lg inline-block p-1 px-2 text-xs text-blue-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
+    <div className="text-neutral-400 max-w-full font-mono overflow-hidden whitespace-nowrap overflow-ellipsis">
       {label}
     </div>
   );
@@ -168,7 +172,7 @@ function Single({
         {renderPercentages ? numberToPercentage(value) : value}
       </MedianDisplay>
       <Slider.Root
-        className="h-6 w-full mt-6 nodrag bg-neutral-200 overflow-hidden relative"
+        className="h-6 w-full nodrag bg-neutral-200 overflow-hidden relative"
         onValueChange={(value) => {
           setValue(Number(value[0]));
           throttleSingleUpdate(line, value.toString());
@@ -251,14 +255,14 @@ function Distribution({
       <MedianDisplay>
         {from} to {to}
       </MedianDisplay>
-      <div className="mt-6 nodrag" ref={divRef} />
+      <div className="nodrag" ref={divRef} />
     </div>
   );
 }
 
 function MedianDisplay({ children }: { children: ReactNode }) {
   return (
-    <p className="text-3xl text-neutral-600 text-center my-3 font-mono tracking-tighter ordinal slashed-zero tabular-nums">
+    <p className="text-3xl pl-2 p-3 bg-slate-100 text-neutral-700 font-mono tracking-wide ordinal slashed-zero tabular-nums">
       {children}
     </p>
   );
