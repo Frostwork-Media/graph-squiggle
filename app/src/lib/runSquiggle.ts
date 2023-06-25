@@ -1,6 +1,6 @@
 import { run } from "@quri/squiggle-lang";
 import { isError } from "./isError";
-import { SquiggleState, useSquiggleState } from "./useSquiggleState";
+import { useSquiggleState } from "./useSquiggleState";
 
 /**
  * Run the squiggle code and update the state

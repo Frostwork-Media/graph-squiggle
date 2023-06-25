@@ -89,6 +89,8 @@ export const SquiggleEditor = forwardRef<
           editor.onDidBlurEditorText(() => {
             useViewState.setState({ editorFocused: false });
           });
+
+          useViewState.setState({ editor });
         }}
       />
     </div>
