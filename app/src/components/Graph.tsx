@@ -12,6 +12,7 @@ import { useNodeLocation } from "../lib/useNodeLocation";
 import { CustomNode, NODE_WIDTH } from "../components/CustomNode";
 import { CSSProperties, useCallback, useState } from "react";
 import { augmentNodes } from "../lib/augmentNodes";
+import { useViewState } from "../lib/useViewState";
 
 const nodeTypes = {
   squiggleNodeType: CustomNode,
@@ -52,6 +53,22 @@ export function Graph() {
       minZoom={0.2}
       maxZoom={2}
       onNodesChange={onNodesChange}
+      onNodeDoubleClick={(event, node) => {
+        const lineNumber = node.data.line;
+        if (typeof lineNumber !== "number") return;
+        // need to focus the editor if it's not focused
+        useViewState.setState({ tab: "code" });
+
+        const editor = useViewState.getState().editor;
+        if (!editor) return;
+
+        editor.focus();
+
+        editor.setPosition({
+          column: Infinity,
+          lineNumber,
+        });
+      }}
       nodesConnectable={false}
       className={selectedNodes.length > 0 ? "selecting" : ""}
       style={{ "--node-width": NODE_WIDTH } as CSSProperties}

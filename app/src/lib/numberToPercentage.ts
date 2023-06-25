@@ -8,12 +8,13 @@
 export function numberToPercentage(n: number) {
   try {
     if (n >= 0 && n <= 1) {
-      return `${(n * 100).toFixed(2)}%`;
+      const percentage = (n * 100).toFixed(2);
+      return `${parseFloat(percentage)}%`;
     } else {
       return n.toFixed(2);
     }
   } catch (error) {
-    console.error(`Recieved ${n} as input`);
+    console.error(`Received ${n} as input`);
     console.error(error);
     return n;
   }
