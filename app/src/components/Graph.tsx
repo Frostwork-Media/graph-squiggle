@@ -64,6 +64,8 @@ export function Graph() {
 
         editor.focus();
 
+        editor.revealLineInCenter(lineNumber);
+
         editor.setPosition({
           column: Infinity,
           lineNumber,

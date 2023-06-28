@@ -43,7 +43,7 @@ export const SquiggleEditor = forwardRef<
           folding: false,
           fontSize: 14,
           lineNumbersMinChars: 3,
-          renderLineHighlight: "none",
+          renderLineHighlight: "line",
           overviewRulerBorder: false,
           overviewRulerLanes: 0,
           wordWrap: "on",
