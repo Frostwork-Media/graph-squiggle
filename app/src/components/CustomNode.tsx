@@ -35,7 +35,7 @@ export function CustomNode({ data }: NodeProps) {
   );
 
   const valueType = (data.valueType ?? "unknown") as SquiggleVariableValue;
-  let value = data.value.toString();
+  let value = data.value?.toString() ?? "";
   if (data.valueType === "pass-through") {
     const id = data.value;
     value = lookupVariableValue(id);

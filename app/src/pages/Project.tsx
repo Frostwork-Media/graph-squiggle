@@ -12,6 +12,7 @@ import { queryClient } from "../lib/queryClient";
 import { useViewState } from "../lib/useViewState";
 import { resetSquiggleState } from "../lib/useSquiggleState";
 import { resetGraphState } from "../lib/completeGraphDataFromSquiggleState";
+import { ErrorBoundary } from "react-error-boundary";
 
 export function Project() {
   /**
@@ -83,11 +84,13 @@ export function Project() {
       ) : loadProjectError ? (
         <LoadFileError loadFileError={loadProjectError} />
       ) : (
-        <ActiveProject
-          id={params.id}
-          isPublic={project.data.public}
-          publicName={project.data.publicName}
-        />
+        <ErrorBoundary FallbackComponent={fallbackRender}>
+          <ActiveProject
+            id={params.id}
+            isPublic={project.data.public}
+            publicName={project.data.publicName}
+          />
+        </ErrorBoundary>
       )}
     </div>
   );
@@ -163,5 +166,16 @@ function RenameTitle({
       onKeyDown={handleKeyDown}
       inputRef={setInputRef}
     />
+  );
+}
+
+function fallbackRender({ error }: { error: Error }) {
+  return (
+    <div className="text-red-500 w-full h-full grid place-content-center">
+      <div className="grid gap-1">
+        <strong>Something went wrong:</strong>
+        <pre>{error.message}</pre>
+      </div>
+    </div>
   );
 }
