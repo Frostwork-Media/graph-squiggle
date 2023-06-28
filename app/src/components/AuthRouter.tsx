@@ -4,11 +4,13 @@ import { Dashboard } from "../pages/Dashboard";
 import { Profile } from "../pages/Profile";
 import { Project } from "../pages/Project";
 import { PublicView } from "../pages/PublicView";
+import { AI } from "../pages/AI";
 
 export function AuthRouter() {
   return (
     <Routes>
       <Route path="_/:username/:slug" element={<PublicView />} />
+      <Route path="/ai" element={<AI />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
