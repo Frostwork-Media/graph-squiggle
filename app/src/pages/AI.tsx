@@ -27,11 +27,17 @@ export function AI() {
             <Spinner />
           ) : projectsQuery.isError ? (
             <div>Error loading projects</div>
-          ) : (
+          ) : projectsQuery.data.graphs.length ? (
             <ProjectsTabs
               projects={projectsQuery.data.graphs}
               username={projectsQuery.data.username}
             />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className="text-2xl font-bold text-gray-900 mb-4">
+                No projects yet
+              </div>
+            </div>
           )}
         </div>
       </div>
