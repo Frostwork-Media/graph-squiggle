@@ -59,16 +59,13 @@ export function CustomNode({ data }: NodeProps) {
           <p className="text-xl">{data.comment}</p>
         </div>
         {valueType === "derived" && (
-          <>
-            <MedianDisplay>{value}</MedianDisplay>
-            <div className="squiggle-chart px-3">
-              <DebouceSquiggleChart
-                code={squiggleCode}
-                enableLocalSettings
-                distributionChartSettings={{ minX: 0, maxX: 1 }}
-              />
-            </div>
-          </>
+          <div className="squiggle-chart px-3">
+            <DebouceSquiggleChart
+              code={squiggleCode}
+              enableLocalSettings
+              distributionChartSettings={{ minX: 0, maxX: 1 }}
+            />
+          </div>
         )}
         {valueType === "single" && "numValue" in data && (
           <Single initialValue={data.numValue} line={data.line} />
