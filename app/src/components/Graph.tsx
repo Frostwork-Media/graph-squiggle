@@ -51,7 +51,7 @@ export function Graph() {
       edges={edges}
       nodeTypes={nodeTypes}
       minZoom={0.2}
-      maxZoom={2}
+      maxZoom={1}
       onNodesChange={onNodesChange}
       onNodeDoubleClick={(event, node) => {
         const lineNumber = node.data.line;

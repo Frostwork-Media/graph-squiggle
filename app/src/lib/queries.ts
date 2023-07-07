@@ -39,3 +39,13 @@ export function usePublicProject(username?: string, publicName?: string) {
     }
   );
 }
+
+export function useAIProjects() {
+  return useQuery<{
+    graphs: { name: string; publicName: string }[];
+    username: string;
+  }>(["ai-projects"], async () => {
+    const res = await fetch(`/api/ai-graphs`);
+    return await res.json();
+  });
+}
