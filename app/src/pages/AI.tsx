@@ -11,15 +11,28 @@ export function AI() {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Probability Graphs - AI
           </h1>
+          <p className="text-lg text-gray-700 mb-3">
+            Many people have different views on how AI will progress. I have
+            been interviewing them. This allows us to figure out where we agree
+            and disagree.
+          </p>
           <p className="text-lg text-gray-700 mb-8">
-            The advancements in Artificial Intelligence (AI) are revolutionizing
-            the way that people interact with technology. By measuring trends in
-            AI through the use of probability graphs, we are able to better
-            understand how AI is changing the way we think and interact. These
-            graphs provide essential insight into the current state of AI in
-            relation to various areas, such as business, health, and education,
-            so that we can devise more efficient, intelligent, and effective
-            strategies for the future.
+            Read through different expert models and if you want you can edit
+            them by clicking the bottom right hand corner. Please send me what
+            you make (
+            <a
+              href="https://twitter.com/NathanpmYoung"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500"
+            >
+              DM me on twitter
+            </a>{" "}
+            or email me at{" "}
+            <a href="mailto:nathanpmyoung@gmail.com" className="text-blue-500">
+              nathanpmyoung[@]gmail.com
+            </a>
+            )
           </p>
         </header>
         <div className="h-full">
