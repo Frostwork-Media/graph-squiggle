@@ -5,8 +5,11 @@ import { Profile } from "../pages/Profile";
 import { Project } from "../pages/Project";
 import { PublicView } from "../pages/PublicView";
 import { AI } from "../pages/AI";
+import { useLogRocket } from "../lib/initLogrocket";
 
 export function AuthRouter() {
+  useLogRocket();
+
   return (
     <Routes>
       <Route path="_/:username/:slug" element={<PublicView />} />
