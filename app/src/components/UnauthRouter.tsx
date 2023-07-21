@@ -3,6 +3,7 @@ import { PublicView } from "../pages/PublicView";
 import { RedirectToSignIn, SignIn } from "@clerk/clerk-react";
 import { useState } from "react";
 import { AI } from "../pages/AI";
+import { NewProjectUnauth } from "../pages/NewProject";
 
 export function UnauthRouter() {
   return (
@@ -10,6 +11,7 @@ export function UnauthRouter() {
       <Route path="_/:username/:slug" element={<PublicView />} />
       <Route path="/ai" element={<AI />} />
       <Route path="/sign-in/*" element={<SignInPage />} />
+      <Route path="/new" element={<NewProjectUnauth />} />
       <Route path="*" element={<RedirectToSignIn />} />
     </Routes>
   );

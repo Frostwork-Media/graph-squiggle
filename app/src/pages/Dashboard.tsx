@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Spinner } from "../components/Spinner";
 import {
   Page,
@@ -10,29 +10,12 @@ import {
 import { format } from "date-fns";
 import type { Project as ProjectType } from "db";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "../lib/queryClient";
+import { useQuery } from "@tanstack/react-query";
 import { Globe } from "phosphor-react";
+import { useCreateProjectMutation } from "../lib/mutations";
 
 export function Dashboard() {
-  const navigate = useNavigate();
-  const createProjectMutation = useMutation({
-    mutationFn: async () => {
-      // hit the /api/project/new endpoint
-      const response = (await fetch("/api/project/new", {
-        method: "POST",
-      }).then((res) => res.json())) as { id: string };
-
-      return response;
-    },
-    onSuccess: (data) => {
-      // invalidate projects query
-      queryClient.invalidateQueries(["projects"]);
-
-      // redirect to the new project
-      if (data) navigate(`/project/${data.id}`);
-    },
-  });
+  const createProjectMutation = useCreateProjectMutation();
 
   const projects = useQuery<ProjectType[]>(
     ["projects"],
