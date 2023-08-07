@@ -22,6 +22,7 @@ export function Dashboard() {
     () => fetch("/api/project/list").then((res) => res.json()),
     {
       retry: false,
+      refetchOnWindowFocus: false,
     }
   );
 

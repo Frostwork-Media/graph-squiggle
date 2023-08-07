@@ -23,7 +23,7 @@ export function Layout() {
   }
   return (
     <div className="h-screen grid grid-rows-[auto_minmax(0,1fr)]">
-      <nav className="p-4 flex items-center gap-2 justify-between w-full bg-gradient-to-t from-white to-slate-50">
+      <nav className="p-4 flex items-center gap-2 justify-between w-full">
         <div className="flex items-center gap-2">
           <NavLink
             to="/"
