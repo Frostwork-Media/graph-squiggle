@@ -2,13 +2,12 @@ import { create } from "zustand";
 import { ProjectContent, projectSchema } from "api";
 import { devtools, subscribeWithSelector } from "zustand/middleware";
 import { isError } from "./isError";
-import type { Prisma, Project } from "db";
+import type { Prisma } from "db";
 import { runSquiggle } from "./runSquiggle";
 import { useSquiggleState } from "./useSquiggleState";
 import { completeGraphDataFromSquiggleState } from "./completeGraphDataFromSquiggleState";
 import { useNodeLocation } from "./useNodeLocation";
 import { saveAs } from "file-saver";
-import { queryClient } from "./queryClient";
 
 export const useProject = create<{
   /** The current project's content () */
